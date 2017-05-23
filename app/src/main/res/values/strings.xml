@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">Alcoholtest</string>
+    <string name="create_new_person">Neue Person erstellen</string>
+    <string name="name">Name</string>
+    <string name="sex">Geschlecht</string>
+    <string name="female">Weiblich</string>
+    <string name="male">Männlich</string>
+    <string name="age">Alter</string>
+    <string name="weight">Körpergewicht</string>
+    <string name="height">Körpergröße</string>
+    <string name="create_person">Person erstellen</string>
+</resources>
