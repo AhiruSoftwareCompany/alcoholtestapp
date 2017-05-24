@@ -9,56 +9,79 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class CreatePerson extends AppCompatActivity {
+    private TextView tvName;
+    private TextView tvAge;
+    private TextView tvWeight;
+    private TextView tvHeight;
+    private RadioButton male;
+    private CreatePerson cp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_create_person);
+        tvName = (TextView) findViewById(R.id.name);
+        tvAge = (TextView) findViewById(R.id.age);
+        tvWeight = (TextView) findViewById(R.id.weight);
+        tvHeight = (TextView) findViewById(R.id.height);
+        male = (RadioButton) findViewById(R.id.sex_male);
+        cp = this;
 
         Button createPerson = (Button) findViewById(R.id.createPerson);
         createPerson.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addPerson();
+                if (addPerson()) {
+                    finish();
+                } else {
+                    Toast.makeText(cp, cp.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
     }
 
-    public void addPerson() {
-        TextView name = (TextView) findViewById(R.id.name);
-        TextView age = (TextView) findViewById(R.id.age);
-        TextView weight = (TextView) findViewById(R.id.weight);
-        TextView height = (TextView) findViewById(R.id.height);
-        RadioButton male = (RadioButton) findViewById(R.id.sex_male);
-        boolean isMale = male.isChecked();
+    public boolean addPerson() {
+        String name = tvName.getText().toString();
+        //"0" makes an empty field into a zero
+        double age = Double.parseDouble("0" + tvAge.getText());
+        double weight = Double.parseDouble("0" + tvWeight.getText());
+        double height = Double.parseDouble("0" + tvHeight.getText());
 
-        SharedPreferences sharedPref = getPreferences(Context.MODE_PRIVATE);
+        if (name.length() > 2 && age > 10 && age < 100 && weight > 30 && height > 100) {
+            try {
+                SharedPreferences sharedPref = getSharedPreferences("settings", 0);
+                SharedPreferences.Editor editor = sharedPref.edit();
 
-        try {
-            JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
-            JSONObject person = new JSONObject();
-            person.put("name", name.getText());
-            person.put("isMale", isMale);
-            person.put("age", Double.parseDouble("" + age.getText()));
-            person.put("weight", Double.parseDouble("" + weight.getText()));
-            person.put("height", Double.parseDouble("" + height.getText()));
-            person.put("created", System.currentTimeMillis() / 1000);
-            persons.put(person);
-            Log.i("danach", persons.toString());
-        } catch (JSONException e) {
-            e.printStackTrace();
+                Log.e("", sharedPref.getString("persons", "[]"));
+                JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
+                JSONObject person = new JSONObject();
+                person.put("name", name);
+                person.put("isMale", male.isChecked());
+                person.put("age", age);
+                person.put("weight", weight);
+                person.put("height", height);
+                person.put("created", System.currentTimeMillis() / 1000);
+                persons.put(person);
+                Log.i("Current persons object", persons.toString());
+
+                editor.putString("persons", persons.toString());
+                editor.commit();
+            } catch (JSONException e) {
+                Toast.makeText(this, "Fehler! #00001", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            return true;
+        } else {
+            return false;
         }
-
-        SharedPreferences.Editor editor = sharedPref.edit();
-        editor.commit();
-
     }
 }

@@ -6,7 +6,8 @@
     <string name="female">Weiblich</string>
     <string name="male">Männlich</string>
     <string name="age">Alter</string>
-    <string name="weight">Körpergewicht</string>
-    <string name="height">Körpergröße</string>
+    <string name="weight">Körpergewicht (kg)</string>
+    <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
+    <string name="height">Körpergröße (cm)</string>
     <string name="create_person">Person erstellen</string>
 </resources>
