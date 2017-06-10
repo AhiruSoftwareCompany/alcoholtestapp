@@ -1,6 +1,6 @@
 package alcoholtest.com.alcoholtest;
 
-import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,6 +40,7 @@ public class CreatePerson extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (addPerson()) {
+                    startActivity(new Intent(CreatePerson.this, MainActivity.class));
                     finish();
                 } else {
                     Toast.makeText(cp, cp.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
@@ -51,17 +52,19 @@ public class CreatePerson extends AppCompatActivity {
 
     public boolean addPerson() {
         String name = tvName.getText().toString();
+
         //"0" makes an empty field into a zero
         double age = Double.parseDouble("0" + tvAge.getText());
         double weight = Double.parseDouble("0" + tvWeight.getText());
         double height = Double.parseDouble("0" + tvHeight.getText());
 
-        if (name.length() > 2 && age > 10 && age < 100 && weight > 30 && height > 100) {
+        //TODO: Maybe split this up
+        if (name.compareTo(cp.getResources().getText(R.string.add_person) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
             try {
                 SharedPreferences sharedPref = getSharedPreferences("settings", 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
 
-                Log.e("", sharedPref.getString("persons", "[]"));
+                Log.i("Added person", sharedPref.getString("persons", "[]"));
                 JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
                 JSONObject person = new JSONObject();
                 person.put("name", name);
@@ -76,7 +79,6 @@ public class CreatePerson extends AppCompatActivity {
                 editor.putString("persons", persons.toString());
                 editor.commit();
             } catch (JSONException e) {
-                Toast.makeText(this, "Fehler! #00001", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             return true;

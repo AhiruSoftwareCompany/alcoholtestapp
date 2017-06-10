@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="alcoholtest.com.alcoholtest">
+    package="alcoholtest.com.alcoholtest"
+    android:versionName="0.1">
+
+    <uses-sdk android:minSdkVersion="19" />
 
     <application
         android:allowBackup="true"
