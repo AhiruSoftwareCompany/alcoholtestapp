@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest;
+package alcoholtest.com.alcoholtest.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -6,6 +6,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import java.util.ArrayList;
+
+import alcoholtest.com.alcoholtest.R;
+import alcoholtest.com.alcoholtest.model.Person;
 
 public class PersonAdapter extends ArrayAdapter<Person>{
 

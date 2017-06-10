@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest;
+package alcoholtest.com.alcoholtest.model;
 
 public class Drink {
     String name;

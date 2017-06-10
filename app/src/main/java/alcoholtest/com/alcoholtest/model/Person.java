@@ -1,4 +1,7 @@
-package alcoholtest.com.alcoholtest;
+package alcoholtest.com.alcoholtest.model;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class Person {
     private String name;
@@ -7,6 +10,19 @@ public class Person {
     private double weight;
     private double height;
     private double created;
+
+    public Person(JSONObject personAsJSON){
+        try {
+            this.name = personAsJSON.getString("name");
+            this.isMale = personAsJSON.getBoolean("isMale");
+            this.age = personAsJSON.getDouble("age");
+            this.weight = personAsJSON.getDouble("weight");
+            this.height = personAsJSON.getDouble("height");
+            this.created = personAsJSON.getLong("created");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     public Person(String name, boolean isMale, double age, double weight, double height, long created) {
         this.name = name;
