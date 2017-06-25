@@ -25,6 +25,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import alcoholtest.com.alcoholtest.adapter.MixtureAdapter;
@@ -44,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
     TextView tvHeight;
     TextView tvSex;
 
+    DecimalFormat format = new DecimalFormat();
+
     Mixture[] mixtureArray = {
             new Mixture("Bier", 500, 0.05, null),
             new Mixture("Bier", 1000, 0.05, null),
@@ -53,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        format.setDecimalSeparatorAlwaysShown(false);
 
         if (switchUser() && currentUserAsJSON != null) {
             updateGui();
@@ -82,9 +86,9 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             tvName.setText(currentUserAsJSON.getString("name"));
-            tvAge.setText(currentUserAsJSON.getDouble("age") + " " + getString(R.string.years));
-            tvWeight.setText(currentUserAsJSON.getDouble("weight") + " kg");
-            tvHeight.setText(currentUserAsJSON.getDouble("height") + " cm");
+            tvAge.setText(format.format(currentUserAsJSON.getDouble("age")) + " " + getString(R.string.years));
+            tvWeight.setText(format.format(currentUserAsJSON.getDouble("weight")) + " kg");
+            tvHeight.setText(format.format(currentUserAsJSON.getDouble("height")) + " cm");
 
             if (currentUserAsJSON.getBoolean("isMale")) {
                 tvSex.setText(R.string.male);
