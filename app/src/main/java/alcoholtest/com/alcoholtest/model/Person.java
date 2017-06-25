@@ -9,7 +9,8 @@ public class Person {
     private double age;
     private double weight;
     private double height;
-    private double created;
+    private long created;
+    private JSONObject personAsJSON;
 
     public Person(JSONObject personAsJSON){
         try {
@@ -19,6 +20,7 @@ public class Person {
             this.weight = personAsJSON.getDouble("weight");
             this.height = personAsJSON.getDouble("height");
             this.created = personAsJSON.getLong("created");
+            this.personAsJSON = personAsJSON;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -31,6 +33,10 @@ public class Person {
         this.weight = weight;
         this.height = height;
         this.created = created;
+    }
+
+    public JSONObject getPersonAsJSON(){
+        return personAsJSON;
     }
 
     public String getName() {
@@ -53,7 +59,7 @@ public class Person {
         return height;
     }
 
-    public double getCreated() {
+    public long getCreated() {
         return created;
     }
 

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,7 +15,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +22,13 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import alcoholtest.com.alcoholtest.model.Person;
+
 public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
-    private JSONObject currentPerson = null;
+    private JSONObject currentPersonAsJSON = null;
+    private Person currentPerson;
     TextView tvName;
     TextView tvAge;
     TextView tvWeight;
@@ -41,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ma = this;
 
-        if (switchUser(false) && currentPerson != null) {
+        if (switchUser(false) && currentPersonAsJSON != null) {
             //TODO: find better name
             setGui();
         }
@@ -56,12 +57,12 @@ public class MainActivity extends AppCompatActivity {
         tvSex = (TextView) findViewById(R.id.sex);
 
         try {
-            tvName.setText(currentPerson.getString("name"));
-            tvAge.setText(currentPerson.getDouble("age") + " Jahre");
-            tvWeight.setText(currentPerson.getDouble("weight") + " kg");
-            tvHeight.setText(currentPerson.getDouble("height") + " cm");
+            tvName.setText(currentPersonAsJSON.getString("name"));
+            tvAge.setText(currentPersonAsJSON.getDouble("age") + " Jahre");
+            tvWeight.setText(currentPersonAsJSON.getDouble("weight") + " kg");
+            tvHeight.setText(currentPersonAsJSON.getDouble("height") + " cm");
 
-            if (currentPerson.getBoolean("isMale")) {
+            if (currentPersonAsJSON.getBoolean("isMale")) {
                 tvSex.setText("männlich");
             } else {
                 tvSex.setText("weiblich");
@@ -89,6 +90,12 @@ public class MainActivity extends AppCompatActivity {
         return false;
     }
 
+    public void editPerson() {
+        Intent i = new Intent(this, EditPerson.class);
+        i.putExtra("created", currentPerson.getCreated());
+        startActivity(i);
+    }
+
     //TODO: Refactor person to user
     public boolean switchUser(boolean fromMenu) {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
@@ -107,13 +114,14 @@ public class MainActivity extends AppCompatActivity {
                 personsString = new String[persons.length() + 1];
 
                 if (persons.length() == 1 && !fromMenu) {
-                    currentPerson = new JSONObject(persons.get(0).toString());
+                    currentPersonAsJSON = new JSONObject(persons.get(0).toString());
+                    currentPerson = new Person(currentPersonAsJSON);
                     return true;
                 }
 
                 for (int i = 0; i < persons.length(); i++) {
                     JSONObject person = new JSONObject(persons.get(i).toString());
-                    personsString[i] = person.getString("name");
+                    personsString[i] = person.toString();
 
                 }
 
@@ -154,7 +162,7 @@ public class MainActivity extends AppCompatActivity {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Pick a tile set");
+                builder.setTitle("Pick a person");
                 builder.setAdapter(adapter,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -168,7 +176,7 @@ public class MainActivity extends AppCompatActivity {
                                 try {
                                     JSONObject selectedPerson = new JSONObject(persons.get(item).toString());
                                     Toast.makeText(MainActivity.this, "You selected: " + selectedPerson.getString("name"), Toast.LENGTH_LONG).show();
-                                    currentPerson = selectedPerson;
+                                    currentPersonAsJSON = selectedPerson;
                                     setGui();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -203,6 +211,9 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case R.id.switchPerson:
                 switchUser(true);
+                break;
+            case R.id.editPerson:
+                editPerson();
                 break;
         }
 

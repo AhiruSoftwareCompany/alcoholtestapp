@@ -2,6 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/switchPerson"
-        android:title="Benutzer wechseln"
+        android:title="Person wechseln"
+        />
+    <item
+        android:id="@+id/editPerson"
+        android:title="Person editieren"
         />
 </menu>
