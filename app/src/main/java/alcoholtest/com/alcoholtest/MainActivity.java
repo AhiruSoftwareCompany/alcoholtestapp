@@ -35,13 +35,11 @@ public class MainActivity extends AppCompatActivity {
     TextView tvWeight;
     TextView tvHeight;
     TextView tvSex;
-    private static Context ma;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ma = this;
 
         if (switchUser() && currentUserAsJSON != null) {
             updateGui();
@@ -85,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Removes given user. If thats the only user, the activity to create a now one will be launched.
+     * Removes given user. If that's the only user, the activity to create a now one will be launched.
      * If there were two users, the one left will be selected
      *
      * @param userToRemove user to remove
@@ -124,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Opens activity to edit the current user
      */
-    public void edituser() {
+    public void editUser() {
         Intent i = new Intent(this, EditUser.class);
         i.putExtra("created", currentUser.getCreated());
         startActivity(i);
@@ -135,7 +133,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
 
         //Ist die Users-datenbank leer
-        if (sharedPref.getString("users", null) == null || sharedPref.getString("users", null).toString().compareTo("[]") == 0) {
+        if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
             createUser();
         } else {
 
@@ -196,9 +194,9 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog,
                                                 int item) {
                                 try {
-                                    JSONObject selecteduser = new JSONObject(users.get(item).toString());
-                                    Toast.makeText(MainActivity.this, "You selected: " + selecteduser.getString("name"), Toast.LENGTH_LONG).show();
-                                    currentUserAsJSON = selecteduser;
+                                    JSONObject selectedUser = new JSONObject(users.get(item).toString());
+                                    Toast.makeText(MainActivity.this, "You selected: " + selectedUser.getString("name"), Toast.LENGTH_LONG).show();
+                                    currentUserAsJSON = selectedUser;
                                     currentUser = new User(currentUserAsJSON);
                                     updateGui();
                                 } catch (JSONException e) {
@@ -236,7 +234,7 @@ public class MainActivity extends AppCompatActivity {
                 switchUser();
                 break;
             case R.id.editUser:
-                edituser();
+                editUser();
                 break;
             case R.id.removeUser:
                 try {

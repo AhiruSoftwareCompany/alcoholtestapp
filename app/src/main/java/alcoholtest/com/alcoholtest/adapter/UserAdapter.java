@@ -36,7 +36,7 @@ public class UserAdapter extends ArrayAdapter<User> {
         Object o = getItem(position);
 
 
-        //TODO: usereninformationen anzeigen
+        //TODO: user informationen anzeigen
         return v;
     }
 }

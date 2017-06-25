@@ -35,11 +35,11 @@ public class CreateUser extends AppCompatActivity {
         male = (RadioButton) findViewById(R.id.sex_male);
         cp = this;
 
-        Button createuser = (Button) findViewById(R.id.createUser);
-        createuser.setOnClickListener(new View.OnClickListener() {
+        Button createUser = (Button) findViewById(R.id.createUser);
+        createUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (adduser()) {
+                if (addUser()) {
                     startActivity(new Intent(CreateUser.this, MainActivity.class));
                     finish();
                 } else {
@@ -50,7 +50,7 @@ public class CreateUser extends AppCompatActivity {
 
     }
 
-    public boolean adduser() {
+    public boolean addUser() {
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero

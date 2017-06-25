@@ -26,7 +26,7 @@ public class EditUser extends AppCompatActivity {
     private RadioButton female;
     private EditUser cu;
     private long created;
-    private User currentuser;
+    private User currentUser;
     SharedPreferences sharedPref;
     JSONArray users;
 
@@ -58,12 +58,12 @@ public class EditUser extends AppCompatActivity {
             for (int i = 0; i < users.length(); i++) {
                 JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
-                    currentuser = new User(new JSONObject(users.get(i).toString()));
-                    tvName.setText(currentuser.getName());
-                    tvAge.setText(currentuser.getAge()+"");
-                    tvWeight.setText(currentuser.getWeight()+"");
-                    tvHeight.setText(currentuser.getHeight()+"");
-                    if(!currentuser.isMale()){
+                    currentUser = new User(new JSONObject(users.get(i).toString()));
+                    tvName.setText(currentUser.getName());
+                    tvAge.setText(currentUser.getAge()+"");
+                    tvWeight.setText(currentUser.getWeight()+"");
+                    tvHeight.setText(currentUser.getHeight()+"");
+                    if(!currentUser.isMale()){
                         female.toggle();
                     }
 
@@ -73,11 +73,11 @@ public class EditUser extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Button saveuser = (Button) findViewById(R.id.saveUser);
-        saveuser.setOnClickListener(new View.OnClickListener() {
+        Button saveUser = (Button) findViewById(R.id.saveUser);
+        saveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (edituser()) {
+                if (editUser()) {
                     startActivity(new Intent(EditUser.this, MainActivity.class));
                     finish();
                 } else {
@@ -88,7 +88,7 @@ public class EditUser extends AppCompatActivity {
 
     }
 
-    public boolean edituser() {
+    public boolean editUser() {
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero

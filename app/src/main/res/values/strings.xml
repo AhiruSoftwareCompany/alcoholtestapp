@@ -16,6 +16,4 @@
     <string name="years">Jahre</string>
     <string name="weight">Körpergewicht (kg)</string>
     <string name="height">Körpergröße (cm)</string>
-    <string name="kilograms">kg</string>
-    <string name="centimetres">cm</string>
 </resources>

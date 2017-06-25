@@ -35,7 +35,7 @@ public class User {
         this.created = created;
     }
 
-    public JSONObject getuserAsJSON(){
+    public JSONObject getUserAsJSON(){
         return userAsJSON;
     }
 
