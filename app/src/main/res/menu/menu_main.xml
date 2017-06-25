@@ -8,4 +8,8 @@
         android:id="@+id/editPerson"
         android:title="Person editieren"
         />
+    <item
+        android:id="@+id/removePerson"
+        android:title="Person löschen"
+        />
 </menu>

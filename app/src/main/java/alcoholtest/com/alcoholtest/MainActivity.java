@@ -27,6 +27,7 @@ import alcoholtest.com.alcoholtest.model.Person;
 public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
+    //TODO: Get rid of json here
     private JSONObject currentPersonAsJSON = null;
     private Person currentPerson;
     TextView tvName;
@@ -42,13 +43,16 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ma = this;
 
-        if (switchUser(false) && currentPersonAsJSON != null) {
+        if (switchUser(false) && currentPersonAsJSON != null  /* || currentPersonAsJSON.toString().compareTo("[]") != 0 */) {
             //TODO: find better name
             setGui();
         }
 
     }
 
+    /**
+     * Updates GUI to match the current selected user
+     */
     public void setGui() {
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
@@ -73,21 +77,38 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public boolean removeUser(String userAsString) throws JSONException {
+    public boolean removeUser(Person personToRemove) throws JSONException {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
 
         for (int i = 0; i < persons.length(); i++) {
             JSONObject person = new JSONObject(persons.get(i).toString());
-            if (person.getString("user").compareTo(userAsString) == 0) {
+            if (person.getString("name").compareTo(personToRemove.getName()) == 0) {
                 persons.remove(i);
                 editor.putString("persons", persons.toString());
                 editor.commit();
+
+                if (persons.length() == 0) {
+                    switchUser(false);
+                }
+                if (persons.length() == 1) {
+                    currentPersonAsJSON = new JSONObject(persons.get(0).toString());
+                    currentPerson = new Person(currentPersonAsJSON);
+                    setGui();
+                } else {
+                    switchUser(true);
+                }
+
                 return true;
             }
         }
+
+        //Wenn nur noch ein Eintrag vorhanden ist, soll die MainActivity neu gezeichnet werden. Falls der einzige Eintrag gelöscht wurde, soll eine neue Person erstellt werden
+
+
         return false;
+
     }
 
     public void editPerson() {
@@ -101,7 +122,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
 
         //Ist die Personendatenbank leer
-        if (sharedPref.getString("persons", null) == null) {
+        if (sharedPref.getString("persons", null) == null || sharedPref.getString("persons", null).toString().compareTo("[]") == 0) {
             startActivity(new Intent(this, CreatePerson.class));
             finish();
         } else {
@@ -177,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
                                     JSONObject selectedPerson = new JSONObject(persons.get(item).toString());
                                     Toast.makeText(MainActivity.this, "You selected: " + selectedPerson.getString("name"), Toast.LENGTH_LONG).show();
                                     currentPersonAsJSON = selectedPerson;
+                                    currentPerson = new Person(currentPersonAsJSON);
                                     setGui();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -214,6 +236,14 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.editPerson:
                 editPerson();
+                break;
+            case R.id.removePerson:
+                try {
+                    System.out.println(currentPerson.toString());
+                    removeUser(currentPerson);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
                 break;
         }
 
