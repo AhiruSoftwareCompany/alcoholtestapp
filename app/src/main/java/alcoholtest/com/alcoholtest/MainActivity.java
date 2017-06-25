@@ -43,9 +43,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ma = this;
 
-        if (switchUser(false) && currentUserAsJSON != null  /* || currentUserAsJSON.toString().compareTo("[]") != 0 */) {
-            //TODO: find better name
-            setGui();
+        if (switchUser() && currentUserAsJSON != null) {
+            updateGui();
         }
 
     }
@@ -53,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Updates GUI to match the current selected user
      */
-    public void setGui() {
+    public void updateGui() {
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
         tvWeight = (TextView) findViewById(R.id.weight);
@@ -62,14 +61,14 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             tvName.setText(currentUserAsJSON.getString("name"));
-            tvAge.setText(currentUserAsJSON.getDouble("age") + " Jahre");
+            tvAge.setText(currentUserAsJSON.getDouble("age") + " " + getString(R.string.years));
             tvWeight.setText(currentUserAsJSON.getDouble("weight") + " kg");
             tvHeight.setText(currentUserAsJSON.getDouble("height") + " cm");
 
             if (currentUserAsJSON.getBoolean("isMale")) {
-                tvSex.setText("männlich");
+                tvSex.setText(R.string.male);
             } else {
-                tvSex.setText("weiblich");
+                tvSex.setText(R.string.female);
             }
 
         } catch (JSONException e) {
@@ -77,6 +76,23 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Creates a user and opens select dialog afterwards
+     */
+    public void createUser() {
+        startActivity(new Intent(this, CreateUser.class));
+        finish();
+    }
+
+    /**
+     * Removes given user. If thats the only user, the activity to create a now one will be launched.
+     * If there were two users, the one left will be selected
+     *
+     * @param userToRemove user to remove
+     * @throws JSONException if something bad happened (should not be the case)
+     * @returns false if not successful
+     * @returns true if successful
+     */
     public boolean removeUser(User userToRemove) throws JSONException {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
@@ -90,71 +106,58 @@ public class MainActivity extends AppCompatActivity {
                 editor.commit();
 
                 if (users.length() == 0) {
-                    switchUser(false);
+                    createUser();
                 }
                 if (users.length() == 1) {
                     currentUserAsJSON = new JSONObject(users.get(0).toString());
                     currentUser = new User(currentUserAsJSON);
-                    setGui();
+                    updateGui();
                 } else {
-                    switchUser(true);
+                    switchUser();
                 }
-
                 return true;
             }
         }
-
-        //Wenn nur noch ein Eintrag vorhanden ist, soll die MainActivity neu gezeichnet werden. Falls der einzige Eintrag gelöscht wurde, soll eine neue user erstellt werden
-
-
         return false;
-
     }
 
+    /**
+     * Opens activity to edit the current user
+     */
     public void edituser() {
         Intent i = new Intent(this, EditUser.class);
         i.putExtra("created", currentUser.getCreated());
         startActivity(i);
     }
 
-    public void createUser() {
-        startActivity(new Intent(this, CreateUser.class));
-        finish();
-    }
 
-    public boolean switchUser(boolean fromMenu) {
+    public boolean switchUser() {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
 
         //Ist die Users-datenbank leer
         if (sharedPref.getString("users", null) == null || sharedPref.getString("users", null).toString().compareTo("[]") == 0) {
             createUser();
         } else {
-            String usersString[];
 
             try {
                 final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
+                final String usersAsString[] = new String[users.length()];
 
-                //Das tut so weh :c
-                usersString = new String[users.length() + 1];
-
-                if (users.length() == 1 && !fromMenu) {
+                //Wenn nur ein User vorhanden, wird dieser ausgewählt
+                if (users.length() == 1) {
                     currentUserAsJSON = new JSONObject(users.get(0).toString());
                     currentUser = new User(currentUserAsJSON);
+                    Toast.makeText(this, R.string.only_one_user_there, Toast.LENGTH_SHORT).show();
                     return true;
                 }
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject user = new JSONObject(users.get(i).toString());
-                    usersString[i] = user.toString();
+                    usersAsString[i] = user.toString();
 
                 }
-
-                usersString[usersString.length - 1] = ma.getResources().getText(R.string.add_user) + "";
-
-                final String[] pS = usersString;
-
                 ListAdapter adapter = new ArrayAdapter<String>(
-                        getApplicationContext(), R.layout.dialog_switchuser_item, usersString) {
+                        getApplicationContext(), R.layout.dialog_switchuser_item, usersAsString) {
 
                     ViewHolder holder;
 
@@ -179,7 +182,7 @@ public class MainActivity extends AppCompatActivity {
                             // view already defined, retrieve view holder
                             holder = (ViewHolder) convertView.getTag();
                         }
-                        holder.name.setText(pS[position]);
+                        holder.name.setText(usersAsString[position]);
 
                         return convertView;
                     }
@@ -192,17 +195,12 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int item) {
-                                if (pS[item].compareTo(ma.getResources().getText(R.string.add_user) + "") == 0) {
-                                    startActivity(new Intent(MainActivity.this, CreateUser.class));
-                                    finish();
-                                }
-
                                 try {
                                     JSONObject selecteduser = new JSONObject(users.get(item).toString());
                                     Toast.makeText(MainActivity.this, "You selected: " + selecteduser.getString("name"), Toast.LENGTH_LONG).show();
                                     currentUserAsJSON = selecteduser;
                                     currentUser = new User(currentUserAsJSON);
-                                    setGui();
+                                    updateGui();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -235,7 +233,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.switchUser:
-                switchUser(true);
+                switchUser();
                 break;
             case R.id.editUser:
                 edituser();
@@ -249,7 +247,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.newUser:
-                switchUser(false);
+                createUser();
                 break;
         }
 
@@ -258,15 +256,13 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-
-
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
             return;
         }
 
         doubleBackToExitPressedOnce = true;
-        Toast.makeText(this, "Nochmal drücken, um zu verlassen", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, R.string.press_back_again_to_leave, Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
             @Override

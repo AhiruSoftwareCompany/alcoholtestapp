@@ -1,14 +1,21 @@
 <resources>
-    <string name="app_name">Alcoholtest</string>
-    <string name="create_new_user">Neue Person erstellen</string>
+    <string name="app_name">Alkoholtester</string>
+    <string name="create_new_user">Neuen Benutzer erstellen</string>
+    <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
+    <string name="create_user">Benutzer erstellen</string>
+    <string name="add_user">Benutzer hinzufügen …</string>
+    <string name="no_information">Keine Information vorhanden</string>
+    <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
+    <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
+
     <string name="name">Name</string>
     <string name="sex">Geschlecht</string>
     <string name="female">Weiblich</string>
     <string name="male">Männlich</string>
     <string name="age">Alter</string>
+    <string name="years">Jahre</string>
     <string name="weight">Körpergewicht (kg)</string>
-    <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="height">Körpergröße (cm)</string>
-    <string name="create_user">Person erstellen</string>
-    <string name="add_user">Person hinzufügen …</string>
+    <string name="kilograms">kg</string>
+    <string name="centimetres">cm</string>
 </resources>
