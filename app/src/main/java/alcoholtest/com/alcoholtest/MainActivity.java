@@ -1,6 +1,7 @@
 package alcoholtest.com.alcoholtest;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,6 +15,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +25,10 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
+import alcoholtest.com.alcoholtest.adapter.MixtureAdapter;
+import alcoholtest.com.alcoholtest.model.Mixture;
 import alcoholtest.com.alcoholtest.model.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -30,11 +37,17 @@ public class MainActivity extends AppCompatActivity {
     //TODO: Get rid of json here
     private JSONObject currentUserAsJSON = null;
     private User currentUser;
+    Button btnAddDrink;
     TextView tvName;
     TextView tvAge;
     TextView tvWeight;
     TextView tvHeight;
     TextView tvSex;
+
+    Mixture[] mixtureArray = {
+            new Mixture("Bier", 500, 0.05, null),
+            new Mixture("Bier", 1000, 0.05, null),
+            new Mixture("Wodka", 20, 0.40, null)};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +58,16 @@ public class MainActivity extends AppCompatActivity {
             updateGui();
         }
 
+        btnAddDrink = (Button) findViewById(R.id.add_drink_button);
+        btnAddDrink.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addDrink(currentUser);
+            }
+        });
+
+        //TODO: Put this in an about dialog
+        Toast.makeText(this, "Emoji artwork provided by EmojiOne", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -128,15 +151,13 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-
     public boolean switchUser() {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
 
-        //Ist die Users-datenbank leer
+        //Ist die Users-datenbank leer, wird ein neuer User erstellt
         if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
             createUser();
         } else {
-
             try {
                 final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
                 final String usersAsString[] = new String[users.length()];
@@ -152,8 +173,9 @@ public class MainActivity extends AppCompatActivity {
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject user = new JSONObject(users.get(i).toString());
                     usersAsString[i] = user.toString();
-
                 }
+
+                //TODO: custom view dialog
                 ListAdapter adapter = new ArrayAdapter<String>(
                         getApplicationContext(), R.layout.dialog_switchuser_item, usersAsString) {
 
@@ -177,7 +199,6 @@ public class MainActivity extends AppCompatActivity {
                                     .findViewById(R.id.name);
                             convertView.setTag(holder);
                         } else {
-                            // view already defined, retrieve view holder
                             holder = (ViewHolder) convertView.getTag();
                         }
                         holder.name.setText(usersAsString[position]);
@@ -214,6 +235,41 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         return false;
+    }
+
+    public void addDrink(User user) {
+        // custom dialog
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_add_drink);
+
+        //Add dialog title and center it
+        dialog.setTitle(R.string.add_drink);
+        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+        if (title != null) {
+            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            title.setPadding(0, 8, 0, 6);
+        }
+
+        // Add predefined mixtures
+        MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
+        GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
+        mixtureList.setAdapter(mixtureAdapter);
+
+        for (Mixture aMixtureArray : mixtureArray) {
+            mixtureAdapter.add(aMixtureArray);
+        }
+
+
+        Button addDrinkButton = (Button) dialog.findViewById(R.id.addDrink);
+
+        addDrinkButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        dialog.show();
     }
 
 
