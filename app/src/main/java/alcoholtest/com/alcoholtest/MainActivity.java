@@ -22,14 +22,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import alcoholtest.com.alcoholtest.model.Person;
+import alcoholtest.com.alcoholtest.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
     //TODO: Get rid of json here
-    private JSONObject currentPersonAsJSON = null;
-    private Person currentPerson;
+    private JSONObject currentUserAsJSON = null;
+    private User currentUser;
     TextView tvName;
     TextView tvAge;
     TextView tvWeight;
@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ma = this;
 
-        if (switchUser(false) && currentPersonAsJSON != null  /* || currentPersonAsJSON.toString().compareTo("[]") != 0 */) {
+        if (switchUser(false) && currentUserAsJSON != null  /* || currentUserAsJSON.toString().compareTo("[]") != 0 */) {
             //TODO: find better name
             setGui();
         }
@@ -61,12 +61,12 @@ public class MainActivity extends AppCompatActivity {
         tvSex = (TextView) findViewById(R.id.sex);
 
         try {
-            tvName.setText(currentPersonAsJSON.getString("name"));
-            tvAge.setText(currentPersonAsJSON.getDouble("age") + " Jahre");
-            tvWeight.setText(currentPersonAsJSON.getDouble("weight") + " kg");
-            tvHeight.setText(currentPersonAsJSON.getDouble("height") + " cm");
+            tvName.setText(currentUserAsJSON.getString("name"));
+            tvAge.setText(currentUserAsJSON.getDouble("age") + " Jahre");
+            tvWeight.setText(currentUserAsJSON.getDouble("weight") + " kg");
+            tvHeight.setText(currentUserAsJSON.getDouble("height") + " cm");
 
-            if (currentPersonAsJSON.getBoolean("isMale")) {
+            if (currentUserAsJSON.getBoolean("isMale")) {
                 tvSex.setText("männlich");
             } else {
                 tvSex.setText("weiblich");
@@ -77,24 +77,24 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public boolean removeUser(Person personToRemove) throws JSONException {
+    public boolean removeUser(User userToRemove) throws JSONException {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
+        JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
-        for (int i = 0; i < persons.length(); i++) {
-            JSONObject person = new JSONObject(persons.get(i).toString());
-            if (person.getString("name").compareTo(personToRemove.getName()) == 0) {
-                persons.remove(i);
-                editor.putString("persons", persons.toString());
+        for (int i = 0; i < users.length(); i++) {
+            JSONObject user = new JSONObject(users.get(i).toString());
+            if (user.getString("name").compareTo(userToRemove.getName()) == 0) {
+                users.remove(i);
+                editor.putString("users", users.toString());
                 editor.commit();
 
-                if (persons.length() == 0) {
+                if (users.length() == 0) {
                     switchUser(false);
                 }
-                if (persons.length() == 1) {
-                    currentPersonAsJSON = new JSONObject(persons.get(0).toString());
-                    currentPerson = new Person(currentPersonAsJSON);
+                if (users.length() == 1) {
+                    currentUserAsJSON = new JSONObject(users.get(0).toString());
+                    currentUser = new User(currentUserAsJSON);
                     setGui();
                 } else {
                     switchUser(true);
@@ -104,54 +104,57 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        //Wenn nur noch ein Eintrag vorhanden ist, soll die MainActivity neu gezeichnet werden. Falls der einzige Eintrag gelöscht wurde, soll eine neue Person erstellt werden
+        //Wenn nur noch ein Eintrag vorhanden ist, soll die MainActivity neu gezeichnet werden. Falls der einzige Eintrag gelöscht wurde, soll eine neue user erstellt werden
 
 
         return false;
 
     }
 
-    public void editPerson() {
-        Intent i = new Intent(this, EditPerson.class);
-        i.putExtra("created", currentPerson.getCreated());
+    public void edituser() {
+        Intent i = new Intent(this, EditUser.class);
+        i.putExtra("created", currentUser.getCreated());
         startActivity(i);
     }
 
-    //TODO: Refactor person to user
+    public void createUser() {
+        startActivity(new Intent(this, CreateUser.class));
+        finish();
+    }
+
     public boolean switchUser(boolean fromMenu) {
         SharedPreferences sharedPref = getSharedPreferences("settings", 0);
 
-        //Ist die Personendatenbank leer
-        if (sharedPref.getString("persons", null) == null || sharedPref.getString("persons", null).toString().compareTo("[]") == 0) {
-            startActivity(new Intent(this, CreatePerson.class));
-            finish();
+        //Ist die Users-datenbank leer
+        if (sharedPref.getString("users", null) == null || sharedPref.getString("users", null).toString().compareTo("[]") == 0) {
+            createUser();
         } else {
-            String personsString[];
+            String usersString[];
 
             try {
-                final JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
+                final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
                 //Das tut so weh :c
-                personsString = new String[persons.length() + 1];
+                usersString = new String[users.length() + 1];
 
-                if (persons.length() == 1 && !fromMenu) {
-                    currentPersonAsJSON = new JSONObject(persons.get(0).toString());
-                    currentPerson = new Person(currentPersonAsJSON);
+                if (users.length() == 1 && !fromMenu) {
+                    currentUserAsJSON = new JSONObject(users.get(0).toString());
+                    currentUser = new User(currentUserAsJSON);
                     return true;
                 }
 
-                for (int i = 0; i < persons.length(); i++) {
-                    JSONObject person = new JSONObject(persons.get(i).toString());
-                    personsString[i] = person.toString();
+                for (int i = 0; i < users.length(); i++) {
+                    JSONObject user = new JSONObject(users.get(i).toString());
+                    usersString[i] = user.toString();
 
                 }
 
-                personsString[personsString.length - 1] = ma.getResources().getText(R.string.add_person) + "";
+                usersString[usersString.length - 1] = ma.getResources().getText(R.string.add_user) + "";
 
-                final String[] pS = personsString;
+                final String[] pS = usersString;
 
                 ListAdapter adapter = new ArrayAdapter<String>(
-                        getApplicationContext(), R.layout.dialog_switchperson_item, personsString) {
+                        getApplicationContext(), R.layout.dialog_switchuser_item, usersString) {
 
                     ViewHolder holder;
 
@@ -166,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                                         Context.LAYOUT_INFLATER_SERVICE);
 
                         if (convertView == null) {
-                            convertView = inflater.inflate(R.layout.dialog_switchperson_item, null);
+                            convertView = inflater.inflate(R.layout.dialog_switchuser_item, null);
 
                             holder = new ViewHolder();
                             holder.name = (TextView) convertView
@@ -183,22 +186,22 @@ public class MainActivity extends AppCompatActivity {
                 };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Pick a person");
+                builder.setTitle("Pick a user");
                 builder.setAdapter(adapter,
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int item) {
-                                if (pS[item].compareTo(ma.getResources().getText(R.string.add_person) + "") == 0) {
-                                    startActivity(new Intent(MainActivity.this, CreatePerson.class));
+                                if (pS[item].compareTo(ma.getResources().getText(R.string.add_user) + "") == 0) {
+                                    startActivity(new Intent(MainActivity.this, CreateUser.class));
                                     finish();
                                 }
 
                                 try {
-                                    JSONObject selectedPerson = new JSONObject(persons.get(item).toString());
-                                    Toast.makeText(MainActivity.this, "You selected: " + selectedPerson.getString("name"), Toast.LENGTH_LONG).show();
-                                    currentPersonAsJSON = selectedPerson;
-                                    currentPerson = new Person(currentPersonAsJSON);
+                                    JSONObject selecteduser = new JSONObject(users.get(item).toString());
+                                    Toast.makeText(MainActivity.this, "You selected: " + selecteduser.getString("name"), Toast.LENGTH_LONG).show();
+                                    currentUserAsJSON = selecteduser;
+                                    currentUser = new User(currentUserAsJSON);
                                     setGui();
                                 } catch (JSONException e) {
                                     e.printStackTrace();
@@ -231,19 +234,22 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.switchPerson:
+            case R.id.switchUser:
                 switchUser(true);
                 break;
-            case R.id.editPerson:
-                editPerson();
+            case R.id.editUser:
+                edituser();
                 break;
-            case R.id.removePerson:
+            case R.id.removeUser:
                 try {
-                    System.out.println(currentPerson.toString());
-                    removeUser(currentPerson);
+                    System.out.println(currentUser.toString());
+                    removeUser(currentUser);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                break;
+            case R.id.newUser:
+                switchUser(false);
                 break;
         }
 

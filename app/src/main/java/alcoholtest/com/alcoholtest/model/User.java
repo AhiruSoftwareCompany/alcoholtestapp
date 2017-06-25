@@ -3,30 +3,30 @@ package alcoholtest.com.alcoholtest.model;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class Person {
+public class User {
     private String name;
     private boolean isMale;
     private double age;
     private double weight;
     private double height;
     private long created;
-    private JSONObject personAsJSON;
+    private JSONObject userAsJSON;
 
-    public Person(JSONObject personAsJSON){
+    public User(JSONObject userAsJSON){
         try {
-            this.name = personAsJSON.getString("name");
-            this.isMale = personAsJSON.getBoolean("isMale");
-            this.age = personAsJSON.getDouble("age");
-            this.weight = personAsJSON.getDouble("weight");
-            this.height = personAsJSON.getDouble("height");
-            this.created = personAsJSON.getLong("created");
-            this.personAsJSON = personAsJSON;
+            this.name = userAsJSON.getString("name");
+            this.isMale = userAsJSON.getBoolean("isMale");
+            this.age = userAsJSON.getDouble("age");
+            this.weight = userAsJSON.getDouble("weight");
+            this.height = userAsJSON.getDouble("height");
+            this.created = userAsJSON.getLong("created");
+            this.userAsJSON = userAsJSON;
         } catch (JSONException e) {
             e.printStackTrace();
         }
     }
 
-    public Person(String name, boolean isMale, double age, double weight, double height, long created) {
+    public User(String name, boolean isMale, double age, double weight, double height, long created) {
         this.name = name;
         this.isMale = isMale;
         this.age = age;
@@ -35,8 +35,8 @@ public class Person {
         this.created = created;
     }
 
-    public JSONObject getPersonAsJSON(){
-        return personAsJSON;
+    public JSONObject getuserAsJSON(){
+        return userAsJSON;
     }
 
     public String getName() {

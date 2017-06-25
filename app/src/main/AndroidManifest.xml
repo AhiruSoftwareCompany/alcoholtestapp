@@ -18,8 +18,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreatePerson"></activity>
-        <activity android:name=".EditPerson"></activity>
+        <activity android:name=".CreateUser"></activity>
+        <activity android:name=".EditUser"></activity>
     </application>
 
 </manifest>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
-        android:id="@+id/switchPerson"
-        android:title="Person wechseln"
-        />
+        android:id="@+id/switchUser"
+        android:title="Switch user" />
     <item
-        android:id="@+id/editPerson"
-        android:title="Person editieren"
-        />
+        android:id="@+id/newUser"
+        android:title="Create a new user" />
     <item
-        android:id="@+id/removePerson"
-        android:title="Person löschen"
-        />
+        android:id="@+id/editUser"
+        android:title="Edit current user" />
+    <item
+        android:id="@+id/removeUser"
+        android:title="Remove current user" />
 </menu>

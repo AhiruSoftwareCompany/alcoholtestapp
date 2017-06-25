@@ -21,7 +21,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Person editieren"
+            android:text="User editieren"
             android:textAppearance="@android:style/TextAppearance.Large" />
 
         <TextView
@@ -74,7 +74,7 @@
             android:ems="10"
             android:hint="0"
             android:inputType="number"
-            android:singleLine="true" />
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"
@@ -88,7 +88,7 @@
             android:ems="10"
             android:hint="0"
             android:inputType="number"
-            android:singleLine="true" />
+            android:maxLines="1" />
 
         <TextView
             android:layout_width="match_parent"
@@ -104,10 +104,10 @@
             android:inputType="number" />
 
         <Button
-            android:id="@+id/savePerson"
+            android:id="@+id/saveUser"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Person speichern" />
+            android:text="User speichern" />
 
     </LinearLayout>
 

@@ -15,19 +15,19 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-public class CreatePerson extends AppCompatActivity {
+public class CreateUser extends AppCompatActivity {
     private TextView tvName;
     private TextView tvAge;
     private TextView tvWeight;
     private TextView tvHeight;
     private RadioButton male;
-    private CreatePerson cp;
+    private CreateUser cp;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_person);
+        setContentView(R.layout.activity_create_user);
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
         tvWeight = (TextView) findViewById(R.id.weight);
@@ -35,12 +35,12 @@ public class CreatePerson extends AppCompatActivity {
         male = (RadioButton) findViewById(R.id.sex_male);
         cp = this;
 
-        Button createPerson = (Button) findViewById(R.id.createPerson);
-        createPerson.setOnClickListener(new View.OnClickListener() {
+        Button createuser = (Button) findViewById(R.id.createUser);
+        createuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (addPerson()) {
-                    startActivity(new Intent(CreatePerson.this, MainActivity.class));
+                if (adduser()) {
+                    startActivity(new Intent(CreateUser.this, MainActivity.class));
                     finish();
                 } else {
                     Toast.makeText(cp, cp.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
@@ -50,7 +50,7 @@ public class CreatePerson extends AppCompatActivity {
 
     }
 
-    public boolean addPerson() {
+    public boolean adduser() {
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero
@@ -59,24 +59,24 @@ public class CreatePerson extends AppCompatActivity {
         double height = Double.parseDouble("0" + tvHeight.getText());
 
         //TODO: Maybe split this up
-        if (name.compareTo(cp.getResources().getText(R.string.add_person) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
+        if (name.compareTo(cp.getResources().getText(R.string.add_user) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
             try {
                 SharedPreferences sharedPref = getSharedPreferences("settings", 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
 
-                Log.i("Added person", sharedPref.getString("persons", "[]"));
-                JSONArray persons = new JSONArray(sharedPref.getString("persons", "[]"));
-                JSONObject person = new JSONObject();
-                person.put("name", name);
-                person.put("isMale", male.isChecked());
-                person.put("age", age);
-                person.put("weight", weight);
-                person.put("height", height);
-                person.put("created", System.currentTimeMillis() / 1000);
-                persons.put(person);
-                Log.i("Current persons object", persons.toString());
+                Log.i("Added user", sharedPref.getString("users", "[]"));
+                JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
+                JSONObject user = new JSONObject();
+                user.put("name", name);
+                user.put("isMale", male.isChecked());
+                user.put("age", age);
+                user.put("weight", weight);
+                user.put("height", height);
+                user.put("created", System.currentTimeMillis() / 1000);
+                users.put(user);
+                Log.i("Current users object", users.toString());
 
-                editor.putString("persons", persons.toString());
+                editor.putString("users", users.toString());
                 editor.commit();
             } catch (JSONException e) {
                 e.printStackTrace();

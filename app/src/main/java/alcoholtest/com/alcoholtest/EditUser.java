@@ -15,33 +15,33 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import alcoholtest.com.alcoholtest.model.Person;
+import alcoholtest.com.alcoholtest.model.User;
 
-public class EditPerson extends AppCompatActivity {
+public class EditUser extends AppCompatActivity {
     private TextView tvName;
     private TextView tvAge;
     private TextView tvWeight;
     private TextView tvHeight;
     private RadioButton male;
     private RadioButton female;
-    private EditPerson cp;
+    private EditUser cu;
     private long created;
-    private Person currentPerson;
+    private User currentuser;
     SharedPreferences sharedPref;
-    JSONArray persons;
+    JSONArray users;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_modify_person);
+        setContentView(R.layout.activity_modify_user);
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
         tvWeight = (TextView) findViewById(R.id.weight);
         tvHeight = (TextView) findViewById(R.id.height);
         male = (RadioButton) findViewById(R.id.sex_male);
         female = (RadioButton) findViewById(R.id.sex_female);
-        cp = this;
+        cu = this;
 
         created = getIntent().getLongExtra("created", 0);
 
@@ -51,19 +51,19 @@ public class EditPerson extends AppCompatActivity {
 
 
         sharedPref = getSharedPreferences("settings", 0);
-        persons = null;
+        users = null;
         try {
-            persons = new JSONArray(sharedPref.getString("persons", "[]"));
+            users = new JSONArray(sharedPref.getString("users", "[]"));
 
-            for (int i = 0; i < persons.length(); i++) {
-                JSONObject j = new JSONObject(persons.get(i).toString());
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
-                    currentPerson = new Person(new JSONObject(persons.get(i).toString()));
-                    tvName.setText(currentPerson.getName());
-                    tvAge.setText(currentPerson.getAge()+"");
-                    tvWeight.setText(currentPerson.getWeight()+"");
-                    tvHeight.setText(currentPerson.getHeight()+"");
-                    if(!currentPerson.isMale()){
+                    currentuser = new User(new JSONObject(users.get(i).toString()));
+                    tvName.setText(currentuser.getName());
+                    tvAge.setText(currentuser.getAge()+"");
+                    tvWeight.setText(currentuser.getWeight()+"");
+                    tvHeight.setText(currentuser.getHeight()+"");
+                    if(!currentuser.isMale()){
                         female.toggle();
                     }
 
@@ -73,22 +73,22 @@ public class EditPerson extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Button savePerson = (Button) findViewById(R.id.savePerson);
-        savePerson.setOnClickListener(new View.OnClickListener() {
+        Button saveuser = (Button) findViewById(R.id.saveUser);
+        saveuser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editPerson()) {
-                    startActivity(new Intent(EditPerson.this, MainActivity.class));
+                if (edituser()) {
+                    startActivity(new Intent(EditUser.this, MainActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(cp, cp.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(cu, cu.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
 
-    public boolean editPerson() {
+    public boolean edituser() {
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero
@@ -97,29 +97,29 @@ public class EditPerson extends AppCompatActivity {
         double height = Double.parseDouble("0" + tvHeight.getText());
 
         //TODO: Maybe split this up
-        if (name.compareTo(cp.getResources().getText(R.string.add_person) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
+        if (name.compareTo(cu.getResources().getText(R.string.add_user) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
             try {
                 sharedPref = getSharedPreferences("settings", 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
 
-                Log.i("Added person", sharedPref.getString("persons", "[]"));
-                JSONObject person = new JSONObject();
-                person.put("name", name);
-                person.put("isMale", male.isChecked());
-                person.put("age", age);
-                person.put("weight", weight);
-                person.put("height", height);
-                person.put("created", System.currentTimeMillis() / 1000);
+                Log.i("Added user", sharedPref.getString("users", "[]"));
+                JSONObject user = new JSONObject();
+                user.put("name", name);
+                user.put("isMale", male.isChecked());
+                user.put("age", age);
+                user.put("weight", weight);
+                user.put("height", height);
+                user.put("created", System.currentTimeMillis() / 1000);
 
-                for (int i = 0; i < persons.length(); i++) {
-                    JSONObject j = new JSONObject(persons.get(i).toString());
+                for (int i = 0; i < users.length(); i++) {
+                    JSONObject j = new JSONObject(users.get(i).toString());
                     if (j.getLong("created") == created) {
-                        persons.put(i, person.toString());
+                        users.put(i, user.toString());
                     }
                 }
-                Log.i("Current persons object", persons.toString());
+                Log.i("Current users object", users.toString());
 
-                editor.putString("persons", persons.toString());
+                editor.putString("users", users.toString());
                 editor.commit();
             } catch (JSONException e) {
                 e.printStackTrace();
