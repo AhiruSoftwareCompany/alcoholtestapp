@@ -9,7 +9,9 @@
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
     <string name="add_drink">Ein Getränk hinzufügen …</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
+    <string name="about_text">Emoji artwork provided by EmojiOne.</string>
 
+    <string name="about">About</string>
     <string name="name">Name</string>
     <string name="sex">Geschlecht</string>
     <string name="female">Weiblich</string>

@@ -12,4 +12,7 @@
     <item
         android:id="@+id/removeUser"
         android:title="Remove current user" />
+    <item
+        android:id="@+id/about"
+        android:title="About" />
 </menu>

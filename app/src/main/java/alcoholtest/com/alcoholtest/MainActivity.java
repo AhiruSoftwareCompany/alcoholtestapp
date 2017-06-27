@@ -2,22 +2,19 @@ package alcoholtest.com.alcoholtest;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,38 +26,30 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import alcoholtest.com.alcoholtest.adapter.MixtureAdapter;
+import alcoholtest.com.alcoholtest.adapter.UserAdapter;
 import alcoholtest.com.alcoholtest.model.Mixture;
 import alcoholtest.com.alcoholtest.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
-    //TODO: Get rid of json here
-    private JSONObject currentUserAsJSON = null;
     private User currentUser;
-    Button btnAddDrink;
-    TextView tvName;
-    TextView tvAge;
-    TextView tvWeight;
-    TextView tvHeight;
-    TextView tvSex;
-
+    private Button btnAddDrink;
+    private TextView tvName;
+    private TextView tvAge;
+    private TextView tvWeight;
+    private TextView tvHeight;
+    private TextView tvSex;
     DecimalFormat format = new DecimalFormat();
 
-    Mixture[] mixtureArray = {
-            new Mixture("Bier", 500, 0.05, null),
-            new Mixture("Bier", 1000, 0.05, null),
-            new Mixture("Wodka", 20, 0.40, null)};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         format.setDecimalSeparatorAlwaysShown(false);
-
-        if (switchUser() && currentUserAsJSON != null) {
-            updateGui();
-        }
+        switchUser(true);
+        updateGui();
 
         btnAddDrink = (Button) findViewById(R.id.add_drink_button);
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
@@ -69,9 +58,6 @@ public class MainActivity extends AppCompatActivity {
                 addDrink(currentUser);
             }
         });
-
-        //TODO: Put this in an about dialog
-        Toast.makeText(this, "Emoji artwork provided by EmojiOne", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -84,21 +70,19 @@ public class MainActivity extends AppCompatActivity {
         tvHeight = (TextView) findViewById(R.id.height);
         tvSex = (TextView) findViewById(R.id.sex);
 
-        try {
-            tvName.setText(currentUserAsJSON.getString("name"));
-            tvAge.setText(format.format(currentUserAsJSON.getDouble("age")) + " " + getString(R.string.years));
-            tvWeight.setText(format.format(currentUserAsJSON.getDouble("weight")) + " kg");
-            tvHeight.setText(format.format(currentUserAsJSON.getDouble("height")) + " cm");
+        if (currentUser != null) {
+            tvName.setText(currentUser.getName());
+            tvAge.setText(format.format(currentUser.getAge()) + " " + getString(R.string.years));
+            tvWeight.setText(format.format(currentUser.getWeight()) + " kg");
+            tvHeight.setText(format.format(currentUser.getHeight()) + " cm");
 
-            if (currentUserAsJSON.getBoolean("isMale")) {
+            if (currentUser.isMale()) {
                 tvSex.setText(R.string.male);
             } else {
                 tvSex.setText(R.string.female);
             }
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
+
     }
 
     /**
@@ -119,7 +103,7 @@ public class MainActivity extends AppCompatActivity {
      * @returns true if successful
      */
     public boolean removeUser(User userToRemove) throws JSONException {
-        SharedPreferences sharedPref = getSharedPreferences("settings", 0);
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
@@ -134,11 +118,10 @@ public class MainActivity extends AppCompatActivity {
                     createUser();
                 }
                 if (users.length() == 1) {
-                    currentUserAsJSON = new JSONObject(users.get(0).toString());
-                    currentUser = new User(currentUserAsJSON);
+                    currentUser = new User(new JSONObject(users.get(0).toString()));
                     updateGui();
                 } else {
-                    switchUser();
+                    switchUser(false);
                 }
                 return true;
             }
@@ -155,127 +138,180 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    public boolean switchUser() {
-        SharedPreferences sharedPref = getSharedPreferences("settings", 0);
+    /**
+     * Switchs between users. If there's no user, a new one will be created. If only one user exists, a toast will be shown
+     *
+     * @param fromStart If this method is called in the onCreate() methode, the "only one user existing" message will be suppressed.
+     * @return Success
+     */
+    public void switchUser(boolean fromStart) {
+        try {
+            SharedPreferences sharedPref = getSharedPreferences("data", 0);
 
-        //Ist die Users-datenbank leer, wird ein neuer User erstellt
-        if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
-            createUser();
-        } else {
-            try {
+            //Ist die Users-datenbank leer, wird ein neuer User erstellt
+            if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
+                createUser();
+            } else {
                 final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                final String usersAsString[] = new String[users.length()];
 
                 //Wenn nur ein User vorhanden, wird dieser ausgewählt
                 if (users.length() == 1) {
-                    currentUserAsJSON = new JSONObject(users.get(0).toString());
-                    currentUser = new User(currentUserAsJSON);
-                    Toast.makeText(this, R.string.only_one_user_there, Toast.LENGTH_SHORT).show();
-                    return true;
+                    currentUser = new User(new JSONObject(users.get(0).toString()));
+                    if (fromStart) {
+                        Toast.makeText(this, R.string.only_one_user_there, Toast.LENGTH_SHORT).show();
+                    }
+                    return;
                 }
 
+                final ArrayList<User> usersList = new ArrayList<>();
                 for (int i = 0; i < users.length(); i++) {
-                    JSONObject user = new JSONObject(users.get(i).toString());
-                    usersAsString[i] = user.toString();
+                    usersList.add(new User(new JSONObject(users.get(i).toString())));
                 }
-
-                //TODO: custom view dialog
-                ListAdapter adapter = new ArrayAdapter<String>(
-                        getApplicationContext(), R.layout.dialog_switchuser_item, usersAsString) {
-
-                    ViewHolder holder;
-
-                    class ViewHolder {
-                        TextView name;
-                    }
-
-                    public View getView(int position, View convertView,
-                                        ViewGroup parent) {
-                        final LayoutInflater inflater = (LayoutInflater) getApplicationContext()
-                                .getSystemService(
-                                        Context.LAYOUT_INFLATER_SERVICE);
-
-                        if (convertView == null) {
-                            convertView = inflater.inflate(R.layout.dialog_switchuser_item, null);
-
-                            holder = new ViewHolder();
-                            holder.name = (TextView) convertView
-                                    .findViewById(R.id.name);
-                            convertView.setTag(holder);
-                        } else {
-                            holder = (ViewHolder) convertView.getTag();
-                        }
-                        holder.name.setText(usersAsString[position]);
-
-                        return convertView;
-                    }
-                };
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("Pick a user");
-                builder.setAdapter(adapter,
+                builder.setNeutralButton("Add a new user", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        createUser();
+                    }
+                });
+
+                builder.setAdapter(new UserAdapter(getApplicationContext(), usersList),
                         new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int item) {
-                                try {
-                                    JSONObject selectedUser = new JSONObject(users.get(item).toString());
-                                    Toast.makeText(MainActivity.this, "You selected: " + selectedUser.getString("name"), Toast.LENGTH_LONG).show();
-                                    currentUserAsJSON = selectedUser;
-                                    currentUser = new User(currentUserAsJSON);
-                                    updateGui();
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
-                                }
+                                currentUser = usersList.get(item);
+                                Toast.makeText(MainActivity.this, "You selected: " + currentUser.getName(), Toast.LENGTH_LONG).show();
+
+                                updateGui();
                                 dialog.dismiss();
                             }
                         });
-                AlertDialog alert = builder.create();
+                Dialog alert = builder.create();
                 alert.show();
-
-                return true;
-            } catch (JSONException e) {
-                e.printStackTrace();
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
-        return false;
     }
 
-    public void addDrink(User user) {
-        // custom dialog
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_add_drink);
+    public void addDrink(final User user) {
 
-        //Add dialog title and center it
-        dialog.setTitle(R.string.add_drink);
-        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-        if (title != null) {
-            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            title.setPadding(0, 8, 0, 6);
-        }
+        try {
+            SharedPreferences sharedPref = getSharedPreferences("data", 0);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            JSONArray mixtures = new JSONArray(sharedPref.getString("mixtures", "[]"));
 
-        // Add predefined mixtures
-        MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
-        GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
-        mixtureList.setAdapter(mixtureAdapter);
-
-        for (Mixture aMixtureArray : mixtureArray) {
-            mixtureAdapter.add(aMixtureArray);
-        }
-
-
-        Button addDrinkButton = (Button) dialog.findViewById(R.id.addDrink);
-
-        addDrinkButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                dialog.dismiss();
+            if (mixtures.length() == 0) {
+                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
+                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
+                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
+                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
+                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
+//                mixtures.put("{\"name\":\"Eigenes\nGetränk\",\"amount\":0,\"percentage\":0,\"image\":\"\"}");
+                editor.putString("drinks", mixtures.toString());
+                editor.commit();
             }
-        });
 
-        dialog.show();
+            final Mixture[] mixtureArray = new Mixture[mixtures.length()];
+
+            for (int i = 0; i < mixtures.length(); i++) {
+                mixtureArray[i] = new Mixture(new JSONObject(mixtures.get(i).toString()));
+            }
+
+            final Dialog dialog = new Dialog(this);
+            dialog.setContentView(R.layout.dialog_add_drink);
+
+            dialog.setTitle(R.string.add_drink);
+            final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+            if (title != null) {
+                title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                title.setPadding(0, 8, 0, 6);
+            }
+
+            final MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
+            GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
+            mixtureList.setAdapter(mixtureAdapter);
+
+            for (Mixture aMixtureArray : mixtureArray) {
+                mixtureAdapter.add(aMixtureArray);
+            }
+
+            mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View v,
+                                        int position, long id) {
+
+                    //EIGENES GETRÄNK HINZUFÜGEN
+/*                    if (position == mixtureAdapter.getCount()) {
+                        Toast.makeText(MainActivity.this, "Eigenes Getränk hinzufügen", Toast.LENGTH_SHORT).show();
+
+                        // Handle custom drink
+
+                        try {
+                            SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                            SharedPreferences.Editor editor = sharedPref.edit();
+                            JSONArray mixtures = new JSONArray(sharedPref.getString("mixtures", "[]"));
+                            editor.putString("drinks", mixtures.toString());
+                            editor.commit();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                        dialog.dismiss();
+
+                    }
+*/
+                    try {
+                        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+
+                        //0 = user, 1 = mixture
+                        JSONArray toPut = new JSONArray();
+                        toPut.put(System.currentTimeMillis());
+                        toPut.put(user.toString());
+                        toPut.put(mixtureArray[position].toString()); //selected mixture
+                        mixtures.put(toPut);
+
+                        editor.putString("mixturesToUser", mixtures.toString());
+                        editor.commit();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    dialog.dismiss();
+                }
+            });
+            dialog.show();
+
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
+    public void getDrinks() {
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        try {
+            JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+
+            for (int i = 0; i < mixtures.length(); i++) {
+
+                //0 = timestamp, 1 = user, 2 = mixture
+                JSONArray j = new JSONArray(mixtures.get(i).toString());
+                long l = Long.valueOf(j.get(0).toString()).longValue();
+                User u = new User(new JSONObject(j.get(0).toString()));
+                Mixture m = new Mixture(new JSONObject(j.get(1).toString()));
+
+            }
+
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
 
     /**
      * Layout-Stuff
@@ -291,7 +327,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.switchUser:
-                switchUser();
+                switchUser(false);
                 break;
             case R.id.editUser:
                 editUser();
@@ -306,6 +342,18 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.newUser:
                 createUser();
+                break;
+            case R.id.about:
+                final Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.dialog_about);
+
+                //Add dialog title and center it
+                dialog.setTitle(R.string.about);
+                final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+                title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                title.setPadding(0, 8, 0, 6);
+
+                dialog.show();
                 break;
         }
 
@@ -330,3 +378,4 @@ public class MainActivity extends AppCompatActivity {
         }, 1700);
     }
 }
+

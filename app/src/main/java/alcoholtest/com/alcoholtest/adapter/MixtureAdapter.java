@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,10 +22,12 @@ import alcoholtest.com.alcoholtest.model.Mixture;
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
     private MixtureAdapter ma;
     private Mixture mixture;
+    private Context mContext;
 
     public MixtureAdapter(Context context, ArrayList<Mixture> arrayList) {
         super(context, R.layout.items_mixture, arrayList);
         ma = this;
+        mContext = context;
     }
 
     @Override
@@ -40,18 +43,20 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         TextView percentage = (TextView) v.findViewById(R.id.percentage);
         ImageView image = (ImageView) v.findViewById(R.id.image);
 
-
         DecimalFormat format = new DecimalFormat();
         format.setDecimalSeparatorAlwaysShown(false);
 
         name.setText(mixture.getName());
-        if(mixture.getAmount() < 100){
+        if (mixture.getAmount() < 100) {
             amount.setText(format.format(mixture.getAmount()) + " ml");
         } else {
-            amount.setText(format.format(mixture.getAmount()/1000) + " l");
+            amount.setText(format.format(mixture.getAmount() / 1000) + " l");
         }
         percentage.setText(format.format(mixture.getPercentage() * 100) + " %");
-        /*image.setImage ...*/
+
+
+        image.setImageResource(mContext.getResources().getIdentifier(mixture.getImage(), "drawable",
+                mContext.getApplicationContext().getPackageName()));
         return v;
     }
 }

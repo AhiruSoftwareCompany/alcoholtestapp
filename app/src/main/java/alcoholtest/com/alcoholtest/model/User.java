@@ -10,9 +10,8 @@ public class User {
     private double weight;
     private double height;
     private long created;
-    private JSONObject userAsJSON;
 
-    public User(JSONObject userAsJSON){
+    public User(JSONObject userAsJSON) {
         try {
             this.name = userAsJSON.getString("name");
             this.isMale = userAsJSON.getBoolean("isMale");
@@ -20,7 +19,6 @@ public class User {
             this.weight = userAsJSON.getDouble("weight");
             this.height = userAsJSON.getDouble("height");
             this.created = userAsJSON.getLong("created");
-            this.userAsJSON = userAsJSON;
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -35,8 +33,24 @@ public class User {
         this.created = created;
     }
 
-    public JSONObject getUserAsJSON(){
-        return userAsJSON;
+    public String getCreatedAsString() {
+        return "" + created;
+    }
+
+    @Override
+    public String toString() {
+        JSONObject user = new JSONObject();
+        try {
+            user.put("name", name);
+            user.put("isMale", isMale);
+            user.put("age", age);
+            user.put("weight", weight);
+            user.put("height", height);
+            user.put("created", created);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user.toString();
     }
 
     public String getName() {

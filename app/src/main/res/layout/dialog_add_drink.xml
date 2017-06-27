@@ -5,12 +5,6 @@
     android:gravity="top|center"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Test" />
-
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -25,15 +19,7 @@
                 android:id="@+id/mixtureList"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:numColumns="3"></GridView>
-
-            <Button
-                android:id="@+id/addDrink"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Button" />
+                android:numColumns="auto_fit"></GridView>
         </LinearLayout>
-
     </ScrollView>
-
 </LinearLayout>

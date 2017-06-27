@@ -50,7 +50,7 @@ public class EditUser extends AppCompatActivity {
         }
 
 
-        sharedPref = getSharedPreferences("settings", 0);
+        sharedPref = getSharedPreferences("data", 0);
         users = null;
         try {
             users = new JSONArray(sharedPref.getString("users", "[]"));
@@ -99,7 +99,7 @@ public class EditUser extends AppCompatActivity {
         //TODO: Maybe split this up
         if (name.compareTo(cu.getResources().getText(R.string.add_user) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
             try {
-                sharedPref = getSharedPreferences("settings", 0);
+                sharedPref = getSharedPreferences("data", 0);
                 SharedPreferences.Editor editor = sharedPref.edit();
 
                 Log.i("Added user", sharedPref.getString("users", "[]"));
