@@ -1,14 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<GridView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mixtureList"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:gravity="top|center"
-    android:orientation="vertical">
-
-    <GridView
-        android:id="@+id/mixtureList"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:numColumns="auto_fit"></GridView>
-
-</LinearLayout>
+    android:numColumns="auto_fit">
+</GridView>

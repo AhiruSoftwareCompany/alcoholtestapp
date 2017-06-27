@@ -3,14 +3,16 @@
     <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="create_user">Benutzer erstellen</string>
-    <string name="add_user">Benutzer hinzufügen …</string>
     <string name="no_information">Keine Information vorhanden</string>
     <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
-    <string name="add_drink">Ein Getränk hinzufügen …</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
     <string name="about_text">Emoji artwork provided by EmojiOne.</string>
-
+    <string name="add_user">Einen Benutzer hinzufügen</string>
+    <string name="you_selected">Ausgewählt:</string>
+    <string name="consumed_drinks">Alkoholische Getränke intus</string>
+    <string name="add_drink">Ein Getränk hinzufügen …</string>
+    <string name="pick_user">Wähle einen Benutzer</string>
     <string name="about">About</string>
     <string name="name">Name</string>
     <string name="sex">Geschlecht</string>
@@ -20,4 +22,5 @@
     <string name="years">Jahre</string>
     <string name="weight">Körpergewicht (kg)</string>
     <string name="height">Körpergröße (cm)</string>
+    <string name="image">Bild</string>
 </resources>

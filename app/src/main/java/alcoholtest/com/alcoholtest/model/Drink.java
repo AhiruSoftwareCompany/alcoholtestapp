@@ -1,8 +1,5 @@
 package alcoholtest.com.alcoholtest.model;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 public class Drink {
     User user;
     Mixture mixture;

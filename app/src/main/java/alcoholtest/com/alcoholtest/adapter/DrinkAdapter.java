@@ -8,8 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
-
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,7 +15,6 @@ import java.util.concurrent.TimeUnit;
 
 import alcoholtest.com.alcoholtest.R;
 import alcoholtest.com.alcoholtest.model.Drink;
-import alcoholtest.com.alcoholtest.model.User;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 

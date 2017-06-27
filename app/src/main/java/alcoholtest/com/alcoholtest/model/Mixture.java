@@ -1,7 +1,5 @@
 package alcoholtest.com.alcoholtest.model;
 
-import android.media.Image;
-
 import org.json.JSONException;
 import org.json.JSONObject;
 

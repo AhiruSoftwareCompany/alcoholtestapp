@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
@@ -116,8 +115,7 @@ public class MainActivity extends AppCompatActivity {
      *
      * @param userToRemove user to remove
      * @throws JSONException if something bad happened (should not be the case)
-     * @returns false if not successful
-     * @returns true if successful
+     * @returns false if not successful, true if successful
      */
     public boolean removeUser(User userToRemove) throws JSONException {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
@@ -159,7 +157,6 @@ public class MainActivity extends AppCompatActivity {
      * Switchs between users. If there's no user, a new one will be created. If only one user exists, a toast will be shown
      *
      * @param fromStart If this method is called in the onCreate() methode, the "only one user existing" message will be suppressed.
-     * @return Success
      */
     public void switchUser(boolean fromStart) {
         try {
@@ -186,8 +183,8 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                builder.setTitle("Pick a user");
-                builder.setNeutralButton("Add a new user", new DialogInterface.OnClickListener() {
+                builder.setTitle(R.string.pick_user);
+                builder.setNeutralButton(R.string.add_user, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         createUser();
@@ -200,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog,
                                                 int item) {
                                 currentUser = usersList.get(item);
-                                Toast.makeText(MainActivity.this, "You selected: " + currentUser.getName(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(MainActivity.this, R.string.you_selected + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
 
                                 updateGui();
                                 dialog.dismiss();
@@ -331,7 +328,7 @@ public class MainActivity extends AppCompatActivity {
                     //Have to do this, because jsonobject == jsonobject is always false
                     if (u.toString().compareTo(currentUser.toString()) == 0) {
                         Drink d = new Drink(u, new Mixture(new
-                                JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()).longValue());
+                                JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()));
 
                         dA.add(d);
                         //Timer
@@ -339,6 +336,10 @@ public class MainActivity extends AppCompatActivity {
                     }
                 }
             }
+
+            //Clean up
+            editor.putString("mixturesToUser", mixtures.toString());
+            editor.commit();
 
         } catch (JSONException e) {
             e.printStackTrace();
