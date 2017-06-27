@@ -36,7 +36,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="start"
-                        android:text="Bier"
+                        android:text="@string/no_information"
                         android:textSize="20sp" />
 
                     <TextView
@@ -45,7 +45,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Vor 2h"
+                        android:text="@string/no_information"
                         android:textSize="20sp" />
 
                 </TableRow>
@@ -55,12 +55,12 @@
                     android:layout_height="match_parent">
 
                     <TextView
-                        android:id="@+id/name"
+                        android:id="@+id/promille"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="start"
-                        android:text="0.1‰ "
+                        android:text="@string/no_information"
                         android:textSize="20sp" />
 
                     <TextView
@@ -69,7 +69,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="end"
-                        android:text="Noch 1h"
+                        android:text="@string/no_information"
                         android:textSize="20sp" />
 
                 </TableRow>

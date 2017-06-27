@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,6 +26,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import alcoholtest.com.alcoholtest.adapter.DrinkAdapter;
 import alcoholtest.com.alcoholtest.adapter.MixtureAdapter;
 import alcoholtest.com.alcoholtest.adapter.UserAdapter;
 import alcoholtest.com.alcoholtest.model.Drink;
@@ -41,36 +43,50 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvWeight;
     private TextView tvHeight;
     private TextView tvSex;
-    DecimalFormat format = new DecimalFormat();
+    private DrinkAdapter dA;
+    private ListView drinks;
+    private DecimalFormat format = new DecimalFormat();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        format.setDecimalSeparatorAlwaysShown(false);
-        switchUser(true);
-        updateGui();
 
+        tvName = (TextView) findViewById(R.id.name);
+        tvAge = (TextView) findViewById(R.id.age);
+        tvWeight = (TextView) findViewById(R.id.weight);
+        tvHeight = (TextView) findViewById(R.id.height);
+        tvSex = (TextView) findViewById(R.id.sex);
         btnAddDrink = (Button) findViewById(R.id.add_drink_button);
+        drinks = (ListView) findViewById(R.id.drinks);
+
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addDrink(currentUser);
             }
         });
+
+        dA = new DrinkAdapter(this, new ArrayList<Drink>());
+        drinks.setAdapter(dA);
+        drinks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                //Handle event: remove drink
+                return false;
+            }
+        });
+
+        format.setDecimalSeparatorAlwaysShown(false);
+        switchUser(true);
+        updateGui();
     }
 
     /**
      * Updates GUI to match the current selected user
      */
     public void updateGui() {
-        tvName = (TextView) findViewById(R.id.name);
-        tvAge = (TextView) findViewById(R.id.age);
-        tvWeight = (TextView) findViewById(R.id.weight);
-        tvHeight = (TextView) findViewById(R.id.height);
-        tvSex = (TextView) findViewById(R.id.sex);
-
         if (currentUser != null) {
             tvName.setText(currentUser.getName());
             tvAge.setText(format.format(currentUser.getAge()) + " " + getString(R.string.years));
@@ -82,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 tvSex.setText(R.string.female);
             }
+            addDrinks();
         }
-
     }
 
     /**
@@ -198,6 +214,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //TODO: Find better name!!!
     public void addDrink(final User user) {
 
         try {
@@ -207,10 +224,8 @@ public class MainActivity extends AppCompatActivity {
 
             if (mixtures.length() == 0) {
                 mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
-                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
-                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
-                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
-                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
+                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":1000,\"percentage\":0.05,\"image\":\"beer\"}"));
+                mixtures.put(new JSONObject("{\"name\":\"Wodka\",\"amount\":20,\"percentage\":0.40,\"image\":\"beer\"}"));
 //                mixtures.put("{\"name\":\"Eigenes\nGetränk\",\"amount\":0,\"percentage\":0,\"image\":\"\"}");
                 editor.putString("drinks", mixtures.toString());
                 editor.commit();
@@ -283,6 +298,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     dialog.dismiss();
+                    addDrinks();
                 }
             });
             dialog.show();
@@ -293,19 +309,35 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void getDrinks() {
+    /**
+     * Adds drinks from the current person to the list view
+     */
+    public void addDrinks() {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
+        dA.clear();
+        dA.notifyDataSetChanged();
+
         try {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
 
-            for (int i = 0; i < mixtures.length(); i++) {
+            if (mixtures.length() > 0) {
+                for (int i = 0; i < mixtures.length(); i++) {
 
-                //0 = timestamp, 1 = user, 2 = mixture
-                JSONArray j = new JSONArray(mixtures.get(i).toString());
-                Drink d = new Drink(new User(new JSONObject(j.get(0).toString())), new Mixture(new
-                        JSONObject(j.get(1).toString())), Long.valueOf(j.get(0).toString()).longValue());
+                    //0 = timestamp, 1 = user, 2 = mixture
+                    JSONArray j = new JSONArray(mixtures.get(i).toString());
+                    User u = new User(new JSONObject(j.get(1).toString()));
 
+                    //Have to do this, because jsonobject == jsonobject is always false
+                    if (u.toString().compareTo(currentUser.toString()) == 0) {
+                        Drink d = new Drink(u, new Mixture(new
+                                JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()).longValue());
+
+                        dA.add(d);
+                        //Timer
+                        //dA.remove(d);
+                    }
+                }
             }
 
         } catch (JSONException e) {
