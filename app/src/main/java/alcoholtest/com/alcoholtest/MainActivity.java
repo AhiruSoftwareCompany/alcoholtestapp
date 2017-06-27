@@ -27,6 +27,7 @@ import java.util.ArrayList;
 
 import alcoholtest.com.alcoholtest.adapter.MixtureAdapter;
 import alcoholtest.com.alcoholtest.adapter.UserAdapter;
+import alcoholtest.com.alcoholtest.model.Drink;
 import alcoholtest.com.alcoholtest.model.Mixture;
 import alcoholtest.com.alcoholtest.model.User;
 
@@ -302,9 +303,8 @@ public class MainActivity extends AppCompatActivity {
 
                 //0 = timestamp, 1 = user, 2 = mixture
                 JSONArray j = new JSONArray(mixtures.get(i).toString());
-                long l = Long.valueOf(j.get(0).toString()).longValue();
-                User u = new User(new JSONObject(j.get(0).toString()));
-                Mixture m = new Mixture(new JSONObject(j.get(1).toString()));
+                Drink d = new Drink(new User(new JSONObject(j.get(0).toString())), new Mixture(new
+                        JSONObject(j.get(1).toString())), Long.valueOf(j.get(0).toString()).longValue());
 
             }
 
