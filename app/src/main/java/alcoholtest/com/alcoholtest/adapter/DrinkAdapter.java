@@ -43,12 +43,20 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         d = getItem(position);
         long ago = new Date().getTime() - d.getTime();
 
-        name.setText(d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage()) + " %)");
+        //TODO: StringBuilder or something else than this crap
+        if (d.getMixture().getAmount() < 100) {
+            name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
+        } else {
+            name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
+        }
 
         timestamp.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)) + " ago");
-        iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "drawable",
-                mContext.getApplicationContext().getPackageName()));
+
+        if (d.getMixture().getImage().compareTo("") != 0) {
+            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "drawable",
+                    mContext.getApplicationContext().getPackageName()));
+        }
 
 
         return v;

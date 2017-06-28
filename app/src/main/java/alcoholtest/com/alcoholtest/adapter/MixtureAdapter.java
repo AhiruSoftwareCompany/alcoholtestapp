@@ -49,9 +49,10 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         }
         percentage.setText(format.format(mixture.getPercentage() * 100) + " %");
 
-
-        image.setImageResource(mContext.getResources().getIdentifier(mixture.getImage(), "drawable",
-                mContext.getApplicationContext().getPackageName()));
+        if (mixture.getImage().compareTo("") != 0) {
+            image.setImageResource(mContext.getResources().getIdentifier(mixture.getImage(), "drawable",
+                    mContext.getApplicationContext().getPackageName()));
+        }
         return v;
     }
 }

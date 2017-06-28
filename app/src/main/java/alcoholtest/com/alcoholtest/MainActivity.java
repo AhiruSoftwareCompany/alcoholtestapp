@@ -219,11 +219,20 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences.Editor editor = sharedPref.edit();
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixtures", "[]"));
 
-            if (mixtures.length() == 0) {
-                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":500,\"percentage\":0.05,\"image\":\"beer\"}"));
-                mixtures.put(new JSONObject("{\"name\":\"Bier\",\"amount\":1000,\"percentage\":0.05,\"image\":\"beer\"}"));
-                mixtures.put(new JSONObject("{\"name\":\"Wodka\",\"amount\":20,\"percentage\":0.40,\"image\":\"beer\"}"));
-//                mixtures.put("{\"name\":\"Eigenes\nGetränk\",\"amount\":0,\"percentage\":0,\"image\":\"\"}");
+            if (mixtures.length() <= 5) {
+                //Updating mixtures
+                mixtures = new JSONArray("[]");
+                mixtures.put(new Mixture("Bier", 500, 0.05, "beer").toString());
+                mixtures.put(new Mixture("Bier", 1000, 0.05, "beer").toString());
+                mixtures.put(new Mixture("Pils", 330, 0.048, "pils").toString());
+                mixtures.put(new Mixture("Pils", 500, 0.048, "pils").toString());
+                mixtures.put(new Mixture("Wein", 200, 0.10, "wine").toString());
+                mixtures.put(new Mixture("Wodka", 20, 0.40, "vodka").toString());
+                mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
+                mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
+
+                //TODO: Add possibility to create custom mixtures (saved somewhere elsed so the predefined ones can be updated)
+//              mixtures.put("{\"name\":\"Eigenes\nGetränk\",\"amount\":0,\"percentage\":0,\"image\":\"\"}");
                 editor.putString("drinks", mixtures.toString());
                 editor.commit();
             }
