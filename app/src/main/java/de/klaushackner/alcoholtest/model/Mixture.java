@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest.model;
+package de.klaushackner.alcoholtest.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

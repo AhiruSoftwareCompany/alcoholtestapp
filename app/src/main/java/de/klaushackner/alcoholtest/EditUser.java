@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest;
+package de.klaushackner.alcoholtest;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import alcoholtest.com.alcoholtest.model.User;
+import de.klaushackner.alcoholtest.model.User;
 
 public class EditUser extends AppCompatActivity {
     private TextView tvName;

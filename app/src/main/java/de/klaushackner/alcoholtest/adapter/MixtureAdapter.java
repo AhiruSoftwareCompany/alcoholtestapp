@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest.adapter;
+package de.klaushackner.alcoholtest.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import alcoholtest.com.alcoholtest.R;
-import alcoholtest.com.alcoholtest.model.Mixture;
+import de.klaushackner.alcoholtest.R;
+import de.klaushackner.alcoholtest.model.Mixture;
 
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
     private MixtureAdapter ma;

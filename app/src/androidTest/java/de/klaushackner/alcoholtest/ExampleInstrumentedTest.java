@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest;
+package de.klaushackner.alcoholtest;
 
 import android.content.Context;
 import android.support.test.InstrumentationRegistry;

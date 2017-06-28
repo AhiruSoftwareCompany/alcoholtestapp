@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest;
+package de.klaushackner.alcoholtest;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -27,12 +27,12 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import alcoholtest.com.alcoholtest.adapter.DrinkAdapter;
-import alcoholtest.com.alcoholtest.adapter.MixtureAdapter;
-import alcoholtest.com.alcoholtest.adapter.UserAdapter;
-import alcoholtest.com.alcoholtest.model.Drink;
-import alcoholtest.com.alcoholtest.model.Mixture;
-import alcoholtest.com.alcoholtest.model.User;
+import de.klaushackner.alcoholtest.adapter.DrinkAdapter;
+import de.klaushackner.alcoholtest.adapter.MixtureAdapter;
+import de.klaushackner.alcoholtest.adapter.UserAdapter;
+import de.klaushackner.alcoholtest.model.Drink;
+import de.klaushackner.alcoholtest.model.Mixture;
+import de.klaushackner.alcoholtest.model.User;
 
 public class MainActivity extends AppCompatActivity {
 

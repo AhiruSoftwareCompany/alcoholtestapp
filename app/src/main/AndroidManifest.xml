@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="alcoholtest.com.alcoholtest"
-    android:versionName="0.1">
+    package="de.klaushackner.alcoholtest"
+    android:versionName="0.2">
 
     <uses-sdk android:minSdkVersion="19" />
 
@@ -13,14 +13,14 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:fullBackupContent="@xml/backup_descriptor">
-        <activity android:name=".MainActivity">
+        <activity android:name="de.klaushackner.alcoholtest.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".CreateUser"></activity>
-        <activity android:name=".EditUser"></activity>
+        <activity android:name="de.klaushackner.alcoholtest.CreateUser"></activity>
+        <activity android:name="de.klaushackner.alcoholtest.EditUser"></activity>
     </application>
 
 </manifest>

@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest;
+package de.klaushackner.alcoholtest;
 
 import android.content.Intent;
 import android.content.SharedPreferences;

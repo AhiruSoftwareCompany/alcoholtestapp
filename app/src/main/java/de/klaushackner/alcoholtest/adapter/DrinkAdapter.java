@@ -1,4 +1,4 @@
-package alcoholtest.com.alcoholtest.adapter;
+package de.klaushackner.alcoholtest.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import alcoholtest.com.alcoholtest.R;
-import alcoholtest.com.alcoholtest.model.Drink;
+import de.klaushackner.alcoholtest.R;
+import de.klaushackner.alcoholtest.model.Drink;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
