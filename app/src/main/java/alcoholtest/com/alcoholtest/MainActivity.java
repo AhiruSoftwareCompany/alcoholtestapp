@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
                 //Wenn nur ein User vorhanden, wird dieser ausgewählt
                 if (users.length() == 1) {
                     currentUser = new User(new JSONObject(users.get(0).toString()));
-                    if (fromStart) {
+                    if (!fromStart) {
                         Toast.makeText(this, R.string.only_one_user_there, Toast.LENGTH_SHORT).show();
                     }
                     return;

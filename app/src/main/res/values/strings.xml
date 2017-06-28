@@ -3,7 +3,7 @@
     <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="create_user">Benutzer erstellen</string>
-    <string name="no_information">Keine Information vorhanden</string>
+    <string name="no_information">k. A.</string>
     <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
