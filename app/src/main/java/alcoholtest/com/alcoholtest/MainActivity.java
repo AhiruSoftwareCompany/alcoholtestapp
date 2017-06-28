@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -63,7 +64,7 @@ public class MainActivity extends AppCompatActivity {
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                addDrink(currentUser);
+                addDrink();
             }
         });
 
@@ -212,18 +213,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     //TODO: Find better name!!!
-    public void addDrink(final User user) {
+
+    public void addDrink() {
 
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             SharedPreferences.Editor editor = sharedPref.edit();
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixtures", "[]"));
 
-            if (mixtures.length() <= 5) {
+            if (mixtures.length() < 8) {
                 //Updating mixtures
+                //Add new mixtures here!
                 mixtures = new JSONArray("[]");
                 mixtures.put(new Mixture("Bier", 500, 0.05, "beer").toString());
-                mixtures.put(new Mixture("Bier", 1000, 0.05, "beer").toString());
+                mixtures.put(new Mixture("Bier", 1000, 0.05, "morebeer").toString());
                 mixtures.put(new Mixture("Pils", 330, 0.048, "pils").toString());
                 mixtures.put(new Mixture("Pils", 500, 0.048, "pils").toString());
                 mixtures.put(new Mixture("Wein", 200, 0.10, "wine").toString());
@@ -232,7 +235,7 @@ public class MainActivity extends AppCompatActivity {
                 mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
 
                 //TODO: Add possibility to create custom mixtures (saved somewhere elsed so the predefined ones can be updated)
-//              mixtures.put("{\"name\":\"Eigenes\nGetränk\",\"amount\":0,\"percentage\":0,\"image\":\"\"}");
+                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
                 editor.putString("drinks", mixtures.toString());
                 editor.commit();
             }
@@ -265,35 +268,21 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View v,
                                         int position, long id) {
-
-                    //EIGENES GETRÄNK HINZUFÜGEN
-/*                    if (position == mixtureAdapter.getCount()) {
-                        Toast.makeText(MainActivity.this, "Eigenes Getränk hinzufügen", Toast.LENGTH_SHORT).show();
-
-                        // Handle custom drink
-
-                        try {
-                            SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                            SharedPreferences.Editor editor = sharedPref.edit();
-                            JSONArray mixtures = new JSONArray(sharedPref.getString("mixtures", "[]"));
-                            editor.putString("drinks", mixtures.toString());
-                            editor.commit();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                        dialog.dismiss();
-
-                    }
-*/
                     try {
                         SharedPreferences sharedPref = getSharedPreferences("data", 0);
                         SharedPreferences.Editor editor = sharedPref.edit();
+
+                        if (mixtureArray[position].getImage().compareTo("custom") == 0) {
+                            addCustomDrink(0, null);
+                            dialog.dismiss();
+                            return;
+                        }
                         JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
 
                         //0 = user, 1 = mixture
                         JSONArray toPut = new JSONArray();
                         toPut.put(System.currentTimeMillis());
-                        toPut.put(user.toString());
+                        toPut.put(currentUser.toString());
                         toPut.put(mixtureArray[position].toString()); //selected mixture
                         mixtures.put(toPut);
 
@@ -312,6 +301,69 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+
+    /**
+     * @param stage         0 = from "add drinks" dialog; 1 = from "add custom drink" dialog
+     * @param customMixture from "add custom drink" dialog
+     */
+    public void addCustomDrink(int stage, Mixture customMixture) {
+        switch (stage) {
+            case 0:
+                //Open dialog and wait for result
+                final Dialog d = new Dialog(this);
+                d.setContentView(R.layout.dialog_add_custom_drink);
+
+                ImageView image = (ImageView) d.findViewById(R.id.image);
+                if (currentUser.getName().compareTo("Franzi") == 0) {
+                    image.setImageResource(getResources().getIdentifier("custom_franzi", "drawable",
+                            getApplicationContext().getPackageName()));
+                }
+
+                Button addDrink = (Button) d.findViewById(R.id.addDrink);
+                addDrink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView tvName = (TextView) d.findViewById(R.id.name);
+                        TextView tvAmount = (TextView) d.findViewById(R.id.amount);
+                        TextView tvPercentage = (TextView) d.findViewById(R.id.percentage);
+                        String name = tvName.getText().toString();
+                        double amount = Double.parseDouble("0" + tvAmount.getText());
+                        double percentage = Double.parseDouble("0" + tvPercentage.getText());
+                        if (currentUser.getName().compareTo("Franzi") == 0) {
+                            addCustomDrink(1, new Mixture(name, amount, percentage, "custom_franzi"));
+                        } else {
+                            addCustomDrink(1, new Mixture(name, amount, percentage, "custom"));
+                        }
+                        d.dismiss();
+                    }
+                });
+                d.show();
+                break;
+            case 1:
+                try {
+                    if (customMixture != null || currentUser != null) {
+                        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                        SharedPreferences.Editor editor = sharedPref.edit();
+                        JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+
+                        //0 = user, 1 = mixture
+                        JSONArray toPut = new JSONArray();
+                        toPut.put(System.currentTimeMillis());
+                        toPut.put(currentUser.toString());
+                        toPut.put(customMixture.toString()); //selected mixture
+                        mixtures.put(toPut);
+
+                        editor.putString("mixturesToUser", mixtures.toString());
+                        editor.commit();
+                        addDrinks();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                break;
         }
     }
 
