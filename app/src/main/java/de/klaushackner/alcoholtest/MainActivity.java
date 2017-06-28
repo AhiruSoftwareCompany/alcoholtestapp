@@ -83,6 +83,23 @@ public class MainActivity extends AppCompatActivity {
 
         format.setDecimalSeparatorAlwaysShown(false);
         switchUser(true);
+    }
+
+    /**
+     * Updates gui after app is paused
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        updateGui();
+    }
+
+    /**
+     * Updates gui on startup
+     */
+    @Override
+    public void onStart() {
+        super.onStart();
         updateGui();
     }
 
@@ -201,7 +218,8 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog,
                                                 int item) {
                                 currentUser = usersList.get(item);
-                                Toast.makeText(c, R.string.you_selected + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
+                                //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainAcivity.this to c
+                                Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
 
                                 updateGui();
                                 dialog.dismiss();
@@ -390,7 +408,6 @@ public class MainActivity extends AppCompatActivity {
 
         try {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
-
             if (mixtures.length() > 0) {
                 for (int i = 0; i < mixtures.length(); i++) {
 
@@ -430,6 +447,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+        final JSONArray users;
+        try {
+            users = new JSONArray(sharedPref.getString("users", "[]"));
+            if (users.length() == 1) {
+                menu.removeItem(R.id.switchUser);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return true;
+    }
+
+    @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.switchUser:
@@ -457,7 +489,7 @@ public class MainActivity extends AppCompatActivity {
                 dialog.setTitle(R.string.about);
                 final TextView title = (TextView) dialog.findViewById(android.R.id.title);
                 title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                title.setPadding(0, 8, 0, 6);
+                title.setPadding(0, 32, 0, 4);
 
                 dialog.show();
                 break;
