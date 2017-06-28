@@ -37,7 +37,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="end"
-                android:inputType="textPersonName" />
+                android:inputType="text|textPersonName"
+                android:textAlignment="viewStart" />
 
         </TableRow>
 
@@ -60,7 +61,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="end"
-                android:inputType="number" />
+                android:inputType="numberDecimal"
+                android:textAlignment="viewStart" />
         </TableRow>
 
         <TableRow
@@ -83,7 +85,8 @@
                 android:layout_weight="1"
                 android:ems="10"
                 android:gravity="end"
-                android:inputType="number" />
+                android:inputType="number"
+                android:textAlignment="viewStart" />
 
         </TableRow>
 

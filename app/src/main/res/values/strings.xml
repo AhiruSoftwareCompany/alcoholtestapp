@@ -7,7 +7,7 @@
     <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
-    <string name="about_text">Emoji artwork provided by EmojiOne.</string>
+    <string name="about_text">(c) 2017 Klaus Hackner\nEmoji artwork provided by EmojiOne.</string>
     <string name="add_user">Einen Benutzer hinzufügen</string>
     <string name="you_selected">Ausgewählt:</string>
     <string name="consumed_drinks">Alkoholische Getränke intus</string>
@@ -15,7 +15,7 @@
     <string name="pick_user">Wähle einen Benutzer</string>
     <string name="about">About</string>
     <string name="name">Name</string>
-    <string name="percentage">Alkoholgehalt</string>
+    <string name="percentage">Alkoholgehalt (%)</string>
     <string name="amount">Menge (ml)</string>
     <string name="sex">Geschlecht</string>
     <string name="female">Weiblich</string>

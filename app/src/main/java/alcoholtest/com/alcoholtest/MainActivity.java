@@ -2,6 +2,7 @@ package alcoholtest.com.alcoholtest;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,6 +37,7 @@ import alcoholtest.com.alcoholtest.model.User;
 public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
+    private Context c;
     private User currentUser;
     private Button btnAddDrink;
     private TextView tvName;
@@ -52,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        c = getApplicationContext();
 
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
@@ -198,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog,
                                                 int item) {
                                 currentUser = usersList.get(item);
-                                Toast.makeText(MainActivity.this, R.string.you_selected + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
+                                Toast.makeText(c, R.string.you_selected + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
 
                                 updateGui();
                                 dialog.dismiss();
@@ -234,8 +237,12 @@ public class MainActivity extends AppCompatActivity {
                 mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
                 mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
 
-                //TODO: Add possibility to create custom mixtures (saved somewhere elsed so the predefined ones can be updated)
-                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
+                if (currentUser.getName().compareTo("Franzi") == 0) {
+                    mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom_franzi").toString());
+                } else {
+                    mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
+                }
+
                 editor.putString("drinks", mixtures.toString());
                 editor.commit();
             }
@@ -272,7 +279,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences sharedPref = getSharedPreferences("data", 0);
                         SharedPreferences.Editor editor = sharedPref.edit();
 
-                        if (mixtureArray[position].getImage().compareTo("custom") == 0) {
+                        if (mixtureArray[position].getImage().compareTo("custom") == 0 || mixtureArray[position].getImage().compareTo("custom_franzi") == 0) {
                             addCustomDrink(0, null);
                             dialog.dismiss();
                             return;
@@ -331,13 +338,18 @@ public class MainActivity extends AppCompatActivity {
                         TextView tvPercentage = (TextView) d.findViewById(R.id.percentage);
                         String name = tvName.getText().toString();
                         double amount = Double.parseDouble("0" + tvAmount.getText());
-                        double percentage = Double.parseDouble("0" + tvPercentage.getText());
-                        if (currentUser.getName().compareTo("Franzi") == 0) {
-                            addCustomDrink(1, new Mixture(name, amount, percentage, "custom_franzi"));
+                        double percentage = Double.parseDouble("0" + tvPercentage.getText()) / 100;
+
+                        if (name.length() > 2 && amount > 1 && amount < 2000 && percentage > 0.01 && percentage < 0.95) {
+                            if (currentUser.getName().compareTo("Franzi") == 0) {
+                                addCustomDrink(1, new Mixture(name, amount, percentage, "custom_franzi"));
+                            } else {
+                                addCustomDrink(1, new Mixture(name, amount, percentage, "custom"));
+                            }
+                            d.dismiss();
                         } else {
-                            addCustomDrink(1, new Mixture(name, amount, percentage, "custom"));
+                            Toast.makeText(c, c.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show();
                         }
-                        d.dismiss();
                     }
                 });
                 d.show();
