@@ -15,6 +15,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSex;
     private DrinkAdapter dA;
     private ListView drinks;
+    private ImageButton refresh;
     private DecimalFormat format = new DecimalFormat();
 
 
@@ -78,6 +80,14 @@ public class MainActivity extends AppCompatActivity {
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //Handle event: remove drink
                 return false;
+            }
+        });
+
+        refresh = (ImageButton) findViewById(R.id.refresh);
+        refresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateGui();
             }
         });
 
@@ -124,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Adds drinks from the current person to the list view
+     * Calculates current persons blood alcohol content (BAC or in German: BAK)
      */
     public void updateDrinkList() {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
@@ -144,6 +155,26 @@ public class MainActivity extends AppCompatActivity {
                     if (u.toString().compareTo(currentUser.toString()) == 0) {
                         Drink d = new Drink(u, new Mixture(new
                                 JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()));
+
+                        //Now the magic begins
+
+                        //alcohol content
+                        double V = d.getMixture().getAmount();
+                        double e = d.getMixture().getPercentage();
+                        double A = V * e * 0.8;
+
+                        double m = currentUser.getWeight();
+                        double r;
+
+                        if (currentUser.isMale()) {
+                            double R = 2.447 - 0.09516 * currentUser.getAge() + 0.1074 * currentUser.getHeight() + 0.3362 * currentUser.getWeight();
+                            r = (1.055 * R) / (0.8 * m);
+                        } else {
+                            double R = -2.097 + 0.1069 * currentUser.getHeight() + 0.2466 * currentUser.getWeight();
+                            r = (1.055 * R) / (0.8 * m);
+                        }
+
+                        d.setPromille(A / (m * r));
 
                         dA.add(d);
                         //Timer
@@ -272,6 +303,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * Adds mixtures to dialog and handles its events
+     * Here you can add more mixtures
+     */
     public void addDrink() {
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
@@ -357,8 +392,8 @@ public class MainActivity extends AppCompatActivity {
                     updateDrinkList();
                 }
             });
-            dialog.show();
 
+            dialog.show();
 
         } catch (JSONException e) {
             e.printStackTrace();

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -17,34 +18,40 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/name" />
+                android:text="@string/name"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/age" />
+                android:text="@string/age"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/height" />
+                android:text="@string/height"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/weight" />
+                android:text="@string/weight"
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/sex" />
+                android:text="@string/sex"
+                android:textSize="18sp" />
 
         </LinearLayout>
 
         <view
             class="android.support.v4.widget.Space"
             android:layout_width="40dp"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -55,31 +62,36 @@
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_information" />
+                android:text="@string/no_information"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_information" />
+                android:text="@string/no_information"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_information" />
+                android:text="@string/no_information"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_information" />
+                android:text="@string/no_information"
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/no_information" />
+                android:text="@string/no_information"
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -87,7 +99,8 @@
     <view
         class="android.support.v4.widget.Space"
         android:layout_width="20dp"
-        android:layout_height="20dp" />
+        android:layout_height="20dp"
+        android:textSize="18sp" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -99,17 +112,26 @@
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center|start"
-            android:text="@string/consumed_drinks" />
+            android:text="@string/consumed_drinks"
+            android:textSize="18sp" />
 
         <Space
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1" />
 
+        <ImageButton
+            android:id="@+id/refresh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:elevation="0dp"
+            app:srcCompat="@android:drawable/ic_popup_sync" />
+
         <Button
             android:id="@+id/add_drink_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:elevation="0dp"
             android:text="@string/add_drink_button" />
 
     </LinearLayout>

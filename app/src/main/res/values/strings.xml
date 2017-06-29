@@ -10,7 +10,7 @@
     <string name="about_text">(c) 2017 Klaus Hackner\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="add_user">Einen Benutzer hinzufügen</string>
     <string name="you_selected">Ausgewählt:</string>
-    <string name="consumed_drinks">Alkoholische Getränke intus</string>
+    <string name="consumed_drinks">Alkoholische Getränke\nintus</string>
     <string name="add_drink">Ein Getränk hinzufügen …</string>
     <string name="pick_user">Wähle einen Benutzer</string>
     <string name="about">About</string>

@@ -26,6 +26,7 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         super(context, R.layout.items_drink, arrayList);
         mContext = context;
         format.setDecimalSeparatorAlwaysShown(false);
+        format.setMaximumFractionDigits(2);
     }
 
     @Override
@@ -57,6 +58,8 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
             iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "drawable",
                     mContext.getApplicationContext().getPackageName()));
         }
+
+        promille.setText(format.format(d.getPromille()) + " ‰");
 
 
         return v;
