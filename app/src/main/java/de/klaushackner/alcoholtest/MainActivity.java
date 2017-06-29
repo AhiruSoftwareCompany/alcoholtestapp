@@ -118,7 +118,46 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 tvSex.setText(R.string.female);
             }
-            addDrinks();
+            updateDrinkList();
+        }
+    }
+
+    /**
+     * Adds drinks from the current person to the list view
+     */
+    public void updateDrinkList() {
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        dA.clear();
+        dA.notifyDataSetChanged();
+
+        try {
+            JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+            if (mixtures.length() > 0) {
+                for (int i = 0; i < mixtures.length(); i++) {
+
+                    //0 = timestamp, 1 = user, 2 = mixture
+                    JSONArray j = new JSONArray(mixtures.get(i).toString());
+                    User u = new User(new JSONObject(j.get(1).toString()));
+
+                    //Have to do this, because jsonobject == jsonobject is always false
+                    if (u.toString().compareTo(currentUser.toString()) == 0) {
+                        Drink d = new Drink(u, new Mixture(new
+                                JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()));
+
+                        dA.add(d);
+                        //Timer
+                        //dA.remove(d);
+                    }
+                }
+            }
+
+            //Clean up
+            editor.putString("mixturesToUser", mixtures.toString());
+            editor.commit();
+
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -233,10 +272,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    //TODO: Find better name!!!
-
     public void addDrink() {
-
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -297,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
                         SharedPreferences sharedPref = getSharedPreferences("data", 0);
                         SharedPreferences.Editor editor = sharedPref.edit();
 
-                        if (mixtureArray[position].getImage().compareTo("custom") == 0 || mixtureArray[position].getImage().compareTo("custom_franzi") == 0) {
+                        if (mixtureArray[position].getPercentage() == 0) {
                             addCustomDrink(0, null);
                             dialog.dismiss();
                             return;
@@ -318,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
                     }
 
                     dialog.dismiss();
-                    addDrinks();
+                    updateDrinkList();
                 }
             });
             dialog.show();
@@ -358,7 +394,7 @@ public class MainActivity extends AppCompatActivity {
                         double amount = Double.parseDouble("0" + tvAmount.getText());
                         double percentage = Double.parseDouble("0" + tvPercentage.getText()) / 100;
 
-                        if (name.length() > 2 && amount > 1 && amount < 2000 && percentage > 0.01 && percentage < 0.95) {
+                        if (name.length() > 2 && amount > 1 && amount < 3000 && percentage > 0.01 && percentage < 0.99) {
                             if (currentUser.getName().compareTo("Franzi") == 0) {
                                 addCustomDrink(1, new Mixture(name, amount, percentage, "custom_franzi"));
                             } else {
@@ -388,51 +424,12 @@ public class MainActivity extends AppCompatActivity {
 
                         editor.putString("mixturesToUser", mixtures.toString());
                         editor.commit();
-                        addDrinks();
+                        updateDrinkList();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 break;
-        }
-    }
-
-    /**
-     * Adds drinks from the current person to the list view
-     */
-    public void addDrinks() {
-        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
-        dA.clear();
-        dA.notifyDataSetChanged();
-
-        try {
-            JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
-            if (mixtures.length() > 0) {
-                for (int i = 0; i < mixtures.length(); i++) {
-
-                    //0 = timestamp, 1 = user, 2 = mixture
-                    JSONArray j = new JSONArray(mixtures.get(i).toString());
-                    User u = new User(new JSONObject(j.get(1).toString()));
-
-                    //Have to do this, because jsonobject == jsonobject is always false
-                    if (u.toString().compareTo(currentUser.toString()) == 0) {
-                        Drink d = new Drink(u, new Mixture(new
-                                JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()));
-
-                        dA.add(d);
-                        //Timer
-                        //dA.remove(d);
-                    }
-                }
-            }
-
-            //Clean up
-            editor.putString("mixturesToUser", mixtures.toString());
-            editor.commit();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
         }
     }
 
