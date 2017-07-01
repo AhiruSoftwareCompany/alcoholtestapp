@@ -25,4 +25,5 @@
     <string name="weight">Körpergewicht (kg)</string>
     <string name="height">Körpergröße (cm)</string>
     <string name="image">Bild</string>
+    <string name="promille">Promille (‰)</string>
 </resources>

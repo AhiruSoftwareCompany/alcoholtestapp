@@ -46,9 +46,11 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvWeight;
     private TextView tvHeight;
     private TextView tvSex;
+    private TextView tvPromille; //TODO: rename this
     private DrinkAdapter dA;
     private ListView drinks;
     private ImageButton refresh;
+    private double currentPromille;
     private DecimalFormat format = new DecimalFormat();
 
 
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
         tvSex = (TextView) findViewById(R.id.sex);
         btnAddDrink = (Button) findViewById(R.id.add_drink_button);
         drinks = (ListView) findViewById(R.id.drinks);
+        tvPromille = (TextView) findViewById(R.id.promille);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -114,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Updates GUI to match the current selected user
+     * Updates GUI to match the current selected user, then calls updateDrinkList()
      */
     public void updateGui() {
         if (currentUser != null) {
@@ -141,6 +144,21 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = sharedPref.edit();
         dA.clear();
         dA.notifyDataSetChanged();
+        currentPromille = 0;
+
+        //make this better, for widget/notification use, ...
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            public void run() {
+                if (currentPromille >= 0.1) {
+                    currentPromille = -0.1;
+                } else {
+                    currentPromille = 0;
+                }
+                handler.postDelayed(this, 3600000); //every hour
+            }
+        }, 3600000); //Every hour
+
 
         try {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
@@ -153,7 +171,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Have to do this, because jsonobject == jsonobject is always false
                     if (u.toString().compareTo(currentUser.toString()) == 0) {
-                        Drink d = new Drink(u, new Mixture(new
+                        final Drink d = new Drink(u, new Mixture(new
                                 JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()));
 
                         //Now the magic begins
@@ -174,11 +192,21 @@ public class MainActivity extends AppCompatActivity {
                             r = (1.055 * R) / (0.8 * m);
                         }
 
+
                         d.setPromille(A / (m * r));
+                        currentPromille += d.getPromille();
+                        tvPromille.setText(format.format(currentPromille));
 
                         dA.add(d);
-                        //Timer
-                        //dA.remove(d);
+
+
+                        final Handler handler2 = new Handler();
+                        handler2.postDelayed(new Runnable() {
+                            public void run() {
+                                dA.remove(d);
+                                handler2.postDelayed(this, Long.getLong(d.getPromille()+"") * 10 * 60 * 60 * 1000); //every hour
+                            }
+                        }, 3600000);
                     }
                 }
             }
