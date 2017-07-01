@@ -3,13 +3,19 @@ package de.klaushackner.alcoholtest.model;
 public class Drink {
     private User user;
     private Mixture mixture;
-    private long time;
+    private long takingTime;
     private double promille;
+    private long expireTime;
 
-    public Drink(User user, Mixture mixture, long time) {
+    public Drink(User user, Mixture mixture, long takingTime, long expireTime) {
         this.user = user;
         this.mixture = mixture;
-        this.time = time;
+        this.takingTime = takingTime;
+        this.expireTime = expireTime;
+    }
+
+    public void setExpireTime(long expireTime) {
+        this.expireTime = expireTime;
     }
 
     public void setPromille(double promille) {
@@ -28,8 +34,12 @@ public class Drink {
         return mixture;
     }
 
-    public long getTime() {
-        return time;
+    public long getTakingTime() {
+        return takingTime;
+    }
+
+    public long getExpireTime() {
+        return expireTime;
     }
 
 }

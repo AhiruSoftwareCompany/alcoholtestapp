@@ -27,6 +27,7 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import de.klaushackner.alcoholtest.adapter.DrinkAdapter;
 import de.klaushackner.alcoholtest.adapter.MixtureAdapter;
@@ -52,7 +53,6 @@ public class MainActivity extends AppCompatActivity {
     private ImageButton refresh;
     private double currentPromille;
     private DecimalFormat format = new DecimalFormat();
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,12 +132,14 @@ public class MainActivity extends AppCompatActivity {
                 tvSex.setText(R.string.female);
             }
             updateDrinkList();
+            tvPromille.setText(format.format(currentPromille));
         }
     }
 
     /**
      * Adds drinks from the current person to the list view
      * Calculates current persons blood alcohol content (BAC or in German: BAK)
+     * Only called by updateGui();
      */
     public void updateDrinkList() {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
@@ -146,20 +148,6 @@ public class MainActivity extends AppCompatActivity {
         dA.notifyDataSetChanged();
         currentPromille = 0;
 
-        //make this better, for widget/notification use, ...
-        final Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
-            public void run() {
-                if (currentPromille >= 0.1) {
-                    currentPromille = -0.1;
-                } else {
-                    currentPromille = 0;
-                }
-                handler.postDelayed(this, 3600000); //every hour
-            }
-        }, 3600000); //Every hour
-
-
         try {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
             if (mixtures.length() > 0) {
@@ -167,20 +155,16 @@ public class MainActivity extends AppCompatActivity {
 
                     //0 = timestamp, 1 = user, 2 = mixture
                     JSONArray j = new JSONArray(mixtures.get(i).toString());
-                    User u = new User(new JSONObject(j.get(1).toString()));
+                    long takingTime = Long.valueOf(j.get(0).toString());
+                    User user = new User(new JSONObject(j.get(1).toString()));
+                    Mixture mixture = new Mixture(new JSONObject(j.get(2).toString()));
 
                     //Have to do this, because jsonobject == jsonobject is always false
-                    if (u.toString().compareTo(currentUser.toString()) == 0) {
-                        final Drink d = new Drink(u, new Mixture(new
-                                JSONObject(j.get(2).toString())), Long.valueOf(j.get(0).toString()));
-
+                    if (user.toString().compareTo(currentUser.toString()) == 0) {
                         //Now the magic begins
 
                         //alcohol content
-                        double V = d.getMixture().getAmount();
-                        double e = d.getMixture().getPercentage();
-                        double A = V * e * 0.8;
-
+                        double A = mixture.getAmount() * mixture.getPercentage() * 0.8;
                         double m = currentUser.getWeight();
                         double r;
 
@@ -192,19 +176,25 @@ public class MainActivity extends AppCompatActivity {
                             r = (1.055 * R) / (0.8 * m);
                         }
 
+                        double promille = A / (m * r);
 
-                        d.setPromille(A / (m * r));
-                        currentPromille += d.getPromille();
-                        tvPromille.setText(format.format(currentPromille));
+                        long expireTime = takingTime + Math.round(promille * 10 * 60 * 60 * 1000); // 0,1 Promille pro Stunde wird abgebaut
 
-                        dA.add(d);
+                        final Drink d = new Drink(user, mixture, takingTime, expireTime);
+                        d.setPromille(promille);
 
+                        if (new Date().getTime() > expireTime) {
+                            mixtures.remove(i);
+                        } else {
+                            currentPromille += d.getPromille();
+                            dA.add(d);
+                        }
 
                         final Handler handler2 = new Handler();
                         handler2.postDelayed(new Runnable() {
                             public void run() {
                                 dA.remove(d);
-                                handler2.postDelayed(this, Long.getLong(d.getPromille()+"") * 10 * 60 * 60 * 1000); //every hour
+                                handler2.postDelayed(this, Long.getLong(d.getPromille() + "") * 10 * 60 * 60 * 1000); //every hour
                             }
                         }, 3600000);
                     }
@@ -280,6 +270,7 @@ public class MainActivity extends AppCompatActivity {
     public void switchUser(boolean fromStart) {
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
+            final SharedPreferences.Editor editor = sharedPref.edit();
 
             //Ist die Users-datenbank leer, wird ein neuer User erstellt
             if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
@@ -287,12 +278,31 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
+                if (fromStart) {
+                    long lastUser = sharedPref.getLong("lastUser", 0);
+
+                    if (lastUser != 0) {
+                        for (int i = 0; i < users.length(); i++) {
+                            User u = new User(new JSONObject(users.get(i).toString()));
+                            if (u.getCreated() == lastUser) {
+                                currentUser = u;
+                                editor.putLong("lastUser", u.getCreated());
+                                editor.commit();
+                                return;
+                            }
+                        }
+                    }
+                }
+
                 //Wenn nur ein User vorhanden, wird dieser ausgewählt
                 if (users.length() == 1) {
                     currentUser = new User(new JSONObject(users.get(0).toString()));
                     if (!fromStart) {
                         Toast.makeText(this, R.string.only_one_user_there, Toast.LENGTH_SHORT).show();
                     }
+
+                    editor.putLong("lastUser", currentUser.getCreated());
+                    editor.commit();
                     return;
                 }
 
@@ -318,6 +328,8 @@ public class MainActivity extends AppCompatActivity {
                                 currentUser = usersList.get(item);
                                 //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainAcivity.this to c
                                 Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
+                                editor.putLong("lastUser", currentUser.getCreated());
+                                editor.commit();
 
                                 updateGui();
                                 dialog.dismiss();

@@ -36,13 +36,14 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         View v = inflater.inflate(R.layout.items_drink, parent, false);
 
         TextView name = (TextView) v.findViewById(R.id.name);
-        TextView timestamp = (TextView) v.findViewById(R.id.timestamp);
-        TextView runsout = (TextView) v.findViewById(R.id.runsout);
+        TextView takingTime = (TextView) v.findViewById(R.id.takingTime);
+        TextView expireTime = (TextView) v.findViewById(R.id.expireTime);
         TextView promille = (TextView) v.findViewById(R.id.promille);
         ImageView iv = (ImageView) v.findViewById(R.id.imageView);
 
         d = getItem(position);
-        long ago = new Date().getTime() - d.getTime();
+        long ago = new Date().getTime() - d.getTakingTime();
+        long expires = d.getExpireTime() - new Date().getTime();
 
         //TODO: StringBuilder or something else than this crap
         if (d.getMixture().getAmount() < 100) {
@@ -51,8 +52,10 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
             name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         }
 
-        timestamp.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
+        takingTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)) + " ago");
+        expireTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
+                MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)) + " left");
 
         if (d.getMixture().getImage().compareTo("") != 0) {
             iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "drawable",

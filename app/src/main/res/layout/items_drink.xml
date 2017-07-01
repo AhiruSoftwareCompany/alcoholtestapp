@@ -36,7 +36,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/timestamp"
+                    android:id="@+id/takingTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
@@ -60,7 +60,7 @@
                     android:textSize="20sp" />
 
                 <TextView
-                    android:id="@+id/runsout"
+                    android:id="@+id/expireTime"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
