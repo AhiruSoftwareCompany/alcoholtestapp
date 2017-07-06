@@ -23,10 +23,7 @@ public class EditUser extends AppCompatActivity {
     private TextView tvWeight;
     private TextView tvHeight;
     private RadioButton male;
-    private EditUser eu;
     private long created;
-    private SharedPreferences sharedPref;
-    private JSONArray users;
 
 
     @Override
@@ -39,7 +36,7 @@ public class EditUser extends AppCompatActivity {
         tvHeight = (TextView) findViewById(R.id.height);
         male = (RadioButton) findViewById(R.id.sex_male);
         RadioButton female = (RadioButton) findViewById(R.id.sex_female);
-        eu = this;
+        final EditUser eu = this;
 
         created = getIntent().getLongExtra("created", 0);
 
@@ -47,8 +44,8 @@ public class EditUser extends AppCompatActivity {
             finish();
         }
 
-        sharedPref = getSharedPreferences("data", 0);
-        users = null;
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+        JSONArray users = null;
         try {
             users = new JSONArray(sharedPref.getString("users", "[]"));
 
@@ -92,12 +89,13 @@ public class EditUser extends AppCompatActivity {
         int weight = Integer.parseInt("0" + tvWeight.getText());
         int height = Integer.parseInt("0" + tvHeight.getText());
 
-        sharedPref = getSharedPreferences("data", 0);
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
 
         if (User.isValidUser(name, age, height, weight)) {
             try {
                 JSONObject user = new JSONObject();
+                JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
                 user.put("name", name);
                 user.put("isMale", male.isChecked());
                 user.put("age", age);

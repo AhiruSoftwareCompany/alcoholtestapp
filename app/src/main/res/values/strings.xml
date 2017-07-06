@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Alcoholtester</string>
+    <string name="app_name">Alkoholtester</string>
     <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="no_information">k. A.</string>
