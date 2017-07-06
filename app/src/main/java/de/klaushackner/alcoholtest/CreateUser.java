@@ -15,6 +15,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.klaushackner.alcoholtest.model.User;
+
 public class CreateUser extends AppCompatActivity {
     private TextView tvName;
     private TextView tvAge;
@@ -60,7 +62,7 @@ public class CreateUser extends AppCompatActivity {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        if (isValidUser(name, age, height, weight)) {
+        if (User.isValidUser(name, age, height, weight)) {
             try {
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
                 JSONObject user = new JSONObject();
@@ -82,9 +84,5 @@ public class CreateUser extends AppCompatActivity {
         } else {
             return false;
         }
-    }
-
-    private boolean isValidUser(String name, int age, int height, int weight) {
-        return name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230;
     }
 }

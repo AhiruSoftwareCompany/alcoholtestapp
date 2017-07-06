@@ -74,4 +74,9 @@ public class User {
         return created;
     }
 
+
+    public static boolean isValidUser(String name, int age, int height, int weight) {
+        return name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230;
+    }
+
 }
