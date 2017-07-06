@@ -49,7 +49,7 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
 
         //TODO: StringBuilder or something else than this crap
         Mixture m = d.getMixture();
-        name.setText(String.format("%.2g ml %s (%.2g %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
+        name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
         /*
         if (d.getMixture().getAmount() < 100) {
             name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
