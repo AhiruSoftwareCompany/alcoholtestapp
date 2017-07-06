@@ -6,31 +6,22 @@ import org.json.JSONObject;
 public class User {
     private String name;
     private boolean isMale;
-    private double age;
-    private double weight;
-    private double height;
+    private int age;
+    private int weight; //kg
+    private int height; //cm
     private long created;
 
     public User(JSONObject userAsJSON) {
         try {
             this.name = userAsJSON.getString("name");
             this.isMale = userAsJSON.getBoolean("isMale");
-            this.age = userAsJSON.getDouble("age");
-            this.weight = userAsJSON.getDouble("weight");
-            this.height = userAsJSON.getDouble("height");
+            this.age = userAsJSON.getInt("age");
+            this.weight = userAsJSON.getInt("weight");
+            this.height = userAsJSON.getInt("height");
             this.created = userAsJSON.getLong("created");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    public User(String name, boolean isMale, double age, double weight, double height, long created) {
-        this.name = name;
-        this.isMale = isMale;
-        this.age = age;
-        this.weight = weight;
-        this.height = height;
-        this.created = created;
     }
 
     public String getCreatedAsString() {
@@ -61,15 +52,21 @@ public class User {
         return isMale;
     }
 
-    public double getAge() {
+    public int getAge() {
         return age;
     }
 
-    public double getWeight() {
+    /**
+     * @return weight in kilogram
+     */
+    public int getWeight() {
         return weight;
     }
 
-    public double getHeight() {
+    /**
+     * @return height in centimeter
+     */
+    public int getHeight() {
         return height;
     }
 

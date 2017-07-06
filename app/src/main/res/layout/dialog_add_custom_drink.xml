@@ -36,9 +36,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:gravity="end"
-                android:inputType="text|textPersonName"
-                android:textAlignment="viewStart" />
+                android:gravity="start"
+                android:inputType="text|textPersonName" />
 
         </TableRow>
 
@@ -60,9 +59,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:gravity="end"
-                android:inputType="numberDecimal"
-                android:textAlignment="viewStart" />
+                android:gravity="start"
+                android:inputType="numberDecimal" />
         </TableRow>
 
         <TableRow
@@ -84,9 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ems="10"
-                android:gravity="end"
-                android:inputType="number"
-                android:textAlignment="viewStart" />
+                android:gravity="start"
+                android:inputType="number" />
 
         </TableRow>
 

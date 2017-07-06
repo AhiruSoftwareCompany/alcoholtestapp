@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/promille"
+                android:text="@string/bac"
                 android:textSize="24sp" />
 
         </LinearLayout>
@@ -100,7 +100,7 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/promille"
+                android:id="@+id/bac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
@@ -121,7 +121,6 @@
         android:orientation="horizontal">
 
         <TextView
-            android:id="@+id/textView"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
             android:gravity="center|start"

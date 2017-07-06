@@ -23,7 +23,6 @@ public class CreateUser extends AppCompatActivity {
     private RadioButton male;
     private CreateUser cp;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,21 +49,19 @@ public class CreateUser extends AppCompatActivity {
 
     }
 
-    public boolean addUser() {
+    private boolean addUser() {
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero
-        double age = Double.parseDouble("0" + tvAge.getText());
-        double weight = Double.parseDouble("0" + tvWeight.getText());
-        double height = Double.parseDouble("0" + tvHeight.getText());
+        int age = Integer.parseInt("0" + tvAge.getText());
+        int weight = Integer.parseInt("0" + tvWeight.getText());
+        int height = Integer.parseInt("0" + tvHeight.getText());
 
-        //TODO: Maybe split this up
-        if (name.compareTo(cp.getResources().getText(R.string.add_user) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
+        SharedPreferences sharedPref = getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        if (isValidUser(name, age, height, weight)) {
             try {
-                SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                SharedPreferences.Editor editor = sharedPref.edit();
-
-                Log.i("Added user", sharedPref.getString("users", "[]"));
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
                 JSONObject user = new JSONObject();
                 user.put("name", name);
@@ -74,10 +71,10 @@ public class CreateUser extends AppCompatActivity {
                 user.put("height", height);
                 user.put("created", System.currentTimeMillis());
                 users.put(user);
-                Log.i("Current users object", users.toString());
 
                 editor.putString("users", users.toString());
                 editor.commit();
+                Log.i("Created user", user.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -85,5 +82,9 @@ public class CreateUser extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    private boolean isValidUser(String name, int age, int height, int weight) {
+        return name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230;
     }
 }

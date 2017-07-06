@@ -2,17 +2,17 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/switchUser"
-        android:title="Switch user" />
+        android:title="@string/switch_user" />
     <item
         android:id="@+id/newUser"
-        android:title="Create a new user" />
+        android:title="@string/create_new_user" />
     <item
         android:id="@+id/editUser"
-        android:title="Edit current user" />
+        android:title="@string/edit_current_user" />
     <item
         android:id="@+id/removeUser"
-        android:title="Remove current user" />
+        android:title="@string/remove_current_user" />
     <item
         android:id="@+id/about"
-        android:title="About" />
+        android:title="@string/about" />
 </menu>

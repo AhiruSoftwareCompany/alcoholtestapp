@@ -1,6 +1,7 @@
 package de.klaushackner.alcoholtest.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,11 @@ import java.util.concurrent.TimeUnit;
 
 import de.klaushackner.alcoholtest.R;
 import de.klaushackner.alcoholtest.model.Drink;
+import de.klaushackner.alcoholtest.model.Mixture;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
-    private Drink d;
-    private DecimalFormat format = new DecimalFormat();
+    private final DecimalFormat format = new DecimalFormat();
     private final Context mContext;
 
     public DrinkAdapter(Context context, ArrayList<Drink> arrayList) {
@@ -29,8 +30,9 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         format.setMaximumFractionDigits(2);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_drink, parent, false);
@@ -38,20 +40,23 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         TextView name = (TextView) v.findViewById(R.id.name);
         TextView takingTime = (TextView) v.findViewById(R.id.takingTime);
         TextView expireTime = (TextView) v.findViewById(R.id.expireTime);
-        TextView promille = (TextView) v.findViewById(R.id.promille);
+        TextView bac = (TextView) v.findViewById(R.id.bac);
         ImageView iv = (ImageView) v.findViewById(R.id.imageView);
 
-        d = getItem(position);
+        Drink d = getItem(position);
         long ago = new Date().getTime() - d.getTakingTime();
         long expires = d.getExpireTime() - new Date().getTime();
 
         //TODO: StringBuilder or something else than this crap
+        Mixture m = d.getMixture();
+        name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
+        /*
         if (d.getMixture().getAmount() < 100) {
             name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         } else {
             name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         }
-
+*/
         takingTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)) + " ago");
         expireTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
@@ -62,7 +67,7 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
                     mContext.getApplicationContext().getPackageName()));
         }
 
-        promille.setText(format.format(d.getPromille()) + " ‰");
+        bac.setText(format.format(d.getBac()) + " ‰");
 
 
         return v;

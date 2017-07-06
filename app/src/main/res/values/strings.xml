@@ -1,19 +1,18 @@
 <resources>
-    <string name="app_name">Alkoholtester</string>
+    <string name="app_name">Alcoholtester</string>
     <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
-    <string name="create_user">Benutzer erstellen</string>
     <string name="no_information">k. A.</string>
     <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
-    <string name="about_text">(c) 2017 Klaus Hackner\n\nAlcoholtest App for Android\nSource: https://github.com/dieechtenilente/alcoholtestapp/\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
+    <string name="about_text">© 2017 Klaus Hackner\n\nAlcoholtest App for Android\nSource: https://github.com/dieechtenilente/alcoholtestapp/\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="add_user">Einen Benutzer hinzufügen</string>
     <string name="you_selected">Ausgewählt:</string>
     <string name="consumed_drinks">Alkoholische Getränke\nintus</string>
     <string name="add_drink">Ein Getränk hinzufügen …</string>
     <string name="pick_user">Wähle einen Benutzer</string>
-    <string name="about">About</string>
+    <string name="about">Über diese App</string>
     <string name="name">Name</string>
     <string name="percentage">Alkoholgehalt (%)</string>
     <string name="amount">Menge (ml)</string>
@@ -25,5 +24,9 @@
     <string name="weight">Körpergewicht (kg)</string>
     <string name="height">Körpergröße (cm)</string>
     <string name="image">Bild</string>
-    <string name="promille">Promille (‰)</string>
+    <string name="bac">Promille (‰)</string>
+    <string name="create_user">Benutzer erstellen</string>
+    <string name="switch_user">Benutzer wechseln</string>
+    <string name="edit_current_user">Aktuellen Benutzer editieren</string>
+    <string name="remove_current_user">Aktuellen Benutzer löschen</string>
 </resources>

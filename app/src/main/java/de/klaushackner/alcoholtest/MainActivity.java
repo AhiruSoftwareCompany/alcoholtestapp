@@ -41,18 +41,14 @@ public class MainActivity extends AppCompatActivity {
     private boolean doubleBackToExitPressedOnce;
     private Context c;
     private User currentUser;
-    private Button btnAddDrink;
     private TextView tvName;
     private TextView tvAge;
     private TextView tvWeight;
     private TextView tvHeight;
     private TextView tvSex;
-    private TextView tvPromille; //TODO: rename this
+    private TextView tvBac;
     private DrinkAdapter dA;
-    private ListView drinks;
-    private ImageButton refresh;
-    private double currentPromille;
-    private DecimalFormat format = new DecimalFormat();
+    private final DecimalFormat format = new DecimalFormat();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,9 +61,9 @@ public class MainActivity extends AppCompatActivity {
         tvWeight = (TextView) findViewById(R.id.weight);
         tvHeight = (TextView) findViewById(R.id.height);
         tvSex = (TextView) findViewById(R.id.sex);
-        btnAddDrink = (Button) findViewById(R.id.add_drink_button);
-        drinks = (ListView) findViewById(R.id.drinks);
-        tvPromille = (TextView) findViewById(R.id.promille);
+        Button btnAddDrink = (Button) findViewById(R.id.add_drink_button);
+        ListView drinks = (ListView) findViewById(R.id.drinks);
+        tvBac = (TextView) findViewById(R.id.bac);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        refresh = (ImageButton) findViewById(R.id.refresh);
+        ImageButton refresh = (ImageButton) findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,7 +116,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Updates GUI to match the current selected user, then calls updateDrinkList()
      */
-    public void updateGui() {
+    private void updateGui() {
         if (currentUser != null) {
             tvName.setText(currentUser.getName());
             tvAge.setText(format.format(currentUser.getAge()) + " " + getString(R.string.years));
@@ -141,12 +137,12 @@ public class MainActivity extends AppCompatActivity {
      * Calculates current persons blood alcohol content (BAC or in German: BAK)
      * Only called by updateGui();
      */
-    public void updateDrinkList() {
+    private void updateDrinkList() {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         dA.clear();
         dA.notifyDataSetChanged();
-        currentPromille = 0;
+        double currentBac = 0;
 
         try {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
@@ -176,17 +172,17 @@ public class MainActivity extends AppCompatActivity {
                             r = (1.055 * R) / (0.8 * m);
                         }
 
-                        double promille = A / (m * r);
+                        double bac = A / (m * r);
 
-                        long expireTime = takingTime + Math.round(promille * 10 * 60 * 60 * 1000); // 0,1 Promille pro Stunde wird abgebaut
+                        long expireTime = takingTime + Math.round(bac * 10 * 60 * 60 * 1000); // 0,1 promille pro Stunde wird abgebaut
 
                         final Drink d = new Drink(user, mixture, takingTime, expireTime);
-                        d.setPromille(promille);
+                        d.setBac(bac);
 
                         if (new Date().getTime() > expireTime) {
                             mixtures.remove(i);
                         } else {
-                            currentPromille += d.getPromille();
+                            currentBac += d.getBac();
                             dA.add(d);
                         }
                     }
@@ -196,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
             //Clean up
             editor.putString("mixturesToUser", mixtures.toString());
             editor.commit();
-            tvPromille.setText(format.format(currentPromille));
+            tvBac.setText(format.format(currentBac));
 
         } catch (JSONException e) {
             e.printStackTrace();
@@ -206,20 +202,19 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Creates a user and opens select dialog afterwards
      */
-    public void createUser() {
+    private void createUser() {
         startActivity(new Intent(this, CreateUser.class));
         finish();
     }
 
     /**
-     * Removes given user. If that's the only user, the activity to create a now one will be launched.
+     * Remove given user. If that's the only user, the activity to create a new one will be launched.
      * If there were two users, the one left will be selected
      *
      * @param userToRemove user to remove
      * @throws JSONException if something bad happened (should not be the case)
-     * @returns false if not successful, true if successful
      */
-    public boolean removeUser(User userToRemove) throws JSONException {
+    private void removeUser(User userToRemove) throws JSONException {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
@@ -240,27 +235,25 @@ public class MainActivity extends AppCompatActivity {
                 } else {
                     switchUser(false);
                 }
-                return true;
             }
         }
-        return false;
     }
 
     /**
      * Opens activity to edit the current user
      */
-    public void editUser() {
+    private void editUser() {
         Intent i = new Intent(this, EditUser.class);
         i.putExtra("created", currentUser.getCreated());
         startActivity(i);
     }
 
     /**
-     * Switchs between users. If there's no user, a new one will be created. If only one user exists, a toast will be shown
+     * Switches between users. If there's no user, a new one will be created. If only one user exists, a toast will be shown
      *
-     * @param fromStart If this method is called in the onCreate() methode, the "only one user existing" message will be suppressed.
+     * @param fromStart If this method is called in the onCreate() method, the "only one user existing" message will be suppressed.
      */
-    public void switchUser(boolean fromStart) {
+    private void switchUser(boolean fromStart) {
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             final SharedPreferences.Editor editor = sharedPref.edit();
@@ -319,7 +312,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onClick(DialogInterface dialog,
                                                 int item) {
                                 currentUser = usersList.get(item);
-                                //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainAcivity.this to c
+                                //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainActivity.this to c
                                 Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
                                 editor.putLong("lastUser", currentUser.getCreated());
                                 editor.commit();
@@ -340,7 +333,7 @@ public class MainActivity extends AppCompatActivity {
      * Adds mixtures to dialog and handles its events
      * Here you can add more mixtures
      */
-    public void addDrink() {
+    private void addDrink() {
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             SharedPreferences.Editor editor = sharedPref.edit();
@@ -438,7 +431,7 @@ public class MainActivity extends AppCompatActivity {
      * @param stage         0 = from "add drinks" dialog; 1 = from "add custom drink" dialog
      * @param customMixture from "add custom drink" dialog
      */
-    public void addCustomDrink(int stage, Mixture customMixture) {
+    private void addCustomDrink(int stage, Mixture customMixture) {
         switch (stage) {
             case 0:
                 //Open dialog and wait for result
@@ -487,7 +480,7 @@ public class MainActivity extends AppCompatActivity {
                         JSONArray toPut = new JSONArray();
                         toPut.put(System.currentTimeMillis());
                         toPut.put(currentUser.toString());
-                        toPut.put(customMixture.toString()); //selected mixture
+                        toPut.put(customMixture != null ? customMixture.toString() : null); //selected mixture
                         mixtures.put(toPut);
 
                         editor.putString("mixturesToUser", mixtures.toString());

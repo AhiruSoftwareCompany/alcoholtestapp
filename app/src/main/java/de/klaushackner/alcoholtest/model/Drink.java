@@ -1,10 +1,10 @@
 package de.klaushackner.alcoholtest.model;
 
 public class Drink {
-    private User user;
-    private Mixture mixture;
-    private long takingTime;
-    private double promille;
+    private final User user;
+    private final Mixture mixture;
+    private final long takingTime;
+    private double bac;
     private long expireTime;
 
     public Drink(User user, Mixture mixture, long takingTime, long expireTime) {
@@ -18,12 +18,12 @@ public class Drink {
         this.expireTime = expireTime;
     }
 
-    public void setPromille(double promille) {
-        this.promille = promille;
+    public void setBac(double bac) {
+        this.bac = bac;
     }
 
-    public double getPromille() {
-        return promille;
+    public double getBac() {
+        return bac;
     }
 
     public User getUser() {

@@ -1,6 +1,7 @@
 package de.klaushackner.alcoholtest.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,22 +16,20 @@ import de.klaushackner.alcoholtest.R;
 import de.klaushackner.alcoholtest.model.Mixture;
 
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
-    private MixtureAdapter ma;
-    private Mixture mixture;
-    private Context mContext;
+    private final Context mContext;
 
     public MixtureAdapter(Context context, ArrayList<Mixture> arrayList) {
         super(context, R.layout.items_mixture, arrayList);
-        ma = this;
         mContext = context;
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_mixture, parent, false);
-        mixture = getItem(position);
+        Mixture mixture = getItem(position);
 
 
         TextView name = (TextView) v.findViewById(R.id.name);

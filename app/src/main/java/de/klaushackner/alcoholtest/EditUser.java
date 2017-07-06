@@ -23,12 +23,10 @@ public class EditUser extends AppCompatActivity {
     private TextView tvWeight;
     private TextView tvHeight;
     private RadioButton male;
-    private RadioButton female;
-    private EditUser cu;
+    private EditUser eu;
     private long created;
-    private User currentUser;
-    SharedPreferences sharedPref;
-    JSONArray users;
+    private SharedPreferences sharedPref;
+    private JSONArray users;
 
 
     @Override
@@ -40,15 +38,14 @@ public class EditUser extends AppCompatActivity {
         tvWeight = (TextView) findViewById(R.id.weight);
         tvHeight = (TextView) findViewById(R.id.height);
         male = (RadioButton) findViewById(R.id.sex_male);
-        female = (RadioButton) findViewById(R.id.sex_female);
-        cu = this;
+        RadioButton female = (RadioButton) findViewById(R.id.sex_female);
+        eu = this;
 
         created = getIntent().getLongExtra("created", 0);
 
         if (created == 0) {
             finish();
         }
-
 
         sharedPref = getSharedPreferences("data", 0);
         users = null;
@@ -58,15 +55,14 @@ public class EditUser extends AppCompatActivity {
             for (int i = 0; i < users.length(); i++) {
                 JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
-                    currentUser = new User(new JSONObject(users.get(i).toString()));
+                    User currentUser = new User(new JSONObject(users.get(i).toString()));
                     tvName.setText(currentUser.getName());
-                    tvAge.setText(currentUser.getAge()+"");
-                    tvWeight.setText(currentUser.getWeight()+"");
-                    tvHeight.setText(currentUser.getHeight()+"");
-                    if(!currentUser.isMale()){
+                    tvAge.setText(currentUser.getAge() + "");
+                    tvWeight.setText(currentUser.getWeight() + "");
+                    tvHeight.setText(currentUser.getHeight() + "");
+                    if (!currentUser.isMale()) {
                         female.toggle();
                     }
-
                 }
             }
         } catch (JSONException e) {
@@ -81,28 +77,26 @@ public class EditUser extends AppCompatActivity {
                     startActivity(new Intent(EditUser.this, MainActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(cu, cu.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(eu, eu.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
     }
 
-    public boolean editUser() {
+    private boolean editUser() {
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero
-        double age = Double.parseDouble("0" + tvAge.getText());
-        double weight = Double.parseDouble("0" + tvWeight.getText());
-        double height = Double.parseDouble("0" + tvHeight.getText());
+        int age = Integer.parseInt("0" + tvAge.getText());
+        int weight = Integer.parseInt("0" + tvWeight.getText());
+        int height = Integer.parseInt("0" + tvHeight.getText());
 
-        //TODO: Maybe split this up
-        if (name.compareTo(cu.getResources().getText(R.string.add_user) + "") != 0 && name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230) {
+        sharedPref = getSharedPreferences("data", 0);
+        SharedPreferences.Editor editor = sharedPref.edit();
+
+        if (!isValidUser(name, age, height, weight)) {
             try {
-                sharedPref = getSharedPreferences("data", 0);
-                SharedPreferences.Editor editor = sharedPref.edit();
-
-                Log.i("Added user", sharedPref.getString("users", "[]"));
                 JSONObject user = new JSONObject();
                 user.put("name", name);
                 user.put("isMale", male.isChecked());
@@ -117,10 +111,10 @@ public class EditUser extends AppCompatActivity {
                         users.put(i, user.toString());
                     }
                 }
-                Log.i("Current users object", users.toString());
 
                 editor.putString("users", users.toString());
                 editor.commit();
+                Log.i("Updated user", user.toString());
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -128,5 +122,9 @@ public class EditUser extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    private boolean isValidUser(String name, int age, int height, int weight) {
+        return name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230;
     }
 }

@@ -1,6 +1,7 @@
 package de.klaushackner.alcoholtest.adapter;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,7 @@ import de.klaushackner.alcoholtest.model.User;
 
 public class UserAdapter extends ArrayAdapter<User> {
 
-    private User p;
-    private DecimalFormat format = new DecimalFormat();
+    private final DecimalFormat format = new DecimalFormat();
     private final Context mContext;
 
     public UserAdapter(Context context, ArrayList<User> arrayList) {
@@ -25,26 +25,24 @@ public class UserAdapter extends ArrayAdapter<User> {
         format.setDecimalSeparatorAlwaysShown(false);
     }
 
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
+    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_users, parent, false);
-        p = getItem(position);
-        TextView tvName = (TextView) v.findViewById(R.id.tvName);
-        TextView tvAge = (TextView) v.findViewById(R.id.tvAge);
-        TextView tvWeight = (TextView) v.findViewById(R.id.tvWeight);
-        TextView tvHeight = (TextView) v.findViewById(R.id.tvHeight);
 
-        User o = getItem(position);
+        TextView tvName = (TextView) v.findViewById(R.id.name);
+        TextView tvAge = (TextView) v.findViewById(R.id.age);
+        TextView tvWeight = (TextView) v.findViewById(R.id.weight);
+        TextView tvHeight = (TextView) v.findViewById(R.id.height);
 
-        tvName.setText(o.getName());
-        tvAge.setText(format.format(o.getAge()) + " " + mContext.getResources().getString(R.string.years));
-        tvWeight.setText(format.format(o.getWeight()) + " kg");
-        tvHeight.setText(format.format(o.getHeight()) + " cm");
+        User u = getItem(position);
 
-
-        //TODO: user informationen anzeigen
+        tvName.setText(u != null ? u.getName() : null);
+        tvAge.setText(format.format(u != null ? u.getAge() : 0) + " " + mContext.getResources().getString(R.string.years));
+        tvWeight.setText(format.format(u != null ? u.getWeight() : 0) + " kg");
+        tvHeight.setText(format.format(u.getHeight()) + " cm");
         return v;
     }
 }
