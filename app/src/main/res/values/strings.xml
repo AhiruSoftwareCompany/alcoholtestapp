@@ -7,7 +7,7 @@
     <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
-    <string name="about_text">(c) 2017 Klaus Hackner\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
+    <string name="about_text">(c) 2017 Klaus Hackner\n\nAlcoholtest App for Android\nSource: https://github.com/dieechtenilente/alcoholtestapp/\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="add_user">Einen Benutzer hinzufügen</string>
     <string name="you_selected">Ausgewählt:</string>
     <string name="consumed_drinks">Alkoholische Getränke\nintus</string>

@@ -82,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
                 //Handle event: remove drink
+
                 return false;
             }
         });
@@ -132,7 +133,6 @@ public class MainActivity extends AppCompatActivity {
                 tvSex.setText(R.string.female);
             }
             updateDrinkList();
-            tvPromille.setText(format.format(currentPromille));
         }
     }
 
@@ -189,14 +189,6 @@ public class MainActivity extends AppCompatActivity {
                             currentPromille += d.getPromille();
                             dA.add(d);
                         }
-
-                        final Handler handler2 = new Handler();
-                        handler2.postDelayed(new Runnable() {
-                            public void run() {
-                                dA.remove(d);
-                                handler2.postDelayed(this, Long.getLong(d.getPromille() + "") * 10 * 60 * 60 * 1000); //every hour
-                            }
-                        }, 3600000);
                     }
                 }
             }
@@ -204,6 +196,7 @@ public class MainActivity extends AppCompatActivity {
             //Clean up
             editor.putString("mixturesToUser", mixtures.toString());
             editor.commit();
+            tvPromille.setText(format.format(currentPromille));
 
         } catch (JSONException e) {
             e.printStackTrace();
