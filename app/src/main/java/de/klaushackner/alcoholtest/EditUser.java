@@ -95,7 +95,7 @@ public class EditUser extends AppCompatActivity {
         sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
 
-        if (!isValidUser(name, age, height, weight)) {
+        if (isValidUser(name, age, height, weight)) {
             try {
                 JSONObject user = new JSONObject();
                 user.put("name", name);

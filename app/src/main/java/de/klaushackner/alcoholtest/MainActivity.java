@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             //Clean up
+
             editor.putString("mixturesToUser", mixtures.toString());
             editor.commit();
             tvBac.setText(format.format(currentBac));
