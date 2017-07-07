@@ -45,7 +45,7 @@ public class EditUser extends AppCompatActivity {
         }
 
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
-        JSONArray users = null;
+        JSONArray users;
         try {
             users = new JSONArray(sharedPref.getString("users", "[]"));
 
@@ -96,7 +96,6 @@ public class EditUser extends AppCompatActivity {
             try {
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
                 JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis()).toJSON();
-                users.put(user);
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());

@@ -41,5 +41,4 @@ public class Drink {
     public long getExpireTime() {
         return expireTime;
     }
-
 }

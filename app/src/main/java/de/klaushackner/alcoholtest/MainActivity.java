@@ -28,6 +28,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Set;
 
 import de.klaushackner.alcoholtest.adapter.DrinkAdapter;
 import de.klaushackner.alcoholtest.adapter.MixtureAdapter;
@@ -93,7 +94,9 @@ public class MainActivity extends AppCompatActivity {
 
         format.setDecimalSeparatorAlwaysShown(false);
         switchUser(true);
+
     }
+
 
     /**
      * Updates gui after app is paused
@@ -143,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
         dA.clear();
         dA.notifyDataSetChanged();
         double currentBac = 0;
+        long lastExpireDuration = 0;
 
         try {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
@@ -174,22 +178,21 @@ public class MainActivity extends AppCompatActivity {
 
                         double bac = A / (m * r);
 
-                        long expireTime = takingTime + Math.round(bac * 10 * 60 * 60 * 1000); // 0,1 promille pro Stunde wird abgebaut
+                        long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
+                        lastExpireDuration = expireTime - takingTime;
 
                         final Drink d = new Drink(user, mixture, takingTime, expireTime);
-                        d.setBac(bac);
 
                         if (new Date().getTime() > expireTime) {
                             mixtures.remove(i);
                         } else {
+                            d.setBac(bac);
                             currentBac += d.getBac();
                             dA.add(d);
                         }
                     }
                 }
             }
-
-            //Clean up
 
             editor.putString("mixturesToUser", mixtures.toString());
             editor.commit();
@@ -230,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
                 if (users.length() == 0) {
                     createUser();
                 }
+
                 if (users.length() == 1) {
                     currentUser = new User(new JSONObject(users.get(0).toString()));
                     updateGui();

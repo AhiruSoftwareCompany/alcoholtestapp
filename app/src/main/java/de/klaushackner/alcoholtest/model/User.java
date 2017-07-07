@@ -39,18 +39,7 @@ public class User {
 
     @Override
     public String toString() {
-        JSONObject user = new JSONObject();
-        try {
-            user.put("name", name);
-            user.put("isMale", isMale);
-            user.put("age", age);
-            user.put("weight", weight);
-            user.put("height", height);
-            user.put("created", created);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return user.toString();
+        return this.toJSON().toString();
     }
 
     public JSONObject toJSON() {
@@ -97,7 +86,6 @@ public class User {
     public long getCreated() {
         return created;
     }
-
 
     public static boolean isValidUser(String name, int age, int height, int weight) {
         return name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230;
