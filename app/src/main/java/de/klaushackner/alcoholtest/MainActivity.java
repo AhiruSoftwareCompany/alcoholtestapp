@@ -78,9 +78,43 @@ public class MainActivity extends AppCompatActivity {
         drinks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                //Handle event: remove drink
+                final int pos = position;
+                SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                SharedPreferences.Editor editor = sharedPref.edit();
 
-                return false;
+                JSONArray mixtures = null;
+                try {
+                    mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                mixtures.remove(pos);
+
+                editor.putString("mixturesToUser", mixtures.toString());
+                editor.commit();
+                updateGui();
+                /*
+                 AlertDialog.Builder builder = new AlertDialog.Builder(c);
+                builder.setTitle(R.string.remove_drink_question);
+
+                builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                try {
+ ...
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                 */
+
+                return true;
             }
         });
 
@@ -404,6 +438,7 @@ public class MainActivity extends AppCompatActivity {
                             dialog.dismiss();
                             return;
                         }
+
                         JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
 
                         //0 = user, 1 = mixture
