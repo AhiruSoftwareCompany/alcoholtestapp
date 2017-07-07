@@ -94,14 +94,9 @@ public class EditUser extends AppCompatActivity {
 
         if (User.isValidUser(name, age, height, weight)) {
             try {
-                JSONObject user = new JSONObject();
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                user.put("name", name);
-                user.put("isMale", male.isChecked());
-                user.put("age", age);
-                user.put("weight", weight);
-                user.put("height", height);
-                user.put("created", System.currentTimeMillis() / 1000);
+                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis()).toJSON();
+                users.put(user);
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());
@@ -117,9 +112,8 @@ public class EditUser extends AppCompatActivity {
                 e.printStackTrace();
             }
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
 

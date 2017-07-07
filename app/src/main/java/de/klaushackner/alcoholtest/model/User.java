@@ -24,6 +24,15 @@ public class User {
         }
     }
 
+    public User(String name, boolean isMale, int age, int weight, int height, long created) {
+        this.name = name;
+        this.isMale = isMale;
+        this.age = age;
+        this.weight = weight;
+        this.height = height;
+        this.created = created;
+    }
+
     public String getCreatedAsString() {
         return "" + created;
     }
@@ -42,6 +51,21 @@ public class User {
             e.printStackTrace();
         }
         return user.toString();
+    }
+
+    public JSONObject toJSON() {
+        JSONObject user = new JSONObject();
+        try {
+            user.put("name", name);
+            user.put("isMale", isMale);
+            user.put("age", age);
+            user.put("weight", weight);
+            user.put("height", height);
+            user.put("created", created);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return user;
     }
 
     public String getName() {
