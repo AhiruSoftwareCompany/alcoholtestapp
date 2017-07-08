@@ -1,6 +1,5 @@
 <resources>
     <string name="app_name">Alkoholtester</string>
-    <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="no_information">k. A.</string>
     <string name="press_back_again_to_leave">Nochmal drücken, um zu verlassen</string>
@@ -8,6 +7,8 @@
     <string name="add_drink_button">Getränk\nhinzufügen</string>
     <string name="about_text">© 2017 Klaus Hackner\n\nAlcoholtest App for Android\n\nSource: https://github.com/dieechtenilente/alcoholtestapp\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="add_user">Einen Benutzer hinzufügen</string>
+    <string name="create_new_user">Neuen Benutzer erstellen</string>
+    <string name="edit_existing_user">Benutzer bearbeiten</string>
     <string name="you_selected">Ausgewählt:</string>
     <string name="consumed_drinks">Alkoholische Getränke\nintus</string>
     <string name="add_drink">Ein Getränk hinzufügen …</string>
@@ -27,6 +28,7 @@
     <string name="bac">Promille (‰)</string>
     <string name="bacNoChar">Promille</string>
     <string name="create_user">Benutzer erstellen</string>
+    <string name="save_user">Benutzer speichern</string>
     <string name="switch_user">Benutzer wechseln</string>
     <string name="edit_current_user">Aktuellen Benutzer editieren</string>
     <string name="remove_current_user">Aktuellen Benutzer löschen</string>

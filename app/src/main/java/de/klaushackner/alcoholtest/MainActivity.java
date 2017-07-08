@@ -423,7 +423,7 @@ public class MainActivity extends AppCompatActivity {
             final TextView title = (TextView) dialog.findViewById(android.R.id.title);
             if (title != null) {
                 title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                title.setPadding(0, 8, 0, 6);
+                title.setPadding(0, 20, 0, 20);
             }
 
             final MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
