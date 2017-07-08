@@ -55,4 +55,18 @@ public class Mixture {
     public String getName() {
         return name;
     }
+
+    public static double getBac(Mixture mixture, User user) {
+        double r;
+
+        if (user.isMale()) {
+            double R = 2.447 - 0.09516 * user.getAge() + 0.1074 * user.getHeight() + 0.3362 * user.getWeight();
+            r = (1.055 * R) / (0.8 * user.getWeight());
+        } else {
+            double R = -2.097 + 0.1069 * user.getHeight() + 0.2466 * user.getWeight();
+            r = (1.055 * R) / (0.8 * user.getWeight());
+        }
+
+        return (mixture.getAmount() * mixture.getPercentage() * 0.8) / (user.getWeight() * r);
+    }
 }

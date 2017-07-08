@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity {
 
                     //Have to do this, because jsonobject == jsonobject is always false
                     if (user.toString().compareTo(currentUser.toString()) == 0) {
-                        double bac = getBac(mixture); //alcohol content
+                        double bac = Mixture.getBac(mixture, currentUser); //alcohol content
 
                         long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
                         lastExpireDuration = expireTime - takingTime;
@@ -222,20 +222,6 @@ public class MainActivity extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-    }
-
-    private double getBac(Mixture mixture) {
-        double r;
-
-        if (currentUser.isMale()) {
-            double R = 2.447 - 0.09516 * currentUser.getAge() + 0.1074 * currentUser.getHeight() + 0.3362 * currentUser.getWeight();
-            r = (1.055 * R) / (0.8 * currentUser.getWeight());
-        } else {
-            double R = -2.097 + 0.1069 * currentUser.getHeight() + 0.2466 * currentUser.getWeight();
-            r = (1.055 * R) / (0.8 * currentUser.getWeight());
-        }
-
-        return (mixture.getAmount() * mixture.getPercentage() * 0.8) / (currentUser.getWeight() * r);
     }
 
     /**
