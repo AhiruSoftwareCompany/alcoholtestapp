@@ -37,4 +37,5 @@
     <string name="remove_drink_question">Soll das Getränk wirklich entfernt werden?</string>
     <string name="time_left">verbl.</string>
     <string name="time_ago">verstr.</string>
+    <string name="current_bac">Du hast aktuell %1$d ‰ Alkohol in deinem Blut!</string>
 </resources>

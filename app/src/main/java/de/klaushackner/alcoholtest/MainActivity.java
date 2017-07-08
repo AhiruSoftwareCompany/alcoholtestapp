@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                     this).setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Obacht")
-                    .setContentText("Du hast aktuell " + format.format(currentBac) + " ‰ Alkohol in deinem Blut");
+                    .setContentText(String.format(getString(R.string.current_bac), currentBac));
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             // notificationID = ID, um die Benachrichtigung später nochmal zu bearbeiten
