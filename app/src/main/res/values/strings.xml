@@ -25,6 +25,7 @@
     <string name="height">Körpergröße (cm)</string>
     <string name="image">Bild</string>
     <string name="bac">Promille (‰)</string>
+    <string name="bacNoChar">Promille</string>
     <string name="create_user">Benutzer erstellen</string>
     <string name="switch_user">Benutzer wechseln</string>
     <string name="edit_current_user">Aktuellen Benutzer editieren</string>
@@ -32,4 +33,6 @@
     <string name="cancel">Abbrechen</string>
     <string name="remove_drink">Getränk\nentfernen</string>
     <string name="remove_drink_question">Soll das Getränk wirklich entfernt werden?</string>
+    <string name="time_left">verbl.</string>
+    <string name="time_ago">verstr.</string>
 </resources>

@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -47,20 +48,19 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         long ago = new Date().getTime() - d.getTakingTime();
         long expires = d.getExpireTime() - new Date().getTime();
 
-        //TODO: StringBuilder or something else than this crap
         Mixture m = d.getMixture();
-        name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
-        /*
         if (d.getMixture().getAmount() < 100) {
-            name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
+            name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
+            //name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         } else {
-            name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
+            name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
+            //name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         }
-*/
+
         takingTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
-                MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)) + " ago");
+                MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)));
         expireTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
-                MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)) + " left");
+                MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
 
         if (d.getMixture().getImage().compareTo("") != 0) {
             iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "drawable",
@@ -68,8 +68,6 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         }
 
         bac.setText(format.format(d.getBac()) + " ‰");
-
-
         return v;
     }
 }
