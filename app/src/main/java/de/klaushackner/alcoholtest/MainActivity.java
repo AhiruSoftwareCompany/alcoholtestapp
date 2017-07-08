@@ -2,14 +2,15 @@ package de.klaushackner.alcoholtest;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Handler;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -122,10 +123,7 @@ public class MainActivity extends AppCompatActivity {
         });
 
         format.setDecimalSeparatorAlwaysShown(false);
-
-
         switchUser(isStartedByLauncher());
-
     }
 
     protected boolean isStartedByLauncher() {
@@ -220,6 +218,7 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("mixturesToUser", mixtures.toString());
             editor.commit();
             tvBac.setText(format.format(currentBac));
+            createNotification(currentBac);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -472,6 +471,22 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (JSONException e) {
             e.printStackTrace();
+        }
+    }
+
+    public void createNotification(double currentBac) {
+        if (currentBac > 0) {
+            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
+                    this).setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle("Obacht")
+                    .setContentText("Du hast aktuell " + format.format(currentBac) + " ‰ Alkohol in deinem Blut");
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+            // notificationID = ID, um die Benachrichtigung später nochmal zu bearbeiten
+            mNotificationManager.notify(1, mBuilder.build());
+        } else {
+            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            mNotificationManager.cancel(1);
         }
     }
 
