@@ -464,7 +464,8 @@ public class MainActivity extends AppCompatActivity {
             NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
                     this).setSmallIcon(R.mipmap.ic_launcher)
                     .setContentTitle("Obacht")
-                    .setContentText(String.format(getString(R.string.current_bac), currentBac));
+                    .setContentText(String.format(getString(R.string.current_bac), format.format(currentBac)));
+            //TODO: replace $s in string resource with $d
             NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
             // notificationID = ID, um die Benachrichtigung später nochmal zu bearbeiten
