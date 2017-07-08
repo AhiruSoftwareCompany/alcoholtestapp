@@ -41,6 +41,7 @@ import de.klaushackner.alcoholtest.model.User;
 public class MainActivity extends AppCompatActivity {
 
     private boolean doubleBackToExitPressedOnce;
+    private MainActivity ma;
     private Context c;
     private User currentUser;
     private TextView tvName;
@@ -57,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         c = getApplicationContext();
+        ma = this;
 
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
@@ -79,43 +81,35 @@ public class MainActivity extends AppCompatActivity {
         drinks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final int pos = position;
-                SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                SharedPreferences.Editor editor = sharedPref.edit();
-
-                JSONArray mixtures = null;
                 try {
+                    final int pos = position;
+                    SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                    final SharedPreferences.Editor editor = sharedPref.edit();
+                    final JSONArray mixtures;
+
                     mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+                    AlertDialog.Builder builder = new AlertDialog.Builder(ma);
+                    builder.setTitle(R.string.remove_drink_question);
+                    builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            mixtures.remove(pos);
+                            editor.putString("mixturesToUser", mixtures.toString());
+                            editor.commit();
+                            updateGui();
+                        }
+                    });
+                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                        }
+                    });
+
+                    AlertDialog dialog = builder.create();
+                    dialog.show();
+                    return true;
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                mixtures.remove(pos);
-
-                editor.putString("mixturesToUser", mixtures.toString());
-                editor.commit();
-                updateGui();
-                /*
-                 AlertDialog.Builder builder = new AlertDialog.Builder(c);
-                builder.setTitle(R.string.remove_drink_question);
-
-                builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                try {
- ...
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                });
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-                AlertDialog dialog = builder.create();
-                dialog.show();
-                 */
-
-                return true;
+                return false;
             }
         });
 
