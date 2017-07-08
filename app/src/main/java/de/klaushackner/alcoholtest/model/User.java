@@ -91,4 +91,13 @@ public class User {
         return name.length() > 2 && age > 10 && age < 100 && weight > 30 && weight < 200 && height > 100 && height < 230;
     }
 
+    //TODO Damn this looks ugly
+    public boolean compareTo(User toCompare) {
+        if (this.name == toCompare.name && this.isMale == toCompare.isMale && this.age == toCompare.age &&
+                this.weight == toCompare.weight && this.height == toCompare.height && this.created == toCompare.created) {
+            return true;
+        }
+        return false;
+    }
+
 }

@@ -195,8 +195,7 @@ public class MainActivity extends AppCompatActivity {
                     User user = new User(new JSONObject(j.get(1).toString()));
                     Mixture mixture = new Mixture(new JSONObject(j.get(2).toString()));
 
-                    //Have to do this, because jsonobject == jsonobject is always false
-                    if (user.toString().compareTo(currentUser.toString()) == 0) {
+                    if (user.compareTo(currentUser)) {
                         double bac = Mixture.getBac(mixture, currentUser); //alcohol content
 
                         long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
