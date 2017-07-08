@@ -128,10 +128,21 @@ public class MainActivity extends AppCompatActivity {
         });
 
         format.setDecimalSeparatorAlwaysShown(false);
-        switchUser(true);
+
+
+        switchUser(isStartedByLauncher());
 
     }
 
+    protected boolean isStartedByLauncher() {
+        if (getIntent() == null) {
+            return false;
+        }
+        boolean isActionMain = Intent.ACTION_MAIN.equals(getIntent().getAction());
+        Set<String> categories = getIntent().getCategories();
+        boolean isCategoryLauncher = categories != null && categories.contains(Intent.CATEGORY_LAUNCHER);
+        return isActionMain && isCategoryLauncher;
+    }
 
     /**
      * Updates gui after app is paused
@@ -187,19 +198,14 @@ public class MainActivity extends AppCompatActivity {
             JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
             if (mixtures.length() > 0) {
                 for (int i = 0; i < mixtures.length(); i++) {
-
-                    //0 = timestamp, 1 = user, 2 = mixture
-                    JSONArray j = new JSONArray(mixtures.get(i).toString());
+                    JSONArray j = new JSONArray(mixtures.get(i).toString());  //0 = timestamp, 1 = user, 2 = mixture
                     long takingTime = Long.valueOf(j.get(0).toString());
                     User user = new User(new JSONObject(j.get(1).toString()));
                     Mixture mixture = new Mixture(new JSONObject(j.get(2).toString()));
 
                     //Have to do this, because jsonobject == jsonobject is always false
                     if (user.toString().compareTo(currentUser.toString()) == 0) {
-                        //Now the magic begins
-
-                        //alcohol content
-                        double bac = getBac(mixture);
+                        double bac = getBac(mixture); //alcohol content
 
                         long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
                         lastExpireDuration = expireTime - takingTime;
@@ -220,7 +226,6 @@ public class MainActivity extends AppCompatActivity {
             editor.putString("mixturesToUser", mixtures.toString());
             editor.commit();
             tvBac.setText(format.format(currentBac));
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -245,7 +250,6 @@ public class MainActivity extends AppCompatActivity {
      */
     private void createUser() {
         startActivity(new Intent(this, CreateUser.class));
-        finish();
     }
 
     /**
@@ -253,31 +257,36 @@ public class MainActivity extends AppCompatActivity {
      * If there were two users, the one left will be selected
      *
      * @param userToRemove user to remove
-     * @throws JSONException if something bad happened (should not be the case)
      */
-    private void removeUser(User userToRemove) throws JSONException {
+    private void removeUser(User userToRemove) {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
+        JSONArray users = null;
+        try {
+            users = new JSONArray(sharedPref.getString("users", "[]"));
 
-        for (int i = 0; i < users.length(); i++) {
-            JSONObject user = new JSONObject(users.get(i).toString());
-            if (user.getString("name").compareTo(userToRemove.getName()) == 0) {
-                users.remove(i);
-                editor.putString("users", users.toString());
-                editor.commit();
+            for (int i = 0; i < users.length(); i++) {
+                JSONObject user = new JSONObject(users.get(i).toString());
+                if (user.getString("name").compareTo(userToRemove.getName()) == 0) {
+                    users.remove(i);
+                    editor.putString("users", users.toString());
+                    editor.commit();
 
-                if (users.length() == 0) {
-                    createUser();
-                }
+                    if (users.length() == 0) {
+                        createUser();
+                        return;
+                    }
 
-                if (users.length() == 1) {
-                    currentUser = new User(new JSONObject(users.get(0).toString()));
-                    updateGui();
-                } else {
-                    switchUser(false);
+                    if (users.length() == 1) {
+                        currentUser = new User(new JSONObject(users.get(0).toString()));
+                        updateGui();
+                    } else {
+                        switchUser(false);
+                    }
                 }
             }
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
     }
 
@@ -306,6 +315,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
+                //Select last user on startup
                 if (fromStart) {
                     long lastUser = sharedPref.getLong("lastUser", 0);
 
@@ -341,6 +351,7 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.pick_user);
+                builder.setCancelable(false);
                 builder.setNeutralButton(R.string.add_user, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -363,8 +374,9 @@ public class MainActivity extends AppCompatActivity {
                                 dialog.dismiss();
                             }
                         });
-                Dialog alert = builder.create();
-                alert.show();
+
+                Dialog dialog = builder.create();
+                dialog.show();
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -572,12 +584,7 @@ public class MainActivity extends AppCompatActivity {
                 editUser();
                 break;
             case R.id.removeUser:
-                try {
-                    System.out.println(currentUser.toString());
-                    removeUser(currentUser);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                removeUser(currentUser);
                 break;
             case R.id.newUser:
                 createUser();
