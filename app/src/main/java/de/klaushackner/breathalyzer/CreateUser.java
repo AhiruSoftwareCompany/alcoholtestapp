@@ -1,4 +1,4 @@
-package de.klaushackner.alcoholtest;
+package de.klaushackner.breathalyzer;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.alcoholtest.model.User;
+import de.klaushackner.breathalyzer.model.User;
 
 public class CreateUser extends AppCompatActivity {
     private TextView tvName;

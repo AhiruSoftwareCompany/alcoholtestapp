@@ -1,4 +1,4 @@
-package de.klaushackner.alcoholtest.model;
+package de.klaushackner.breathalyzer.model;
 
 public class Drink {
     private final User user;

@@ -1,14 +1,11 @@
-package de.klaushackner.alcoholtest.model;
+package de.klaushackner.breathalyzer.model;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import static de.klaushackner.alcoholtest.R.string.male;
 
 public class User {
     private String name;

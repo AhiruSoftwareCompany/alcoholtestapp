@@ -1,4 +1,4 @@
-package de.klaushackner.alcoholtest.adapter;
+package de.klaushackner.breathalyzer.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -12,8 +12,8 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import de.klaushackner.alcoholtest.R;
-import de.klaushackner.alcoholtest.model.Mixture;
+import de.klaushackner.breathalyzer.R;
+import de.klaushackner.breathalyzer.model.Mixture;
 
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
     private final Context mContext;

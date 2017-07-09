@@ -1,4 +1,4 @@
-package de.klaushackner.alcoholtest.adapter;
+package de.klaushackner.breathalyzer.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,8 +11,8 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import de.klaushackner.alcoholtest.R;
-import de.klaushackner.alcoholtest.model.User;
+import de.klaushackner.breathalyzer.R;
+import de.klaushackner.breathalyzer.model.User;
 
 public class UserAdapter extends ArrayAdapter<User> {
 

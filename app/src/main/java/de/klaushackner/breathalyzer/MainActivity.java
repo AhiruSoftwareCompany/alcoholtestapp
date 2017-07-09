@@ -1,4 +1,4 @@
-package de.klaushackner.alcoholtest;
+package de.klaushackner.breathalyzer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -32,12 +32,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Set;
 
-import de.klaushackner.alcoholtest.adapter.DrinkAdapter;
-import de.klaushackner.alcoholtest.adapter.MixtureAdapter;
-import de.klaushackner.alcoholtest.adapter.UserAdapter;
-import de.klaushackner.alcoholtest.model.Drink;
-import de.klaushackner.alcoholtest.model.Mixture;
-import de.klaushackner.alcoholtest.model.User;
+import de.klaushackner.breathalyzer.adapter.DrinkAdapter;
+import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
+import de.klaushackner.breathalyzer.adapter.UserAdapter;
+import de.klaushackner.breathalyzer.model.Drink;
+import de.klaushackner.breathalyzer.model.Mixture;
+import de.klaushackner.breathalyzer.model.User;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package de.klaushackner.alcoholtest.adapter;
+package de.klaushackner.breathalyzer.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.text.DecimalFormat;
@@ -15,9 +14,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import de.klaushackner.alcoholtest.R;
-import de.klaushackner.alcoholtest.model.Drink;
-import de.klaushackner.alcoholtest.model.Mixture;
+import de.klaushackner.breathalyzer.R;
+import de.klaushackner.breathalyzer.model.Drink;
+import de.klaushackner.breathalyzer.model.Mixture;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
