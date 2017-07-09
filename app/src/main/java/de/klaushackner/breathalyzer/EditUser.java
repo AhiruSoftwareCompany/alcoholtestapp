@@ -95,15 +95,16 @@ public class EditUser extends AppCompatActivity {
             try {
                 SharedPreferences sharedPref = getSharedPreferences("data", 0);
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
+                User newUser = new User(name, male.isChecked(), age, weight, height, u.getCreated(), u.getDrinks());
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());
                     if (j.getLong("created") == u.getCreated()) {
-                        users.put(i, new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis(), u.getDrinks()).toJSON());
+                        users.put(i, newUser.toJSON());
                     }
                 }
 
-                u.saveUser(this);
+                newUser.saveUser(this);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

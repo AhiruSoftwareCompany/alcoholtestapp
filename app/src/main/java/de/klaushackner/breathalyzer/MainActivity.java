@@ -261,6 +261,9 @@ public class MainActivity extends AppCompatActivity {
      * Opens activity to edit the current user
      */
     private void editUser() {
+        //Save old user before selecting a new one
+        currentUser.saveUser(c);
+
         Intent i = new Intent(this, EditUser.class);
         i.putExtra("created", currentUser.getCreated());
         startActivity(i);
@@ -328,9 +331,6 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int item) {
-                                //Save old user before selecting a new one
-                                currentUser.saveUser(c);
-
                                 currentUser = usersList.get(item);
                                 //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainActivity.this to c
                                 Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
