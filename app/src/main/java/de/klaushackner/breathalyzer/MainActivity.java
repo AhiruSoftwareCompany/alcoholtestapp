@@ -2,11 +2,15 @@ package de.klaushackner.breathalyzer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.Icon;
 import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -120,6 +124,17 @@ public class MainActivity extends AppCompatActivity {
 
         format.setDecimalSeparatorAlwaysShown(false);
         switchUser(isStartedByLauncher());
+
+        //If coming from a notication, the mixture will be added to the current user
+        String m = getIntent().getStringExtra("mixtureToAdd");
+        if (m != null) {
+            try {
+                currentUser.addDrink(new Mixture(new JSONObject(m)));
+                updateGui();
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     protected boolean isStartedByLauncher() {
@@ -434,19 +449,40 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createNotification(double currentBac) {
+        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         if (currentBac > 0) {
-            NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(
-                    this).setSmallIcon(R.mipmap.ic_launcher)
-                    .setContentTitle("Obacht")
-                    .setContentText(String.format(getString(R.string.current_bac), format.format(currentBac)));
-            //TODO: replace $s in string resource with $d
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            try {
+                JSONArray drinks = new JSONArray(currentUser.getDrinks().toString());
+                Mixture m = new Mixture(new JSONObject(drinks.getJSONArray(drinks.length() - 1).get(1).toString()));
 
-            // notificationID = ID, um die Benachrichtigung später nochmal zu bearbeiten
-            mNotificationManager.notify(1, mBuilder.build());
+                Intent i = new Intent(this, MainActivity.class);
+
+                //Pretend that we come from the home launcher
+                i.setAction(getIntent().getAction());
+                i.addCategory(Intent.CATEGORY_LAUNCHER);
+                i.putExtra("mixtureToAdd", drinks.getJSONArray(drinks.length() - 1).get(1).toString());
+
+                TaskStackBuilder sB = TaskStackBuilder.create(this);
+                sB.addParentStack(MainActivity.class);
+                sB.addNextIntent(i);
+
+                PendingIntent p = sB.getPendingIntent(0,
+                        PendingIntent.FLAG_UPDATE_CURRENT);
+
+                Notification n = new Notification.Builder(this)
+                        .setSmallIcon(R.mipmap.ic_launcher)
+                        .setContentTitle("Obacht")
+                        .setContentText(String.format(getString(R.string.current_bac), format.format(currentBac))) //TODO: replace $s in string resource with $d
+                        .setOnlyAlertOnce(true)
+                        .addAction(getResources().getIdentifier(m.getImage(), "drawable", getPackageName()), "Das selbe nochmal", p) //TODO: Shrink all icons to fit the notificaiton bar
+                        .build();
+
+                notificationManager.notify(0, n);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         } else {
-            NotificationManager mNotificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            mNotificationManager.cancel(1);
+            notificationManager.cancel(1);
         }
     }
 
