@@ -24,6 +24,7 @@ public class EditUser extends AppCompatActivity {
     private TextView tvHeight;
     private RadioButton male;
     private long created;
+    private User userToEdit;
 
 
     @Override
@@ -52,12 +53,12 @@ public class EditUser extends AppCompatActivity {
             for (int i = 0; i < users.length(); i++) {
                 JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
-                    User currentUser = new User(new JSONObject(users.get(i).toString()));
-                    tvName.setText(currentUser.getName());
-                    tvAge.setText(currentUser.getAge() + "");
-                    tvWeight.setText(currentUser.getWeight() + "");
-                    tvHeight.setText(currentUser.getHeight() + "");
-                    if (!currentUser.isMale()) {
+                    userToEdit = new User(new JSONObject(users.get(i).toString()));
+                    tvName.setText(userToEdit.getName());
+                    tvAge.setText(userToEdit.getAge() + "");
+                    tvWeight.setText(userToEdit.getWeight() + "");
+                    tvHeight.setText(userToEdit.getHeight() + "");
+                    if (!userToEdit.isMale()) {
                         female.toggle();
                     }
                 }
@@ -89,13 +90,12 @@ public class EditUser extends AppCompatActivity {
         int weight = Integer.parseInt("0" + tvWeight.getText());
         int height = Integer.parseInt("0" + tvHeight.getText());
 
-        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
 
         if (User.isValidUser(name, age, height, weight)) {
             try {
+                SharedPreferences sharedPref = getSharedPreferences("data", 0);
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis()).toJSON();
+                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis(), userToEdit.getDrinks()).toJSON();
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());
@@ -104,9 +104,7 @@ public class EditUser extends AppCompatActivity {
                     }
                 }
 
-                editor.putString("users", users.toString());
-                editor.commit();
-                Log.i("Updated user", user.toString());
+                userToEdit.saveUser(this);
             } catch (JSONException e) {
                 e.printStackTrace();
             }

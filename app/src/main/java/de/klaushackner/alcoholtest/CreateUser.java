@@ -65,7 +65,7 @@ public class CreateUser extends AppCompatActivity {
         if (User.isValidUser(name, age, height, weight)) {
             try {
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis()).toJSON();
+                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis(), new JSONArray()).toJSON();
                 users.put(user);
 
                 editor.putString("users", users.toString());

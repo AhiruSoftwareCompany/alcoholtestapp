@@ -82,35 +82,31 @@ public class MainActivity extends AppCompatActivity {
         drinks.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                try {
-                    final int pos = position;
-                    SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                    final SharedPreferences.Editor editor = sharedPref.edit();
-                    final JSONArray mixtures;
+                final int pos = position;
 
-                    mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
-                    AlertDialog.Builder builder = new AlertDialog.Builder(ma);
-                    builder.setTitle(R.string.remove_drink_question);
-                    builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            mixtures.remove(pos);
-                            editor.putString("mixturesToUser", mixtures.toString());
-                            editor.commit();
+                AlertDialog.Builder builder = new AlertDialog.Builder(ma);
+                builder.setTitle(R.string.remove_drink_question);
+                builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+
+                        try {
+                            JSONArray mixture = currentUser.getDrinks().getJSONArray(pos);
+                            currentUser.removeDrink(mixture.getLong(0));
+                            currentUser.saveUser(c);
                             updateGui();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
-                    });
-                    builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                        }
-                    });
+                    }
+                });
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
 
-                    AlertDialog dialog = builder.create();
-                    dialog.show();
-                    return true;
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                return false;
+                AlertDialog dialog = builder.create();
+                dialog.show();
+                return true;
             }
         });
 
@@ -179,43 +175,36 @@ public class MainActivity extends AppCompatActivity {
      * Only called by updateGui();
      */
     private void updateDrinkList() {
-        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-        SharedPreferences.Editor editor = sharedPref.edit();
         dA.clear();
         dA.notifyDataSetChanged();
         double currentBac = 0;
         long lastExpireDuration = 0;
 
         try {
-            JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
+            JSONArray mixtures = currentUser.getDrinks();
             if (mixtures.length() > 0) {
                 for (int i = 0; i < mixtures.length(); i++) {
-                    JSONArray j = new JSONArray(mixtures.get(i).toString());  //0 = timestamp, 1 = user, 2 = mixture
-                    long takingTime = Long.valueOf(j.get(0).toString());
-                    User user = new User(new JSONObject(j.get(1).toString()));
-                    Mixture mixture = new Mixture(new JSONObject(j.get(2).toString()));
+                    JSONArray j = new JSONArray(mixtures.get(i).toString());  //0 = timestamp, 1 = mixture
+                    long takingTime = j.getLong(0);
+                    Mixture mixture = new Mixture(new JSONObject(j.get(1).toString()));
 
-                    if (user.compareTo(currentUser)) {
-                        double bac = Mixture.getBac(mixture, currentUser); //alcohol content
+                    double bac = Mixture.getBac(mixture, currentUser); //alcohol content
 
-                        long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
-                        lastExpireDuration = expireTime - takingTime;
+                    long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
+                    lastExpireDuration = expireTime - takingTime;
 
-                        final Drink d = new Drink(user, mixture, takingTime, expireTime);
+                    final Drink d = new Drink(currentUser, mixture, takingTime, expireTime);
 
-                        if (new Date().getTime() < expireTime) {
-                            d.setBac(bac);
-                            currentBac += d.getBac();
-                            dA.add(d);
-                        } else {
-                            mixtures.remove(i);
-                        }
+                    if (new Date().getTime() < expireTime) {
+                        d.setBac(bac);
+                        currentBac += d.getBac();
+                        dA.add(d);
+                    } else {
+                        mixtures.remove(i);
                     }
                 }
             }
 
-            editor.putString("mixturesToUser", mixtures.toString());
-            editor.commit();
             tvBac.setText(format.format(currentBac));
             createNotification(currentBac);
         } catch (JSONException e) {
@@ -322,6 +311,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
+                //Dialog with all users
                 final ArrayList<User> usersList = new ArrayList<>();
                 for (int i = 0; i < users.length(); i++) {
                     usersList.add(new User(new JSONObject(users.get(i).toString())));
@@ -342,6 +332,9 @@ public class MainActivity extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog,
                                                 int item) {
+                                //Save old user before selecting a new one
+                                currentUser.saveUser(c);
+
                                 currentUser = usersList.get(item);
                                 //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainActivity.this to c
                                 Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
@@ -384,6 +377,8 @@ public class MainActivity extends AppCompatActivity {
                 mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
                 mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
 
+                //TODO:Add possibility to save custom mixtures
+
                 if (currentUser.getName().compareTo("Franzi") == 0) {
                     mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom_franzi").toString());
                 } else {
@@ -420,32 +415,15 @@ public class MainActivity extends AppCompatActivity {
 
             mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
-                public void onItemClick(AdapterView<?> parent, View v,
-                                        int position, long id) {
-                    try {
-                        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-
-                        if (mixtureArray[position].getPercentage() == 0) {
-                            addCustomDrink(0, null);
-                            dialog.dismiss();
-                            return;
-                        }
-
-                        JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
-
-                        //0 = user, 1 = mixture
-                        JSONArray toPut = new JSONArray();
-                        toPut.put(System.currentTimeMillis());
-                        toPut.put(currentUser.toString());
-                        toPut.put(mixtureArray[position].toString()); //selected mixture
-                        mixtures.put(toPut);
-
-                        editor.putString("mixturesToUser", mixtures.toString());
-                        editor.commit();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                    if (mixtureArray[position].getPercentage() == 0) {
+                        addCustomDrink(0, null);
+                        dialog.dismiss();
+                        return;
                     }
+
+                    currentUser.addDrink(mixtureArray[position]);
+                    currentUser.saveUser(c);
 
                     dialog.dismiss();
                     updateDrinkList();
@@ -520,25 +498,10 @@ public class MainActivity extends AppCompatActivity {
                 d.show();
                 break;
             case 1:
-                try {
-                    if (customMixture != null || currentUser != null) {
-                        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                        SharedPreferences.Editor editor = sharedPref.edit();
-                        JSONArray mixtures = new JSONArray(sharedPref.getString("mixturesToUser", "[]"));
-
-                        //0 = user, 1 = mixture
-                        JSONArray toPut = new JSONArray();
-                        toPut.put(System.currentTimeMillis());
-                        toPut.put(currentUser.toString());
-                        toPut.put(customMixture != null ? customMixture.toString() : null); //selected mixture
-                        mixtures.put(toPut);
-
-                        editor.putString("mixturesToUser", mixtures.toString());
-                        editor.commit();
-                        updateDrinkList();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
+                if (customMixture != null || currentUser != null) {
+                    currentUser.addDrink(customMixture);
+                    currentUser.saveUser(c);
+                    updateDrinkList();
                 }
                 break;
         }
