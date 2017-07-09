@@ -22,9 +22,7 @@ public class EditUser extends AppCompatActivity {
     private TextView tvWeight;
     private TextView tvHeight;
     private RadioButton male;
-    private long created;
-    private User userToEdit;
-
+    private User u;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,52 +34,56 @@ public class EditUser extends AppCompatActivity {
         tvHeight = (TextView) findViewById(R.id.height);
         male = (RadioButton) findViewById(R.id.sex_male);
         RadioButton female = (RadioButton) findViewById(R.id.sex_female);
-        final EditUser eu = this;
+        Button saveUser = (Button) findViewById(R.id.saveUser);
 
-        created = getIntent().getLongExtra("created", 0);
+        final EditUser eU = this;
+        long created = getIntent().getLongExtra("created", 0);
 
         if (created == 0) {
             finish();
+            return;
         }
 
-        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-        JSONArray users;
         try {
-            users = new JSONArray(sharedPref.getString("users", "[]"));
+            SharedPreferences sharedPref = getSharedPreferences("data", 0);
+            JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
             for (int i = 0; i < users.length(); i++) {
                 JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
-                    userToEdit = new User(new JSONObject(users.get(i).toString()));
-                    tvName.setText(userToEdit.getName());
-                    tvAge.setText(userToEdit.getAge() + "");
-                    tvWeight.setText(userToEdit.getWeight() + "");
-                    tvHeight.setText(userToEdit.getHeight() + "");
-                    if (!userToEdit.isMale()) {
+                    u = new User(new JSONObject(users.get(i).toString()));
+                    tvName.setText(u.getName());
+                    tvAge.setText(u.getAge() + "");
+                    tvWeight.setText(u.getWeight() + "");
+                    tvHeight.setText(u.getHeight() + "");
+                    if (!u.isMale()) {
                         female.toggle();
                     }
+                    break;
                 }
             }
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        Button saveUser = (Button) findViewById(R.id.saveUser);
         saveUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (editUser()) {
+                if (editUser(u)) {
                     startActivity(new Intent(EditUser.this, MainActivity.class));
                     finish();
                 } else {
-                    Toast.makeText(eu, eu.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(eU, eU.getResources().getText(R.string.wronginput), Toast.LENGTH_SHORT).show();
                 }
             }
         });
-
     }
 
-    private boolean editUser() {
+    private boolean editUser(User u) {
+        if (u == null) {
+            return false;
+        }
+
         String name = tvName.getText().toString();
 
         //"0" makes an empty field into a zero
@@ -89,21 +91,19 @@ public class EditUser extends AppCompatActivity {
         int weight = Integer.parseInt("0" + tvWeight.getText());
         int height = Integer.parseInt("0" + tvHeight.getText());
 
-
         if (User.isValidUser(name, age, height, weight)) {
             try {
                 SharedPreferences sharedPref = getSharedPreferences("data", 0);
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis(), userToEdit.getDrinks()).toJSON();
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());
-                    if (j.getLong("created") == created) {
-                        users.put(i, user.toString());
+                    if (j.getLong("created") == u.getCreated()) {
+                        users.put(i, new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis(), u.getDrinks()).toJSON());
                     }
                 }
 
-                userToEdit.saveUser(this);
+                u.saveUser(this);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -111,6 +111,4 @@ public class EditUser extends AppCompatActivity {
         }
         return false;
     }
-
-
 }
