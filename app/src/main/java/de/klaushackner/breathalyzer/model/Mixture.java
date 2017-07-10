@@ -28,6 +28,10 @@ public class Mixture {
     }
 
     public String toString() {
+        return toJSON().toString();
+    }
+
+    public JSONObject toJSON(){
         JSONObject j = new JSONObject();
         try {
             j.put("name", name);
@@ -37,7 +41,7 @@ public class Mixture {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return j.toString();
+        return j;
     }
 
     public double getAmount() {

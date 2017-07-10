@@ -50,10 +50,10 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         Mixture m = d.getMixture();
         if (d.getMixture().getAmount() < 100) {
             name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
-            //name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
+            //name.setText(format.format(m.getAmount()) + " ml " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         } else {
             name.setText(String.format("%.2f l %s (%.2f %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
-            //name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
+            //name.setText(format.format(m.getAmount() / 1000) + " l " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         }
 
         takingTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
