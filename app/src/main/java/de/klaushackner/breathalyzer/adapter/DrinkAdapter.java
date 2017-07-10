@@ -52,7 +52,7 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
             name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
             //name.setText(format.format(d.getMixture().getAmount()) + " ml " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         } else {
-            name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
+            name.setText(String.format("%.2f l %s (%.2f %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
             //name.setText(format.format(d.getMixture().getAmount() / 1000) + " l " + d.getMixture().getName() + " (" + format.format(d.getMixture().getPercentage() * 100) + " %)");
         }
 

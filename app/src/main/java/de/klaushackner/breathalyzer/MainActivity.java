@@ -470,8 +470,8 @@ public class MainActivity extends AppCompatActivity {
 
                 Notification n = new Notification.Builder(this)
                         .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle("Obacht")
-                        .setContentText(String.format(getString(R.string.current_bac), format.format(currentBac))) //TODO: replace $s in string resource with $d
+                        .setContentTitle(getString(R.string.notification_alert))
+                        .setContentText(String.format(getString(R.string.notification_text_current_bac), format.format(currentBac)))
                         .setOnlyAlertOnce(true)
                         .addAction(getResources().getIdentifier(m.getImage(), "drawable", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
                         .build();
