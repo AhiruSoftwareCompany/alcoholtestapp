@@ -10,9 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.drawable.Icon;
 import android.os.Handler;
-import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -92,7 +90,6 @@ public class MainActivity extends AppCompatActivity {
                 builder.setTitle(R.string.remove_drink_question);
                 builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-
                         try {
                             JSONArray mixture = currentUser.getDrinks().getJSONArray(pos);
                             currentUser.removeDrink(mixture.getLong(0));
@@ -130,6 +127,7 @@ public class MainActivity extends AppCompatActivity {
         if (m != null) {
             try {
                 currentUser.addDrink(new Mixture(new JSONObject(m)));
+                currentUser.saveUser(c);
                 updateGui();
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -449,7 +447,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void createNotification(double currentBac) {
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        NotificationManager notMngr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        int nID = 1;
         if (currentBac > 0) {
             try {
                 JSONArray drinks = new JSONArray(currentUser.getDrinks().toString());
@@ -462,11 +461,11 @@ public class MainActivity extends AppCompatActivity {
                 i.addCategory(Intent.CATEGORY_LAUNCHER);
                 i.putExtra("mixtureToAdd", drinks.getJSONArray(drinks.length() - 1).get(1).toString());
 
-                TaskStackBuilder sB = TaskStackBuilder.create(this);
-                sB.addParentStack(MainActivity.class);
-                sB.addNextIntent(i);
+                TaskStackBuilder tSB = TaskStackBuilder.create(this);
+                tSB.addParentStack(MainActivity.class);
+                tSB.addNextIntent(i);
 
-                PendingIntent p = sB.getPendingIntent(0,
+                PendingIntent p = tSB.getPendingIntent(0,
                         PendingIntent.FLAG_UPDATE_CURRENT);
 
                 Notification n = new Notification.Builder(this)
@@ -474,15 +473,15 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle("Obacht")
                         .setContentText(String.format(getString(R.string.current_bac), format.format(currentBac))) //TODO: replace $s in string resource with $d
                         .setOnlyAlertOnce(true)
-                        .addAction(getResources().getIdentifier(m.getImage(), "drawable", getPackageName()), "Das selbe nochmal", p) //TODO: Shrink all icons to fit the notificaiton bar
+                        .addAction(getResources().getIdentifier(m.getImage(), "drawable", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
                         .build();
 
-                notificationManager.notify(0, n);
+                notMngr.notify(nID, n);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
         } else {
-            notificationManager.cancel(1);
+            notMngr.cancel(nID);
         }
     }
 
@@ -493,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
      */
     private void addCustomDrink(int stage, Mixture customMixture) {
         switch (stage) {
-            case 0:
+            case 0: //0 = from "add drinks" dialog; 1 = from "add custom drink" dialog
                 //Open dialog and wait for result
                 final Dialog d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_custom_drink);
@@ -511,11 +510,12 @@ public class MainActivity extends AppCompatActivity {
                         TextView tvName = (TextView) d.findViewById(R.id.name);
                         TextView tvAmount = (TextView) d.findViewById(R.id.amount);
                         TextView tvPercentage = (TextView) d.findViewById(R.id.percentage);
+
                         String name = tvName.getText().toString();
                         double amount = Double.parseDouble("0" + tvAmount.getText());
                         double percentage = Double.parseDouble("0" + tvPercentage.getText()) / 100;
 
-                        if (name.length() > 2 && amount > 1 && amount < 3000 && percentage > 0.01 && percentage < 0.99) {
+                        if (Mixture.isValidMixture(name, amount, percentage)) {
                             if (currentUser.getName().compareTo("Franzi") == 0) {
                                 addCustomDrink(1, new Mixture(name, amount, percentage, "custom_franzi"));
                             } else {
@@ -529,7 +529,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 d.show();
                 break;
-            case 1:
+            case 1: //from "add custom drink" dialog
                 if (customMixture != null || currentUser != null) {
                     currentUser.addDrink(customMixture);
                     currentUser.saveUser(c);

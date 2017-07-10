@@ -69,4 +69,8 @@ public class Mixture {
 
         return (mixture.getAmount() * mixture.getPercentage() * 0.8) / (user.getWeight() * r);
     }
+
+    public static boolean isValidMixture(String name, double amount, double percentage){
+        return name.length() > 2 && amount > 1 && amount < 3000 && percentage > 0.01 && percentage < 0.99;
+    }
 }
