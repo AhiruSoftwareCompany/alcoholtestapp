@@ -11,7 +11,7 @@
 
 An array with every user currently existing including his drinks (updated on startup/refresh button press)
 
-```json
+```
 [
   {
     name:String,
@@ -39,7 +39,7 @@ In addition to that: the uid (creation date) from the last selected user
 
 ### Drinks-Array
 
-```json
+```
 [
   {
     name:String,
