@@ -6,6 +6,8 @@ public class Drink {
     private final long takingTime;
     private double bac;
     private long expireTime;
+    public static double depletingFactor = 1; //0.1 per unit
+    public static double depletingFactorPerHour = depletingFactor / 3600000;
 
     public Drink(User user, Mixture mixture, long takingTime, long expireTime) {
         this.user = user;
@@ -40,5 +42,13 @@ public class Drink {
 
     public long getExpireTime() {
         return expireTime;
+    }
+
+    public double getRelativeBac() {
+        if ((expireTime - System.currentTimeMillis()) > 0) {
+            long elapsed = System.currentTimeMillis() - takingTime;
+            return bac - (elapsed * depletingFactorPerHour);
+        }
+        return 0;
     }
 }

@@ -203,14 +203,14 @@ public class MainActivity extends AppCompatActivity {
 
                     double bac = Mixture.getBac(mixture, currentUser); //alcohol content
 
-                    long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000); // 0,1 promille pro Stunde wird abgebaut
+                    long expireTime = lastExpireDuration + takingTime + Math.round(bac * Drink.depletingFactor * 36000000); // 0,1 promille pro Stunde wird abgebaut
                     lastExpireDuration = expireTime - takingTime;
 
                     final Drink d = new Drink(currentUser, mixture, takingTime, expireTime);
 
                     if (new Date().getTime() < expireTime) {
                         d.setBac(bac);
-                        currentBac += d.getBac();
+                        currentBac += d.getRelativeBac();
                         dA.add(d);
                     } else {
                         mixtures.remove(i);
@@ -219,7 +219,7 @@ public class MainActivity extends AppCompatActivity {
             }
 
             tvBac.setText(format.format(currentBac));
-            createNotification(currentBac);
+            createBacNotification(currentBac);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -446,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void createNotification(double currentBac) {
+    public void createBacNotification(double currentBac) {
         NotificationManager notMngr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
         int nID = 1;
         if (currentBac > 0) {
