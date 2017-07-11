@@ -7,7 +7,7 @@ public class Drink {
     private double bac;
     private long expireTime;
     public static double depletingFactor = 1; //0.1 per unit
-    public static double depletingFactorPerHour = depletingFactor / 3600000;
+    public static double depletingFactorPerHour = (depletingFactor / 10) / 3600000; // e.g 0.1/3600000
 
     public Drink(User user, Mixture mixture, long takingTime, long expireTime) {
         this.user = user;
