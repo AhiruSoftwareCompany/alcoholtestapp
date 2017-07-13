@@ -174,4 +174,20 @@ public class User {
 
     }
 
+    public Mixture getMixture(long takingTime) {
+        try {
+            for (int i = 0; i < drinks.length(); i++) {
+                JSONArray array = new JSONArray(drinks.get(i).toString());
+                long t = array.getLong(0);
+                if (t == takingTime) {
+                    JSONObject j = new JSONObject(array.get(1).toString());
+                    return new Mixture(j);
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

@@ -100,6 +100,20 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+                builder.setNeutralButton(R.string.add_as_mixture, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        try {
+                            JSONArray mixtures = currentUser.getDrinks().getJSONArray(pos);
+                            long l = mixtures.getLong(0);
+                            Mixture m = currentUser.getMixture(l);
+                            Mixture.addCustomMixture(c, m);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                    }
+                });
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -368,82 +382,44 @@ public class MainActivity extends AppCompatActivity {
      * Here you can add more mixtures
      */
     private void addDrink() {
-        try {
-            SharedPreferences sharedPref = getSharedPreferences("data", 0);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            JSONArray mixtures = new JSONArray(sharedPref.getString("mixtures", "[]"));
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_add_drink);
 
-            if (mixtures.length() < 8) {
-                //Updating mixtures
-                //Add new mixtures here!
-                mixtures = new JSONArray("[]");
-                mixtures.put(new Mixture("Bier", 500, 0.05, "beer").toString());
-                mixtures.put(new Mixture("Bier", 1000, 0.05, "morebeer").toString());
-                mixtures.put(new Mixture("Pils", 330, 0.048, "pils").toString());
-                mixtures.put(new Mixture("Pils", 500, 0.048, "pils").toString());
-                mixtures.put(new Mixture("Wein", 200, 0.10, "wine").toString());
-                mixtures.put(new Mixture("Wodka", 20, 0.40, "vodka").toString());
-                mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
-                mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
-
-                //TODO:Add possibility to save custom mixtures
-
-                if (currentUser.getName().compareTo("Franzi") == 0) {
-                    mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom_franzi").toString());
-                } else {
-                    mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
-                }
-
-                editor.putString("drinks", mixtures.toString());
-                editor.commit();
-            }
-
-            final Mixture[] mixtureArray = new Mixture[mixtures.length()];
-
-            for (int i = 0; i < mixtures.length(); i++) {
-                mixtureArray[i] = new Mixture(new JSONObject(mixtures.get(i).toString()));
-            }
-
-            final Dialog dialog = new Dialog(this);
-            dialog.setContentView(R.layout.dialog_add_drink);
-
-            dialog.setTitle(R.string.add_drink);
-            final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-            if (title != null) {
-                title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                title.setPadding(0, 20, 0, 20);
-            }
-
-            final MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
-            GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
-            mixtureList.setAdapter(mixtureAdapter);
-
-            for (Mixture aMixtureArray : mixtureArray) {
-                mixtureAdapter.add(aMixtureArray);
-            }
-
-            mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                    if (mixtureArray[position].getPercentage() == 0) {
-                        addCustomDrink(0, null);
-                        dialog.dismiss();
-                        return;
-                    }
-
-                    currentUser.addDrink(mixtureArray[position]);
-                    currentUser.saveUser(c);
-
-                    dialog.dismiss();
-                    updateDrinkList();
-                }
-            });
-
-            dialog.show();
-
-        } catch (JSONException e) {
-            e.printStackTrace();
+        dialog.setTitle(R.string.add_drink);
+        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+        if (title != null) {
+            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            title.setPadding(0, 20, 0, 20);
         }
+
+        final MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
+        GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
+        mixtureList.setAdapter(mixtureAdapter);
+
+        final Mixture[] mixtureArray = Mixture.getMixtureArray(c, currentUser);
+
+        for (Mixture aMixtureArray : mixtureArray) {
+            mixtureAdapter.add(aMixtureArray);
+        }
+
+        mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                if (mixtureArray[position].getPercentage() == 0) {
+                    addCustomDrink(0, null);
+                    dialog.dismiss();
+                    return;
+                }
+
+                currentUser.addDrink(mixtureArray[position]);
+                currentUser.saveUser(c);
+
+                dialog.dismiss();
+                updateDrinkList();
+            }
+        });
+
+        dialog.show();
     }
 
     public void createBacNotification(double currentBac) {

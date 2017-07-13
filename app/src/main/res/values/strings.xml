@@ -1,11 +1,12 @@
 <resources>
     <string name="app_name">Alkomat 3000</string>
+    <string name="press_back_again_to_leave">Nochmal drücken, um zu Verlassen</string>
+    <string name="about_text">© 2017 Klaus Hackner\n\nAlkomat 3000 for Android\n\nSource: https://github.com/dieechtenilente/alcoholtestapp\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
+
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="no_information">k. A.</string>
-    <string name="press_back_again_to_leave">Nochmal drücken, um zu Verlassen</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
     <string name="add_drink_button">Getränk\nhinzufügen</string>
-    <string name="about_text">© 2017 Klaus Hackner\n\nAlkomat 3000 for Android\n\nSource: https://github.com/dieechtenilente/alcoholtestapp\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="add_user">Einen Benutzer hinzufügen</string>
     <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="edit_existing_user">Benutzer bearbeiten</string>
@@ -32,11 +33,14 @@
     <string name="switch_user">Benutzer wechseln</string>
     <string name="edit_current_user">Aktuellen Benutzer editieren</string>
     <string name="remove_current_user">Aktuellen Benutzer löschen</string>
-    <string name="cancel">Abbrechen</string>
-    <string name="remove_drink">Getränk\nentfernen</string>
-    <string name="remove_drink_question">Soll das Getränk wirklich entfernt werden?</string>
     <string name="time_left">verbl.</string>
     <string name="time_ago">verstr.</string>
+
     <string name="notification_alert">Obacht</string>
     <string name="notification_text_current_bac">Du hast aktuell %1$s ‰ Alkohol in deinem Blut!</string>
+
+    <string name="remove_drink_question">Soll das Getränk wirklich entfernt werden?</string>
+    <string name="remove_drink">Getränk\nentfernen</string>
+    <string name="cancel">Abbruch</string>
+    <string name="add_as_mixture">Getränk\nspeichern</string>
 </resources>

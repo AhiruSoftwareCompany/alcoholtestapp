@@ -1,9 +1,12 @@
 package de.klaushackner.breathalyzer.model;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class Drink {
-    private final User user;
-    private final Mixture mixture;
-    private final long takingTime;
+    private User user;
+    private Mixture mixture;
+    private long takingTime;
     private double bac;
     private long expireTime;
     public static double depletingFactor = 1; //0.1 per unit
@@ -14,6 +17,17 @@ public class Drink {
         this.mixture = mixture;
         this.takingTime = takingTime;
         this.expireTime = expireTime;
+    }
+
+    public Drink(JSONObject drinkAsJSON) {
+        try {
+            this.user = new User(new JSONObject(drinkAsJSON.get("user").toString()));
+            this.expireTime = drinkAsJSON.getLong("expireTime");
+            this.mixture = new Mixture(new JSONObject(drinkAsJSON.get("mixture").toString()));
+            this.takingTime = drinkAsJSON.getLong("takingTime");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void setExpireTime(long expireTime) {
