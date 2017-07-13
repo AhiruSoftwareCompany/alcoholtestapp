@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity {
                 final int pos = position;
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(ma);
-                builder.setTitle(R.string.remove_drink_question);
+                builder.setTitle(R.string.dialog_drink_question);
                 builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         try {
@@ -416,6 +416,33 @@ public class MainActivity extends AppCompatActivity {
 
                 dialog.dismiss();
                 updateDrinkList();
+            }
+        });
+
+        mixtureList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int pos = position;
+                final Dialog d = dialog;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ma);
+                builder.setTitle(R.string.remove_custom_mixture);
+                builder.setPositiveButton(R.string.remove_mixture, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        Mixture m = mixtureArray[pos];
+                        Mixture.removeCustomMixture(c, m);
+                        d.dismiss();
+
+                    }
+                });
+
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+                builder.create().show();
+                return true;
             }
         });
 

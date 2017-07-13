@@ -94,31 +94,31 @@ public class Mixture {
 
     public static Mixture[] getMixtureArray(Context c, User u) {
         try {
-            JSONArray mixtures = new JSONArray();
             JSONArray customMixtures = getCustomMixtures(c);
 
-            if (mixtures.length() < 8) {
-                //Add new mixtures here!
-                mixtures = new JSONArray("[]");
-                mixtures.put(new Mixture("Bier", 500, 0.05, "beer").toString());
-                mixtures.put(new Mixture("Bier", 1000, 0.05, "morebeer").toString());
-                mixtures.put(new Mixture("Pils", 330, 0.048, "pils").toString());
-                mixtures.put(new Mixture("Pils", 500, 0.048, "pils").toString());
-                mixtures.put(new Mixture("Wein", 200, 0.10, "wine").toString());
-                mixtures.put(new Mixture("Wodka", 20, 0.40, "vodka").toString());
-                mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
-                mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
+            //Add new mixtures here!
+            JSONArray mixtures = new JSONArray("[]");
+            mixtures.put(new Mixture("Bier", 500, 0.05, "beer").toString());
+            mixtures.put(new Mixture("Bier", 1000, 0.05, "morebeer").toString());
+            mixtures.put(new Mixture("Goaß", 270, 0.06296296296, "goass").toString());
+            mixtures.put(new Mixture("Goaßmaß", 540, 0.06296296296, "goass").toString());
+            mixtures.put(new Mixture("Pils", 330, 0.048, "pils").toString());
+            mixtures.put(new Mixture("Pils", 500, 0.048, "pils").toString());
+            mixtures.put(new Mixture("Wein", 200, 0.10, "wine").toString());
+            mixtures.put(new Mixture("Wodka", 20, 0.40, "vodka").toString());
+            mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
+            mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
 
-                for (int i = 0; i < customMixtures.length(); i++) {
-                    mixtures.put(customMixtures.get(i).toString());
-                }
-
-                if (u.getName().compareTo("Franzi") == 0) {
-                    mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom_franzi").toString());
-                } else {
-                    mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
-                }
+            for (int i = 0; i < customMixtures.length(); i++) {
+                mixtures.put(customMixtures.get(i).toString());
             }
+
+            if (u.getName().compareTo("Franzi") == 0) {
+                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom_franzi").toString());
+            } else {
+                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
+            }
+
 
             final Mixture[] mixtureArray = new Mixture[mixtures.length()];
 
@@ -150,6 +150,28 @@ public class Mixture {
 
             JSONArray mixtures = new JSONArray(sharedPref.getString("customMixtures", "[]"));
             mixtures.put(m.toString());
+
+            editor.putString("customMixtures", mixtures.toString());
+            editor.commit();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+    public static void removeCustomMixture(Context c, Mixture m) {
+        try {
+            SharedPreferences sharedPref = c.getSharedPreferences("data", 0);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            JSONArray mixtures = new JSONArray(sharedPref.getString("customMixtures", "[]"));
+
+            for (int i = 0; i < mixtures.length(); i++) {
+                if (mixtures.get(i).toString().compareTo(m.toString()) == 0) {
+                    mixtures.remove(i);
+                    break; //break prevents removing every mixture matching to the given mixture (helpful if you add the same mixture two times and want to remove it)
+                }
+            }
 
             editor.putString("customMixtures", mixtures.toString());
             editor.commit();
