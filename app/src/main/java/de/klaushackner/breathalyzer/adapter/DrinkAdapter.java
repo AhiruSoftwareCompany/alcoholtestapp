@@ -12,6 +12,7 @@ import android.widget.TextView;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.klaushackner.breathalyzer.R;
@@ -49,16 +50,16 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
 
         Mixture m = d.getMixture();
         if (d.getMixture().getAmount() < 100) {
-            name.setText(String.format("%.2f ml %s (%.2f %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
+            name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
             //name.setText(format.format(m.getAmount()) + " ml " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         } else {
-            name.setText(String.format("%.2f l %s (%.2f %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
+            name.setText(String.format(Locale.GERMAN, "%.2g l %s (%.2g %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
             //name.setText(format.format(m.getAmount() / 1000) + " l " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         }
 
-        takingTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
+        takingTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)));
-        expireTime.setText(String.format("%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
+        expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
                 MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
 
         if (d.getMixture().getImage().compareTo("") != 0) {
