@@ -36,9 +36,11 @@ import java.util.Set;
 
 import de.klaushackner.breathalyzer.adapter.DrinkAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
+import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
 import de.klaushackner.breathalyzer.adapter.UserAdapter;
 import de.klaushackner.breathalyzer.model.Drink;
 import de.klaushackner.breathalyzer.model.Mixture;
+import de.klaushackner.breathalyzer.model.MixtureImage;
 import de.klaushackner.breathalyzer.model.User;
 
 public class MainActivity extends AppCompatActivity {
@@ -476,7 +478,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle(getString(R.string.notification_alert))
                         .setContentText(String.format(getString(R.string.notification_text_current_bac), format.format(currentBac)))
                         .setOnlyAlertOnce(true)
-                        .addAction(getResources().getIdentifier(m.getImage(), "mipmap", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
+                        .addAction(getResources().getIdentifier(m.getImageString(), "mipmap", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
                         .build();
 
                 notMngr.notify(nID, n);
@@ -500,11 +502,58 @@ public class MainActivity extends AppCompatActivity {
                 final Dialog d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_custom_drink);
 
-                ImageView image = (ImageView) d.findViewById(R.id.image);
+                final ImageView image = (ImageView) d.findViewById(R.id.image);
+                MixtureImage currentImage;
+
                 if (currentUser.getName().compareTo("Franzi") == 0) {
-                    image.setImageResource(getResources().getIdentifier("custom_panda", "mipmap",
+                    currentImage = MixtureImage.custom_panda;
+                    image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
+                            getApplicationContext().getPackageName()));
+                } else {
+                    currentImage = MixtureImage.custom;
+                    image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
                             getApplicationContext().getPackageName()));
                 }
+
+                image.setTag(currentImage.toString());
+
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final Dialog dialog = new Dialog(ma);
+                        dialog.setContentView(R.layout.dialog_switch_mixtureimage);
+
+                        dialog.setTitle(R.string.switch_mixtureimage);
+                        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+                        if (title != null) {
+                            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            title.setPadding(0, 20, 0, 20);
+                        }
+
+                        final MixtureImageAdapter mA = new MixtureImageAdapter(ma, new ArrayList<MixtureImage>());
+                        GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
+                        mixtureList.setAdapter(mA);
+
+                        final MixtureImage[] mixtureItemArray = MixtureImage.values();
+
+                        for (MixtureImage aMixtureItemArray : mixtureItemArray) {
+                            mA.add(aMixtureItemArray);
+                        }
+
+                        mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                                MixtureImage m = mixtureItemArray[position];
+
+                                image.setTag(m.toString()); //Updates tag if necessary
+                                image.setImageResource(getResources().getIdentifier(m.toString(), "mipmap",
+                                        getApplicationContext().getPackageName()));
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
 
                 Button addDrink = (Button) d.findViewById(R.id.addDrink);
                 addDrink.setOnClickListener(new View.OnClickListener() {
@@ -519,10 +568,11 @@ public class MainActivity extends AppCompatActivity {
                         double percentage = Double.parseDouble("0" + tvPercentage.getText()) / 100;
 
                         if (Mixture.isValidMixture(name, amount, percentage)) {
+                            MixtureImage m = MixtureImage.fromString(image.getTag().toString());
                             if (currentUser.getName().compareTo("Franzi") == 0) {
-                                addCustomDrink(1, new Mixture(name, amount, percentage, "custom_panda"));
+                                addCustomDrink(1, new Mixture(name, amount, percentage, m));
                             } else {
-                                addCustomDrink(1, new Mixture(name, amount, percentage, "custom"));
+                                addCustomDrink(1, new Mixture(name, amount, percentage, m));
                             }
                             d.dismiss();
                         } else {

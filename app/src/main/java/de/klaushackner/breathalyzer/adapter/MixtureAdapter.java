@@ -48,8 +48,8 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         }
         percentage.setText(format.format(mixture.getPercentage() * 100) + " %");
 
-        if (mixture.getImage().compareTo("") != 0) {
-            image.setImageResource(mContext.getResources().getIdentifier(mixture.getImage(), "mipmap",
+        if (mixture.getImage() != null) {
+            image.setImageResource(mContext.getResources().getIdentifier(mixture.getImageString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
         return v;

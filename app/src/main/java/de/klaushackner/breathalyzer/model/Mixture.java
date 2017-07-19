@@ -17,13 +17,14 @@ import java.util.ArrayList;
 import de.klaushackner.breathalyzer.R;
 import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
 
+
 public class Mixture {
     private String name;
     private double amount;
     private double percentage;
-    private String image;
+    private MixtureImage image;
 
-    public Mixture(String name, double amount, double percentage, String image) {
+    public Mixture(String name, double amount, double percentage, MixtureImage image) {
         this.amount = amount;
         this.name = name;
         this.percentage = percentage;
@@ -35,7 +36,7 @@ public class Mixture {
             this.name = mixtureAsJSON.getString("name");
             this.amount = mixtureAsJSON.getDouble("amount");
             this.percentage = mixtureAsJSON.getDouble("percentage");
-            this.image = mixtureAsJSON.getString("image");
+            this.image = MixtureImage.fromString(mixtureAsJSON.getString("image"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -51,7 +52,7 @@ public class Mixture {
             j.put("name", name);
             j.put("amount", amount);
             j.put("percentage", percentage);
-            j.put("image", image);
+            j.put("image", image.toString());
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -66,8 +67,12 @@ public class Mixture {
         return percentage;
     }
 
-    public String getImage() {
+    public MixtureImage getImage() {
         return image;
+    }
+
+    public String getImageString() {
+        return image.toString();
     }
 
     public String getName() {
@@ -98,25 +103,25 @@ public class Mixture {
 
             //Add new mixtures here!
             JSONArray mixtures = new JSONArray("[]");
-            mixtures.put(new Mixture("Bier", 500, 0.05, "beer").toString());
-            mixtures.put(new Mixture("Bier", 1000, 0.05, "morebeer").toString());
-            mixtures.put(new Mixture("Goaß", 270, 0.06296296296, "goass").toString());
-            mixtures.put(new Mixture("Goaßmaß", 540, 0.06296296296, "goass").toString());
-            mixtures.put(new Mixture("Pils", 330, 0.048, "pils").toString());
-            mixtures.put(new Mixture("Pils", 500, 0.048, "pils").toString());
-            mixtures.put(new Mixture("Wein", 200, 0.10, "wine").toString());
-            mixtures.put(new Mixture("Wodka", 20, 0.40, "vodka").toString());
-            mixtures.put(new Mixture("Whisky", 20, 0.40, "whisky").toString());
-            mixtures.put(new Mixture("Sekt", 200, 0.12, "sparklingwine").toString());
+            mixtures.put(new Mixture("Bier", 500, 0.05, MixtureImage.beer).toString());
+            mixtures.put(new Mixture("Bier", 1000, 0.05, MixtureImage.morebeer).toString());
+            mixtures.put(new Mixture("Goaß", 270, 0.06296296296, MixtureImage.goass).toString());
+            mixtures.put(new Mixture("Goaßmaß", 540, 0.06296296296, MixtureImage.goass).toString());
+            mixtures.put(new Mixture("Pils", 330, 0.048, MixtureImage.pils).toString());
+            mixtures.put(new Mixture("Pils", 500, 0.048, MixtureImage.pils).toString());
+            mixtures.put(new Mixture("Wein", 200, 0.10, MixtureImage.wine).toString());
+            mixtures.put(new Mixture("Wodka", 20, 0.40, MixtureImage.vodka).toString());
+            mixtures.put(new Mixture("Whisky", 20, 0.40, MixtureImage.whisky).toString());
+            mixtures.put(new Mixture("Sekt", 200, 0.12, MixtureImage.sparklingwine).toString());
 
             for (int i = 0; i < customMixtures.length(); i++) {
                 mixtures.put(customMixtures.get(i).toString());
             }
 
             if (u.getName().compareTo("Franzi") == 0) {
-                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom_franzi").toString());
+                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, MixtureImage.custom_panda).toString());
             } else {
-                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, "custom").toString());
+                mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, MixtureImage.custom).toString());
             }
 
 

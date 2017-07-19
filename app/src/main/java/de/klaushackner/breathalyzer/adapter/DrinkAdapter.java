@@ -62,8 +62,8 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
                 MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
 
-        if (d.getMixture().getImage().compareTo("") != 0) {
-            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "mipmap",
+        if (d.getMixture().getImage() != null) {
+            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImageString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
 
