@@ -594,10 +594,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * Layout-Stuff
      */
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -658,6 +658,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.newUser:
                 createUser();
+                break;
+            case R.id.sendFeedback:
+                startActivity(new Intent(this, SendFeedback.class));
                 break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);

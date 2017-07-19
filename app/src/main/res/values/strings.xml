@@ -43,4 +43,8 @@
     <string name="remove_custom_mixture">Rezeptur entfernen?</string>
     <string name="remove_mixture">Rezeptur\nentfernen</string>
     <string name="switch_mixtureimage">Anderes Bild auswählen</string>
+    <string name="send_feedback">Feedback senden</string>
+    <string name="message">Nachricht</string>
+    <string name="send_message">Nachricht senden</string>
+    <string name="feedback_sent">Feedback wurde gesendet.\nVielen Dank!</string>
 </resources>
