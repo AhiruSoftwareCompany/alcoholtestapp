@@ -502,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
 
                 ImageView image = (ImageView) d.findViewById(R.id.image);
                 if (currentUser.getName().compareTo("Franzi") == 0) {
-                    image.setImageResource(getResources().getIdentifier("custom_franzi", "drawable",
+                    image.setImageResource(getResources().getIdentifier("custom_panda", "drawable",
                             getApplicationContext().getPackageName()));
                 }
 
@@ -520,7 +520,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (Mixture.isValidMixture(name, amount, percentage)) {
                             if (currentUser.getName().compareTo("Franzi") == 0) {
-                                addCustomDrink(1, new Mixture(name, amount, percentage, "custom_franzi"));
+                                addCustomDrink(1, new Mixture(name, amount, percentage, "custom_panda"));
                             } else {
                                 addCustomDrink(1, new Mixture(name, amount, percentage, "custom"));
                             }
