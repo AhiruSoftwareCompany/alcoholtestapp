@@ -63,7 +63,7 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
                 MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
 
         if (d.getMixture().getImage().compareTo("") != 0) {
-            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "drawable",
+            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImage(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
 

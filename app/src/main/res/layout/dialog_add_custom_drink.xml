@@ -15,7 +15,7 @@
             android:contentDescription="@string/image"
             android:cropToPadding="true"
             android:gravity="center"
-            android:src="@drawable/custom" />
+            android:src="@mipmap/custom" />
 
         <TableLayout
             android:layout_width="match_parent"

@@ -476,7 +476,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle(getString(R.string.notification_alert))
                         .setContentText(String.format(getString(R.string.notification_text_current_bac), format.format(currentBac)))
                         .setOnlyAlertOnce(true)
-                        .addAction(getResources().getIdentifier(m.getImage(), "drawable", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
+                        .addAction(getResources().getIdentifier(m.getImage(), "mipmap", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
                         .build();
 
                 notMngr.notify(nID, n);
@@ -502,7 +502,7 @@ public class MainActivity extends AppCompatActivity {
 
                 ImageView image = (ImageView) d.findViewById(R.id.image);
                 if (currentUser.getName().compareTo("Franzi") == 0) {
-                    image.setImageResource(getResources().getIdentifier("custom_panda", "drawable",
+                    image.setImageResource(getResources().getIdentifier("custom_panda", "mipmap",
                             getApplicationContext().getPackageName()));
                 }
 
