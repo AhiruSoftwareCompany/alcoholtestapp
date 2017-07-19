@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvHeight;
     private TextView tvSex;
     private TextView tvBac;
+    private Menu menu;
     private DrinkAdapter dA;
     private final DecimalFormat format = new DecimalFormat();
 
@@ -304,6 +305,7 @@ public class MainActivity extends AppCompatActivity {
      * @param fromStart If this method is called in the onCreate() method, the "only one user existing" message will be suppressed.
      */
     private void switchUser(boolean fromStart) {
+        closeOptionsMenu();
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             final SharedPreferences.Editor editor = sharedPref.edit();
@@ -596,14 +598,39 @@ public class MainActivity extends AppCompatActivity {
      * Layout-Stuff
      */
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        MenuItem m = menu.findItem(R.id.switchUser);
+        if (m != null) {
+            m.setIcon(R.mipmap.switchuser);
+        }
+
+        if (currentUser != null) { //TODO: After creating a user while showing the menu, currentUser is null
+            if (currentUser.isMale()) {
+                m = menu.findItem(R.id.newUser);
+                m.setIcon(R.mipmap.male_new);
+                m = menu.findItem(R.id.editUser);
+                m.setIcon(R.mipmap.male_edit);
+                m = menu.findItem(R.id.removeUser);
+                m.setIcon(R.mipmap.male_delete);
+            } else {
+                m = menu.findItem(R.id.newUser);
+                m.setIcon(R.mipmap.female_new);
+                m = menu.findItem(R.id.editUser);
+                m.setIcon(R.mipmap.female_edit);
+                m = menu.findItem(R.id.removeUser);
+                m.setIcon(R.mipmap.female_delete);
+            }
+        }
+
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         final JSONArray users;
         try {
