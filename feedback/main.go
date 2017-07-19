@@ -1,6 +1,9 @@
+// HTTP server that takes JSON feedback for the Alkomat 300 app and turns it into a neat
+// e-mail forwarded to the maintainer's address.
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
@@ -9,48 +12,62 @@ import (
 	"time"
 )
 
-const (
-	// address of the feedback bot
-	FromAddr = "foo@example.com"
-
-	// SMTP server of the feedback bot
-	SMTPSrv = "smtp.example.com"
-
-	// your mail address
-	ToAddr = "bar@derp.com"
-
-	// default subject line; fixed at the moment
-	Subject = "Feedback"
-
-	// port used by this server
-	Port = "8080"
-)
-
 func main() {
 	if FromAddr == "foo@example.com" {
-		log.Fatal("Please set the constants in main.go and recompile (go install)")
+		log.Fatal("Please set the constants in config.go and recompile")
 	}
 
 	if Passwd == "" {
-		log.Fatal("Please enter the password in passwd.go and recompile (go install)")
+		log.Fatal("Please enter the password in config.go and recompile")
 	}
 
-	http.HandleFunc("/feedback", feedbackHandler)
+	http.HandleFunc("/", rootHandler)
 
-	log.Println("Starting server on port ", Port)
+	log.Println("Starting server on port", Port)
 	log.Fatal(http.ListenAndServe(":"+Port, nil))
 }
 
-func feedbackHandler(w http.ResponseWriter, r *http.Request) {
+type Device struct {
+	OSVer      string
+	OSAPILevel string
+	Device     string
+	Model      string
+}
+
+type Feedback struct {
+	Device  Device
+	Sender  string
+	Message string
+}
+
+func rootHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	err := sendMail(Subject, "Hello, world!\n") // newline is significant
-	if err != nil {
-		fmt.Fprintln(w, "Error sending mail")
+	fbstr := r.Form.Get("feedback")
+	if fbstr == "" {
+		log.Println("missing or empty feedback property")
 		return
 	}
 
-	fmt.Fprintln(w, "Mail sent")
+	log.Println("received feedback from", r.RemoteAddr)
+
+	decoder := json.NewDecoder(strings.NewReader(fbstr))
+	var feedback Feedback
+	err := decoder.Decode(&feedback)
+	if err != nil {
+		log.Println("JSON decode error:", err)
+	}
+
+	// The message written by the app user is indented by a single tab for clearer separation.
+	msg := fmt.Sprintf("Alkomat 3000 Feedback\n\nSender: %s\nDevice: %+v\nMessage:\n\n\t", feedback.Sender, feedback.Device)
+	msg += strings.Replace(feedback.Message, "\n", "\n\t", -1) + "\n"
+	msg += "\nEnd of feedback\n"
+
+	err = sendMail(Subject, msg)
+	if err != nil {
+		log.Println("couldn't send mail:", err)
+		return
+	}
 }
 
 // sendMail sends a mail with the given subject and content. The content must have Unix
