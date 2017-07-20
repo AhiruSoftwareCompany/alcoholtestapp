@@ -5,6 +5,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"net/smtp"
@@ -28,14 +29,15 @@ func main() {
 }
 
 type Device struct {
-	OSVer      string
-	OSAPILevel string
-	Device     string
-	Model      string
+	OSVer    string
+	OSAPILvl int
+	Device   string
+	Model    string
 }
 
 func (d Device) String() string {
-	return fmt.Sprintf("\tOS version: %s (API %s)\n\tDevice: %s\n\tModel: %s\n")
+	return fmt.Sprintf("\tOS version: %s (API %d)\n\tDevice: %s\n\tModel: %s\n",
+		d.OSVer, d.OSAPILvl, d.Device, d.Model)
 }
 
 type Feedback struct {
@@ -50,13 +52,11 @@ type Feedback struct {
 func rootHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
-	fbstr := r.Form.Get("feedback")
-	if fbstr == "" {
-		log.Println("missing or empty feedback property")
-		return
-	}
+	body, _ := ioutil.ReadAll(r.Body)
+	fbstr := string(body)
 
-	log.Println("Received feedback from", r.RemoteAddr)
+	agent := r.Header.Get("user-agent")
+	log.Println("Received feedback from", agent, "(", r.RemoteAddr, ")")
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
 	var feedback Feedback
@@ -72,7 +72,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// The message written by the app user is indented by a single tab for clearer separation.
-	msg := fmt.Sprintf("Alkomat 3000 Feedback\n\n%s\nDevice: %v\nApp: %s\nMessage:\n\n\t",
+	msg := fmt.Sprintf("Alkomat 3000 Feedback\n%s\nDevice:\n%v\nApp: %s\nMessage:\n\n\t",
 		senderstr, feedback.Device, feedback.AppInfo)
 	msg += strings.Replace(feedback.Message, "\n", "\n\t", -1) + "\n"
 	msg += "\nEnd of message\n"
