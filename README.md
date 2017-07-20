@@ -57,7 +57,7 @@ In addition to that: the "`uid`" (simply the creation date (with milliseconds)) 
 
 For custom recipies saved by the user:
 
-```json
+```
 [
   {
     name:String,
