@@ -25,7 +25,7 @@ func main() {
 	http.HandleFunc("/", rootHandler)
 
 	log.Println("Starting server on port", Port)
-	log.Fatal(http.ListenAndServe(":"+Port, nil))
+	log.Fatal(http.ListenAndServeTLS(":"+Port, CertificatePath, PrivateKeyPath, nil))
 }
 
 type Device struct {
