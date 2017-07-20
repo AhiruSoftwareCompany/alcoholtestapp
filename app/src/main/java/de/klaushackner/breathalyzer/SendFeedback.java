@@ -46,7 +46,7 @@ public class SendFeedback extends AppCompatActivity {
             toSend.put("Message", message.getText());
 
             if (isValidRequest()) {
-                FeedbackSender fs = new FeedbackSender(toSend, getApplicationContext());
+                new FeedbackSender(toSend, this);
             } else {
                 Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
             }
