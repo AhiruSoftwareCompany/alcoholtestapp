@@ -74,19 +74,19 @@ For custom recipies saved by the user:
 
 Example of the string sent by the app:
 
-```json
+```
 {
-  "Device":{
-    "OsVer":"3.0.31-novafusion(6452af36f2)",
-    "OsApiLvl":22,
-     "Device":"golden (samsung, GT-I8190)",
-     "Model":"GT-I8190 (cm_golden)"
+  Device:{
+    OsVer:"3.0.31-novafusion(6452af36f2)",
+    OsApiLvl:22,
+    Device:"golden (samsung, GT-I8190)",
+    Model:"GT-I8190 (cm_golden)"
    },
-  "AppInfo":"Friendly name: 1.1, version code: 1",
-  "LogTrace":"",
-  "Sender":"Francis alias Ajax",
-  "SenderMail":"foo@bar.cool",
-  "Message":"Hi, I have a problem! Can you help me??"
+  AppInfo:"Friendly name: 1.1, version code: 1",
+  LogTrace:"",
+  Sender:"Francis alias Ajax",
+  SenderMail:"foo@bar.cool",
+  Message:"Hi, I have a problem! Can you help me??"
 }
 ```
 
