@@ -55,3 +55,26 @@ In addition to that: the uid (creation date) from the last selected user
   }
 ]
 ```
+
+## Send Feedback
+
+### Feedback
+
+Example of the string sent by the app:
+```json
+{
+  "Device":{
+    "OsVer":"3.0.31-novafusion(6452af36f2)",
+    "OsApiLvl":22,
+     "Device":"golden (samsung, GT-I8190)",
+     "Model":"GT-I8190 (cm_golden)"
+   },
+  "AppInfo":"Friendly name: 1.1, version code: 1",
+  "LogTrace":"",
+  "Sender":"Klaus",
+  "SenderMail":"foo@bar.cool",
+  "Message":"Hi, I have a problem! Can you help me??"
+}
+```
+
+The `LogTrace` is for future use: Logging every exception into a file.
