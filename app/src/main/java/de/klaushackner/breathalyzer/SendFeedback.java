@@ -6,12 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class SendFeedback extends AppCompatActivity {
     private EditText name;
+    private EditText email;
     private EditText message;
     private Button button;
 
@@ -21,7 +23,8 @@ public class SendFeedback extends AppCompatActivity {
         setContentView(R.layout.activity_send_feedback);
 
         name = (EditText) findViewById(R.id.name);
-        message = (EditText) findViewById(R.id.text);
+        email = (EditText) findViewById(R.id.email);
+        message = (EditText) findViewById(R.id.message);
         button = (Button) findViewById(R.id.sendFeedback);
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -35,10 +38,18 @@ public class SendFeedback extends AppCompatActivity {
     private void sendMessage() {
         JSONObject toSend = new JSONObject();
         try {
-            toSend.put("device", getDeviceInfo());
-            toSend.put("sender", name.getText());
-            toSend.put("message", message.getText());
-            FeedbackSender fs = new FeedbackSender(toSend, getApplicationContext());
+            toSend.put("Device", getDeviceInfo());
+            toSend.put("AppInfo", "Friendly name: " + BuildConfig.VERSION_NAME + ", version code: " + BuildConfig.VERSION_CODE);
+            toSend.put("LogTrace", ""); //TODO
+            toSend.put("Sender", name.getText());
+            toSend.put("SenderMail", email.getText());
+            toSend.put("Message", message.getText());
+
+            if (isValidRequest()) {
+                FeedbackSender fs = new FeedbackSender(toSend, getApplicationContext());
+            } else {
+                Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -47,14 +58,21 @@ public class SendFeedback extends AppCompatActivity {
     public JSONObject getDeviceInfo() {
         JSONObject deviceInfo = new JSONObject();
         try {
-            deviceInfo.put("os_ver", System.getProperty("os.version") + "(" + Build.VERSION.INCREMENTAL + ")");
-            deviceInfo.put("os_api_lvl", android.os.Build.VERSION.SDK_INT);
-            deviceInfo.put("device", android.os.Build.DEVICE + " (" + Build.MANUFACTURER + ", " + Build.MODEL + ")");
-            deviceInfo.put("model", android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")");
+            deviceInfo.put("OsVer", System.getProperty("os.version") + "(" + Build.VERSION.INCREMENTAL + ")");
+            deviceInfo.put("OsApiLvl", android.os.Build.VERSION.SDK_INT);
+            deviceInfo.put("Device", android.os.Build.DEVICE + " (" + Build.MANUFACTURER + ", " + Build.MODEL + ")");
+            deviceInfo.put("Model", android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")");
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return deviceInfo;
+    }
+
+    public boolean isValidRequest() {
+        if (message.getText().length() > 3) { //Should be enough for now
+            return true;
+        }
+        return false;
     }
 
 

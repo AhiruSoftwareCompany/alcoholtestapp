@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.klaushackner.breathalyzer"
-    android:versionName="1">
+    package="de.klaushackner.breathalyzer">
 
     <uses-sdk android:minSdkVersion="19" />
 

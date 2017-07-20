@@ -45,6 +45,9 @@
     <string name="switch_mixtureimage">Anderes Bild auswählen</string>
     <string name="send_feedback">Feedback senden</string>
     <string name="message">Nachricht</string>
-    <string name="send_message">Nachricht senden</string>
+    <string name="send_message">Nachricht senden*</string>
     <string name="feedback_sent">Feedback wurde gesendet.\nVielen Dank!</string>
+    <string name="email">E-Mail (Für Rückfragen/Antworten)</string>
+    <string name="emailhint">E-Mail</string>
+    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten sowie Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!</string>
 </resources>
