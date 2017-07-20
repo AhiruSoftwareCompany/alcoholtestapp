@@ -47,6 +47,7 @@ public class SendFeedback extends AppCompatActivity {
 
             if (isValidRequest()) {
                 new FeedbackSender(toSend, this);
+                button.setEnabled(false);
             } else {
                 Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
             }
@@ -73,6 +74,10 @@ public class SendFeedback extends AppCompatActivity {
             return true;
         }
         return false;
+    }
+
+    public void onResult() {
+        button.setEnabled(true);
     }
 
 

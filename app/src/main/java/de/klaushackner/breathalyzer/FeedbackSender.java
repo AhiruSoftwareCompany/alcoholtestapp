@@ -30,6 +30,7 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
+            conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setRequestProperty("User-Agent", sf.getResources().getString(R.string.app_name));
 
@@ -50,6 +51,7 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
+        sf.onResult();
 
         switch (rc) {
             case 400:
