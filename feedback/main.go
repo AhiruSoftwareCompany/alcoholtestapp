@@ -34,10 +34,17 @@ type Device struct {
 	Model      string
 }
 
+func (d Device) String() string {
+	return fmt.Sprintf("\tOS version: %s (API %s)\n\tDevice: %s\n\tModel: %s\n")
+}
+
 type Feedback struct {
-	Device  Device
-	Sender  string
-	Message string
+	Device     Device
+	AppInfo    string
+	LogTrace   string
+	Sender     string
+	SenderMail string
+	Message    string
 }
 
 func rootHandler(w http.ResponseWriter, r *http.Request) {
@@ -49,7 +56,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	log.Println("received feedback from", r.RemoteAddr)
+	log.Println("Received feedback from", r.RemoteAddr)
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
 	var feedback Feedback
@@ -58,10 +65,18 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 		log.Println("JSON decode error:", err)
 	}
 
+	// Only show sender if one is mentioned.
+	senderstr := ""
+	if feedback.Sender != "" {
+		senderstr = fmt.Sprintf("Sender: %s <%s>", feedback.Sender, feedback.SenderMail)
+	}
+
 	// The message written by the app user is indented by a single tab for clearer separation.
-	msg := fmt.Sprintf("Alkomat 3000 Feedback\n\nSender: %s\nDevice: %+v\nMessage:\n\n\t", feedback.Sender, feedback.Device)
+	msg := fmt.Sprintf("Alkomat 3000 Feedback\n\n%s\nDevice: %v\nApp: %s\nMessage:\n\n\t",
+		senderstr, feedback.Device, feedback.AppInfo)
 	msg += strings.Replace(feedback.Message, "\n", "\n\t", -1) + "\n"
-	msg += "\nEnd of feedback\n"
+	msg += "\nEnd of message\n"
+	msg += "Log trace:\n" + feedback.LogTrace + "\n"
 
 	err = sendMail(Subject, msg)
 	if err != nil {
