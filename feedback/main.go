@@ -1,4 +1,4 @@
-// HTTP server that takes JSON feedback for the Alkomat 300 app and turns it into a neat
+// HTTP server that takes JSON feedback for the Alkomat 3000 app and turns it into a neat
 // e-mail forwarded to the maintainer's address.
 package main
 
