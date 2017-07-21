@@ -1,9 +1,5 @@
 # Alkomat 3000
 
-
-
-
-
 ### Installing the app
 Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone. Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
 
@@ -215,9 +211,7 @@ The `LogTrace` is for future use: Logging every exception into a file.
 ## Issues
 Found a bug? Want to request a new feature?  Please let us know by submitting an issue or use the in-app feedback function (in the options menu).
 
-## Contributing
-Anyone and everyone is welcome to contribute e.g. sounds (with YouTube source).
-
 ## Sources/Adaptions
 Readme adapted from [Esri](https://github.com/Esri/arcgis-runtime-samples-android)
+
 [Emoji icons provided free by EmojiOne](http://emojione.com/)
