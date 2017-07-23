@@ -110,6 +110,7 @@ public class Mixture {
             mixtures.put(new Mixture("Pils", 330, 0.048, MixtureImage.pils).toString());
             mixtures.put(new Mixture("Pils", 500, 0.048, MixtureImage.pils).toString());
             mixtures.put(new Mixture("Wein", 200, 0.10, MixtureImage.wine).toString());
+            mixtures.put(new Mixture("Wodka", 20, 0.30, MixtureImage.vodka).toString());
             mixtures.put(new Mixture("Wodka", 20, 0.40, MixtureImage.vodka).toString());
             mixtures.put(new Mixture("Whisky", 20, 0.40, MixtureImage.whisky).toString());
             mixtures.put(new Mixture("Sekt", 200, 0.12, MixtureImage.sparklingwine).toString());
