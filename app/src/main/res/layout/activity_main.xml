@@ -59,7 +59,7 @@
 
         <view
             class="android.support.v4.widget.Space"
-            android:layout_width="40dp"
+            android:layout_width="25dp"
             android:layout_height="wrap_content"
             android:textSize="24sp" />
 
@@ -83,14 +83,14 @@
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/weight"
+                android:id="@+id/height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
                 android:textSize="24sp" />
 
             <TextView
-                android:id="@+id/height"
+                android:id="@+id/weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"

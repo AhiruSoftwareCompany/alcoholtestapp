@@ -22,8 +22,10 @@
     <string name="male">Männlich</string>
     <string name="age">Alter</string>
     <string name="years">Jahre</string>
-    <string name="weight">Körpergewicht (kg)</string>
-    <string name="height">Körpergröße (cm)</string>
+    <string name="weight">Körpergewicht</string>
+    <string name="height">Körpergröße</string>
+    <string name="weight_with_unit">Körpergewicht (kg)</string>
+    <string name="height_with_unit">Körpergröße (cm)</string>
     <string name="image">Bild</string>
     <string name="bac">Promille (‰)</string>
     <string name="bacNoChar">Promille</string>
