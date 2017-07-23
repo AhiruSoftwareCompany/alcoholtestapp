@@ -31,6 +31,9 @@
         <activity
             android:name="de.klaushackner.breathalyzer.SendFeedback"
             android:screenOrientation="portrait"></activity>
+        <activity
+            android:name="de.klaushackner.breathalyzer.ShowRecipes"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

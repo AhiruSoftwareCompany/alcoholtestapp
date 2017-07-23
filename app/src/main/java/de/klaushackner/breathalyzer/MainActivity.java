@@ -517,7 +517,7 @@ public class MainActivity extends AppCompatActivity {
                             getApplicationContext().getPackageName()));
                 }
 
-                image.setTag(currentImage.toString());
+                image.setTag(currentImage);
 
                 image.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -547,7 +547,7 @@ public class MainActivity extends AppCompatActivity {
                             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
                                 MixtureImage m = mixtureItemArray[position];
 
-                                image.setTag(m.toString()); //Updates tag if necessary
+                                image.setTag(m); //Updates tag if necessary
                                 image.setImageResource(getResources().getIdentifier(m.toString(), "mipmap",
                                         getApplicationContext().getPackageName()));
                                 dialog.dismiss();
@@ -661,6 +661,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.sendFeedback:
                 startActivity(new Intent(this, SendFeedback.class));
+                break;
+            case R.id.recipes:
+                startActivity(new Intent(this, ShowRecipes.class));
                 break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);

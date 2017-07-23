@@ -21,6 +21,9 @@
         android:id="@+id/sendFeedback"
         android:title="@string/send_feedback" />
     <item
+        android:id="@+id/recipes"
+        android:title="@string/recipes" />
+    <item
         android:id="@+id/about"
         android:title="@string/about" />
 </menu>
