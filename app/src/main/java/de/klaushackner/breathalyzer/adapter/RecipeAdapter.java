@@ -57,7 +57,6 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         image.setImageResource(mContext.getResources().getIdentifier(recipe.getImage().toString(), "mipmap",
                 mContext.getApplicationContext().getPackageName()));
 
-        System.out.println(recipe.toString());
         return v;
     }
 }

@@ -607,12 +607,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void showRecipes() {
-        Intent i = new Intent(this, ShowRecipes.class);
-        i.putExtra("currentUser", currentUser.getCreated());
-        startActivity(i);
-    }
-
     /**
      * Layout-Stuff
      */
@@ -681,7 +675,9 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SendFeedback.class));
                 break;
             case R.id.recipes:
-                showRecipes();
+                Intent i = new Intent(this, ShowRecipes.class);
+                i.putExtra("currentUser", currentUser.getCreated());
+                startActivity(i);
                 break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);

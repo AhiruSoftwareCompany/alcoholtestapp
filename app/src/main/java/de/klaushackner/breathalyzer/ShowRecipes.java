@@ -21,6 +21,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.adapter.RecipeAdapter;
+import de.klaushackner.breathalyzer.model.Ingredient;
 import de.klaushackner.breathalyzer.model.Mixture;
 import de.klaushackner.breathalyzer.model.MixtureImage;
 import de.klaushackner.breathalyzer.model.Recipe;
@@ -68,7 +69,13 @@ public class ShowRecipes extends AppCompatActivity {
                 Button cancel = (Button) dialog.findViewById(R.id.cancel);
 
                 TextView text = (TextView) dialog.findViewById(R.id.text);
-                text.setText(r.getText());
+
+                String s = r.getText();
+                s += "\n\n" + getResources().getString(R.string.ingredience) + "\n";
+                for (Ingredient i : r.getIngredients()) {
+                    s += i.getAmount() + " ml\t\t" + i.getName() + "\n";
+                }
+                text.setText(s);
                 text.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
 
                 add.setOnClickListener(new View.OnClickListener() {

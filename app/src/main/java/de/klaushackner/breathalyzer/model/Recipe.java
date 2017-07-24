@@ -181,4 +181,7 @@ public class Recipe {
         }
     }
 
+    public Ingredient[] getIngredients() {
+        return ingredients;
+    }
 }
