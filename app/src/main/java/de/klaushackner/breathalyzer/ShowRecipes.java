@@ -74,9 +74,9 @@ public class ShowRecipes extends AppCompatActivity {
                 s += "\n\n" + getResources().getString(R.string.ingredience) + "\n";
                 for (Ingredient i : r.getIngredients()) {
                     if (i.getAmount() < 10) {
-                        s += format.format(i.getAmount()) + "\t\t" + format.format(i.getName()) + "\n";
+                        s += format.format(i.getAmount()) + "\t\t\t" + i.getName() + "\n";
                     } else {
-                        s += format.format(i.getAmount()) + " ml\t\t" + format.format(i.getName()) + "\n";
+                        s += format.format(i.getAmount()) + " ml\t\t" + i.getName() + "\n";
                     }
                 }
                 text.setText(s);

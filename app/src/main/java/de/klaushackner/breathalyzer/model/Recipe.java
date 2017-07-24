@@ -125,10 +125,10 @@ public class Recipe {
             recipes.put(new Recipe(
                     MixtureImage.cocktail,
                     "Mojito",
-                    "Ein Rum-Cocktail mit kubanischer Note.\n1.\tMinze, Limettensaft und Zucker in ein Glas geben\\n\n" +
-                            "2.\tMit Stößel leicht andrücken.\\n\n" +
-                            "3.\tGlas mit Eiswürfeln auffüllen und Rum hinzugeben.\\n\n" +
-                            "4.\tGut verrühren und mit Soda auffüllen.\\n\n\nGlas: Longdrinkglas\nDekoration mit Minzzweig, Limetten",
+                    "Ein Rum-Cocktail mit kubanischer Note.\n1.\tMinze, Limettensaft und Zucker in ein Glas geben\n" +
+                            "2.\tMit Stößel leicht andrücken.\n" +
+                            "3.\tGlas mit Eiswürfeln auffüllen und Rum hinzugeben.\n" +
+                            "4.\tGut verrühren und mit Soda auffüllen.\n\nGlas: Longdrinkglas\nDekoration mit Minzzweig, Limetten",
                     new Ingredient[]{
                             new Ingredient("Rum, weiß (37,5%)", 0.375, 40),
                             new Ingredient("Limettensaft", 0, 20),
@@ -143,12 +143,12 @@ public class Recipe {
                             new Ingredient("Pott Rum (54%)", 0.54, 50),
                             new Ingredient("Limette", 0, 10),
                             new Ingredient("Vanillesirup", 0, 20),
-                            new Ingredient("Bitterorangen-Likör (Ein Spritzer)", 0, 1),
+                            new Ingredient("Bitterorangen-Likör (Spritzer)", 0, 1),
                             new Ingredient("Ginger Beer", 0, 100)}));
             recipes.put(new Recipe(
                     MixtureImage.cocktail2,
                     "Touch Down",
-                    "1.\tZutaten außer Grenadine mit Eis shaken und in das Glas geben.\\n\n" +
+                    "1.\tZutaten außer Grenadine mit Eis shaken und in das Glas geben.\n" +
                             "2.\tGrenadine ins Glas geben und vorsichtig umrühren.\n\nGlas: Lang, dünn (Fancy)\nDekoration mit ½ Maracujascheibe",
                     new Ingredient[]{
                             new Ingredient("Wodka Gorbatschow (37,5%)", 0.375, 40),
@@ -166,7 +166,7 @@ public class Recipe {
                             new Ingredient("Rum, weiß (37,5%)", 0.375, 60),
                             new Ingredient("Sahne", 0, 20),
                             new Ingredient("Kokoslikör/Malibu (21%)", 0.21, 40),
-                            new Ingredient("Ananassaft)", 0, 120),
+                            new Ingredient("Ananassaft", 0, 120),
                             new Ingredient("Crushed-Ice (2 EL)", 0, 2),
                             new Ingredient("frische Ananas", 0, 1)}));
 

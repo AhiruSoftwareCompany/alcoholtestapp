@@ -10,9 +10,9 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -264,7 +264,7 @@ public class MainActivity extends AppCompatActivity {
     private void removeUser(User userToRemove) {
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
-        JSONArray users = null;
+        JSONArray users;
         try {
             users = new JSONArray(sharedPref.getString("users", "[]"));
 
@@ -494,7 +494,7 @@ public class MainActivity extends AppCompatActivity {
                         .setContentTitle(getString(R.string.notification_alert))
                         .setContentText(String.format(getString(R.string.notification_text_current_bac), format.format(currentBac)))
                         .setOnlyAlertOnce(true)
-                        .addAction(getResources().getIdentifier(m.getImageString(), "mipmap", getPackageName()), "Das selbe nochmal", p) //TODO: (Issue #12) Shrink all icons to fit the notificaiton bar
+                        .addAction(getResources().getIdentifier(m.getImageString(), "mipmap", getPackageName()), "Das selbe nochmal", p)
                         .build();
 
                 notMngr.notify(nID, n);
