@@ -16,7 +16,7 @@
     <string name="about">Über diese App</string>
     <string name="name">Name</string>
     <string name="percentage">Alkoholgehalt (%)</string>
-    <string name="amount">Menge (ml)</string>
+    <string name="amount">Alk-Menge (ml)</string>
     <string name="sex">Geschlecht</string>
     <string name="female">Weiblich</string>
     <string name="male">Männlich</string>
@@ -55,5 +55,5 @@
     <string name="emailhint">E-Mail</string>
     <string name="recipes">Rezepte</string>
     <string name="ingredience">Zutaten:</string>
-    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten sowie Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!</string>
+    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten sowie Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!</string>
 </resources>

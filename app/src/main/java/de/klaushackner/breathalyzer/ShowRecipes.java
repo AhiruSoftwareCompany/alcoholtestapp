@@ -12,18 +12,17 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.adapter.RecipeAdapter;
 import de.klaushackner.breathalyzer.model.Ingredient;
 import de.klaushackner.breathalyzer.model.Mixture;
-import de.klaushackner.breathalyzer.model.MixtureImage;
 import de.klaushackner.breathalyzer.model.Recipe;
 import de.klaushackner.breathalyzer.model.User;
 
@@ -32,6 +31,7 @@ public class ShowRecipes extends AppCompatActivity {
     private Context c;
     private User currentUser;
     private RecipeAdapter rA;
+    private final DecimalFormat format = new DecimalFormat();
 
     public ShowRecipes() {
     }
@@ -73,7 +73,11 @@ public class ShowRecipes extends AppCompatActivity {
                 String s = r.getText();
                 s += "\n\n" + getResources().getString(R.string.ingredience) + "\n";
                 for (Ingredient i : r.getIngredients()) {
-                    s += i.getAmount() + " ml\t\t" + i.getName() + "\n";
+                    if (i.getAmount() < 10) {
+                        s += format.format(i.getAmount()) + "\t\t" + format.format(i.getName()) + "\n";
+                    } else {
+                        s += format.format(i.getAmount()) + " ml\t\t" + format.format(i.getName()) + "\n";
+                    }
                 }
                 text.setText(s);
                 text.getLayoutParams().height = LinearLayout.LayoutParams.WRAP_CONTENT;
