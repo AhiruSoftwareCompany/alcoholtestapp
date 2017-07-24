@@ -137,7 +137,13 @@ public class MainActivity extends AppCompatActivity {
         });
 
         format.setDecimalSeparatorAlwaysShown(false);
-        switchUser(isStartedByLauncher());
+
+        if (!getIntent().getBooleanExtra("fromShowRecipes", false)) {
+            switchUser(isStartedByLauncher());
+        } else {
+            switchUser(getIntent().getLongExtra("currentUser", 0));
+        }
+
 
         //If coming from a notication, the mixture will be added to the current user
         String m = getIntent().getStringExtra("mixtureToAdd");
@@ -183,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
     /**
      * Updates GUI to match the current selected user, then calls updateDrinkList()
      */
-    private void updateGui() {
+    public void updateGui() {
         if (currentUser != null) {
             tvName.setText(currentUser.getName());
             tvAge.setText(format.format(currentUser.getAge()) + " " + getString(R.string.years));
@@ -381,9 +387,17 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void switchUser(long created) {
+        if (created != 0) {
+            currentUser = User.getUserByCreated(c, created);
+        } else {
+            switchUser(isStartedByLauncher());
+        }
+    }
+
     /**
      * Adds mixtures to dialog and handles its events
-     * Here you can add more mixtures
+     * Here you can addCustomRecipe more mixtures
      */
     private void addDrink() {
         final Dialog dialog = new Dialog(this);
@@ -492,14 +506,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
     /**
-     * @param stage         0 = from "add drinks" dialog; 1 = from "add custom drink" dialog
-     * @param customMixture from "add custom drink" dialog
+     * @param stage         0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
+     * @param customMixture from "addCustomRecipe custom drink" dialog
      */
     private void addCustomDrink(int stage, Mixture customMixture) {
         switch (stage) {
-            case 0: //0 = from "add drinks" dialog; 1 = from "add custom drink" dialog
+            case 0: //0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
                 //Open dialog and wait for result
                 final Dialog d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_custom_drink);
@@ -584,7 +597,7 @@ public class MainActivity extends AppCompatActivity {
                 });
                 d.show();
                 break;
-            case 1: //from "add custom drink" dialog
+            case 1: //from "addCustomRecipe custom drink" dialog
                 if (customMixture != null || currentUser != null) {
                     currentUser.addDrink(customMixture);
                     currentUser.saveUser(c);
@@ -594,6 +607,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private void showRecipes() {
+        Intent i = new Intent(this, ShowRecipes.class);
+        i.putExtra("currentUser", currentUser.getCreated());
+        startActivity(i);
+    }
 
     /**
      * Layout-Stuff
@@ -663,7 +681,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(this, SendFeedback.class));
                 break;
             case R.id.recipes:
-                startActivity(new Intent(this, ShowRecipes.class));
+                showRecipes();
                 break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);

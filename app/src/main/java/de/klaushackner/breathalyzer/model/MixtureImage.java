@@ -16,7 +16,6 @@ public enum MixtureImage {
     goass("goass"),
     morebeer("morebeer"),
     pils("pils"),
-    save("save"),
     sparklingwine("sparklingwine"),
     vodka("vodka"),
     whisky("whisky"),

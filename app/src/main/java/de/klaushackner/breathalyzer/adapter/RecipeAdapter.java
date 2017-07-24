@@ -54,45 +54,10 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
 
         percentage.setText(format.format(recipe.getPercentage() * 100) + " %");
 
-        image.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                final Dialog dialog = new Dialog(mContext);
-                dialog.setContentView(R.layout.dialog_switch_mixtureimage);
+        image.setImageResource(mContext.getResources().getIdentifier(recipe.getImage().toString(), "mipmap",
+                mContext.getApplicationContext().getPackageName()));
 
-                dialog.setTitle(R.string.switch_mixtureimage);
-                final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-                if (title != null) {
-                    title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                    title.setPadding(0, 20, 0, 20);
-                }
-
-                final MixtureImageAdapter mA = new MixtureImageAdapter(mContext, new ArrayList<MixtureImage>());
-                GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
-                mixtureList.setAdapter(mA);
-
-                final MixtureImage[] mixtureItemArray = MixtureImage.values();
-
-                for (MixtureImage aMixtureItemArray : mixtureItemArray) {
-                    mA.add(aMixtureItemArray);
-                }
-
-                mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                        MixtureImage m = mixtureItemArray[position];
-
-                        recipe.setImage(m);
-                        image.setImageResource(mContext.getResources().getIdentifier(m.toString(), "mipmap",
-                                mContext.getApplicationContext().getPackageName()));
-                        dialog.dismiss();
-                    }
-                });
-                dialog.show();
-            }
-        });
-
-
+        System.out.println(recipe.toString());
         return v;
     }
 }

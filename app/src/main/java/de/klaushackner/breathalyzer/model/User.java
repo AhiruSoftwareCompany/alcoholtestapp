@@ -158,6 +158,24 @@ public class User {
         }
     }
 
+    public static User getUserByCreated(Context c, long created) {
+        SharedPreferences sharedPref = c.getSharedPreferences("data", 0);
+
+        try {
+            JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
+
+            for (int i = 0; i < users.length(); i++) {
+                User u = new User(new JSONObject(users.get(i).toString()));
+                if (u.getCreated() == created) {
+                    return u;
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public void removeDrink(long takingTime) {
         try {
             for (int i = 0; i < drinks.length(); i++) {

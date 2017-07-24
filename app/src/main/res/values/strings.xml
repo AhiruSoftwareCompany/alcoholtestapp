@@ -44,6 +44,8 @@
     <string name="add_as_mixture">Rezeptur\nspeichern</string>
     <string name="remove_custom_mixture">Rezeptur entfernen?</string>
     <string name="remove_mixture">Rezeptur\nentfernen</string>
+    <string name="remove_custom_recipe">Rezeptur entfernen?</string>
+    <string name="remove_recipe">Rezeptur\nentfernen</string>
     <string name="switch_mixtureimage">Anderes Bild auswählen</string>
     <string name="send_feedback">Feedback senden</string>
     <string name="message">Nachricht</string>

@@ -10,10 +10,12 @@ import org.json.JSONObject;
 public class Recipe {
     private MixtureImage image;
     private String name;
+    private String text;
     private Ingredient[] ingredients;
 
-    public Recipe(MixtureImage image, String name, Ingredient[] ingredients) {
+    public Recipe(MixtureImage image, String name, String text, Ingredient[] ingredients) {
         this.image = image;
+        this.text = text;
         this.name = name;
         this.ingredients = ingredients;
     }
@@ -22,11 +24,15 @@ public class Recipe {
         try {
             this.image = MixtureImage.fromString(recipeAsJSON.getString("image"));
             this.name = recipeAsJSON.getString("name");
+            this.text = recipeAsJSON.getString("text");
             JSONArray ingr = recipeAsJSON.getJSONArray("ingredients");
-            this.ingredients = new Ingredient[ingr.length()];
+            ingredients = new Ingredient[ingr.length()];
+            for (int i = 0; i < ingr.length(); i++) {
+                this.ingredients[i] = new Ingredient(new JSONObject(ingr.get(i).toString()));
+            }
 
             for (int i = 0; i < ingr.length(); i++) {
-                ingredients[i] = new Ingredient(ingr.getJSONObject(i));
+                ingredients[i] = new Ingredient(new JSONObject(ingr.get(i).toString()));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -43,12 +49,62 @@ public class Recipe {
         try {
             j.put("image", image.toString());
             j.put("name", name);
-            j.put("ingredients", ingredients);
+            j.put("text", text);
+            JSONArray ingr = new JSONArray();
+            for (Ingredient i : ingredients) {
+                ingr.put(i.toString());
+            }
+            j.put("ingredients", ingr);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        System.out.println(j.toString());
         return j;
+    }
+
+    public MixtureImage getImage() {
+        return image;
+    }
+
+    public void setImage(MixtureImage image) {
+        this.image = image;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public double getAmount() {
+        double amount = 0;
+        for (Ingredient ingr : ingredients) {
+            if (ingr.getPercentage() != 0) {
+                amount += ingr.getAmount();
+            }
+        }
+        return amount; //Menge der Bestandteile des Getränks mit Alkohol
+    }
+
+    public double getPercentage() {
+        double a = 0;
+        for (Ingredient ingr : ingredients) {
+            a += (ingr.getAmount() * ingr.getPercentage());
+        }
+        if (getAmount() > 0) {
+            return a / getAmount();
+        } else {
+            return 0;
+        }
     }
 
     public static Recipe[] getRecipeArray(Context c) {
@@ -57,12 +113,14 @@ public class Recipe {
 
             //Add new recipes here!
             JSONArray recipes = new JSONArray("[]");
-            recipes.put(new Recipe(MixtureImage.bluebeer, "Test", null));
+            recipes.put(new Recipe(MixtureImage.bluebeer,
+                    "Test",
+                    "Folgende Zutaten einfach zusammenkippen.",
+                    new Ingredient[]{new Ingredient("Test", 0.5, 40), new Ingredient("Test2", 0.5, 50)}));
 
             for (int i = 0; i < customRecipe.length(); i++) {
                 recipes.put(customRecipe.get(i).toString());
             }
-
 
             final Recipe[] recipeArray = new Recipe[recipes.length()];
 
@@ -102,7 +160,6 @@ public class Recipe {
         }
     }
 
-
     public static void removeCustomRecipe(Context c, Recipe r) {
         try {
             SharedPreferences sharedPref = c.getSharedPreferences("data", 0);
@@ -113,7 +170,7 @@ public class Recipe {
             for (int i = 0; i < recipes.length(); i++) {
                 if (recipes.get(i).toString().compareTo(r.toString()) == 0) {
                     recipes.remove(i);
-                    break; //break prevents removing every recipe matching to the given recipe (helpful if you add the same recipe two times and want to remove it)
+                    break; //break prevents removing every recipe matching to the given recipe (helpful if you addCustomRecipe the same recipe two times and want to remove it)
                 }
             }
 

@@ -175,7 +175,7 @@ public class Mixture {
             for (int i = 0; i < mixtures.length(); i++) {
                 if (mixtures.get(i).toString().compareTo(m.toString()) == 0) {
                     mixtures.remove(i);
-                    break; //break prevents removing every mixture matching to the given mixture (helpful if you add the same mixture two times and want to remove it)
+                    break; //break prevents removing every mixture matching to the given mixture (helpful if you addCustomRecipe the same mixture two times and want to remove it)
                 }
             }
 
