@@ -118,7 +118,17 @@ const (
 
 ## App structure
 
+### Terminology
+
+|`user`|A user|
+|`mixture`|A mixture for a drink (e.g. beer with 500ml and 5%)|
+|`ingredient`|A ingredient used to create a drink with a recipe|
+|`drink`|A consumed mixture|
+|`recipe`|A mixture for a drink with more then one ingredient|
+
 ### Data saved by app on your phone
+
+Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
 
 #### Users-Array
 
@@ -154,24 +164,7 @@ In addition to that: the "`uid`" (simply the creation date (with milliseconds)) 
 
 `MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
 
-```
-[
-  {
-    name:String,
-    amount:double,
-    percentage:double,
-    image:MixtureImage
-  },
-  {
-    name:Eigenes\nGetränk,
-    amount:0,
-    percentage:0,
-    image:MixtureImage.custom
-  }
-]
-```
-
-For custom recipies saved by the user:
+For custom mixtures saved by the user:
 
 ```
 [
@@ -180,6 +173,26 @@ For custom recipies saved by the user:
     amount:double,
     percentage:double,
     image":MixtureImage
+  }
+]
+```
+
+#### Recipes-Array
+
+`MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
+
+For custom recipes saved by the user:
+
+```
+[
+  {image:MixtureImage,
+    name:String,
+    text:String,
+    ingredients:[
+      {name:String,
+	  percentage:double,
+	  amount:double}
+    ]
   }
 ]
 ```
