@@ -120,6 +120,8 @@ const (
 
 ### Terminology
 
+|term|description|
+|----|-----------|
 |`user`|A user|
 |`mixture`|A mixture for a drink (e.g. beer with 500ml and 5%)|
 |`ingredient`|A ingredient used to create a drink with a recipe|
