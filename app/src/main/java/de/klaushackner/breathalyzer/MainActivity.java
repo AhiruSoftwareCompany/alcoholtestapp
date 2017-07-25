@@ -65,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         c = getApplicationContext();
         ma = this;
+        format.setDecimalSeparatorAlwaysShown(false);
 
         tvName = (TextView) findViewById(R.id.name);
         tvAge = (TextView) findViewById(R.id.age);
@@ -136,14 +137,11 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        format.setDecimalSeparatorAlwaysShown(false);
-
-        if (!getIntent().getBooleanExtra("fromShowRecipes", false)) {
-            switchUser(isStartedByLauncher());
-        } else {
+        if (getIntent().getBooleanExtra("fromShowRecipes", false)) {
             switchUser(getIntent().getLongExtra("currentUser", 0));
+        } else {
+            switchUser(isStartedByLauncher());
         }
-
 
         //If coming from a notication, the mixture will be added to the current user
         String m = getIntent().getStringExtra("mixtureToAdd");
@@ -201,6 +199,15 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 tvSex.setText(R.string.female);
             }
+
+            if (User.getUserCount(c) == 1) {
+                try {
+                    menu.removeItem(R.id.switchUser);
+                } catch (Exception e) {
+                    //Nobody cares about you, e.
+                }
+            }
+
             updateDrinkList();
         }
     }
@@ -643,15 +650,8 @@ public class MainActivity extends AppCompatActivity {
             }
         }
 
-        SharedPreferences sharedPref = getSharedPreferences("data", 0);
-        final JSONArray users;
-        try {
-            users = new JSONArray(sharedPref.getString("users", "[]"));
-            if (users.length() == 1) {
-                menu.removeItem(R.id.switchUser);
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
+        if (User.getUserCount(c) == 1) {
+            menu.removeItem(R.id.switchUser);
         }
         return true;
     }

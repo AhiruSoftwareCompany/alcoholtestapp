@@ -176,6 +176,18 @@ public class User {
         return null;
     }
 
+    public static int getUserCount(Context c) {
+        SharedPreferences sharedPref = c.getSharedPreferences("data", 0);
+
+        try {
+            JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
+            return users.length();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
     public void removeDrink(long takingTime) {
         try {
             for (int i = 0; i < drinks.length(); i++) {
