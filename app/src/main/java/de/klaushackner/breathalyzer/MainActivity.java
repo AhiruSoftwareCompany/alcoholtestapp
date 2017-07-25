@@ -275,19 +275,19 @@ public class MainActivity extends AppCompatActivity {
         try {
             users = new JSONArray(sharedPref.getString("users", "[]"));
 
-            for (int i = 0; i < users.length(); i++) {
+            for (int i = 0; i < User.getUserCount(c); i++) {
                 JSONObject user = new JSONObject(users.get(i).toString());
                 if (user.getString("name").compareTo(userToRemove.getName()) == 0) {
                     users.remove(i);
                     editor.putString("users", users.toString());
                     editor.commit();
 
-                    if (users.length() == 0) {
+                    if (User.getUserCount(c) == 0) {
                         createUser();
                         return;
                     }
 
-                    if (users.length() == 1) {
+                    if (User.getUserCount(c) == 1) {
                         currentUser = new User(new JSONObject(users.get(0).toString()));
                         updateGui();
                     } else {
@@ -334,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
                     long lastUser = sharedPref.getLong("lastUser", 0);
 
                     if (lastUser != 0) {
-                        for (int i = 0; i < users.length(); i++) {
+                        for (int i = 0; i < User.getUserCount(c); i++) {
                             User u = new User(new JSONObject(users.get(i).toString()));
                             if (u.getCreated() == lastUser) {
                                 currentUser = u;
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 //Wenn nur ein User vorhanden, wird dieser ausgewählt
-                if (users.length() == 1) {
+                if (User.getUserCount(c) == 1) {
                     currentUser = new User(new JSONObject(users.get(0).toString()));
                     editor.putLong("lastUser", currentUser.getCreated());
                     editor.commit();
@@ -356,7 +356,7 @@ public class MainActivity extends AppCompatActivity {
 
                 //Dialog with all users
                 final ArrayList<User> usersList = new ArrayList<>();
-                for (int i = 0; i < users.length(); i++) {
+                for (int i = 0; i < User.getUserCount(c); i++) {
                     usersList.add(new User(new JSONObject(users.get(i).toString())));
                 }
 

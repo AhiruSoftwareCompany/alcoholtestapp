@@ -132,6 +132,12 @@ public class ShowRecipes extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onResume(){
+        super.onResume();
+        updateRecipes();
+    }
+
     private void updateRecipes() {
         rA.clear();
         rA.notifyDataSetChanged();
