@@ -187,13 +187,16 @@ For custom recipes saved by the user:
 
 ```
 [
-  {image:MixtureImage,
+  {
+    image:MixtureImage,
     name:String,
     text:String,
     ingredients:[
-      {name:String,
-	  percentage:double,
-	  amount:double}
+      {
+        name:String,
+        percentage:double,
+        amount:double
+      }
     ]
   }
 ]
