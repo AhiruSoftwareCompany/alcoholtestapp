@@ -119,7 +119,7 @@ public class Recipe {
                     "Zutaten mit Eiswürfeln shaken\n\nGlas: Longdrinkglas\nDekoration mit ½ Orangenscheibe, Ananas, Kirsche",
                     new Ingredient[]{
                             new Ingredient("Wodka Gorbatschow (37,5%)", 0.375, 40),
-                            new Ingredient("Pfirsichlikör (17%)", 0.5, 20),
+                            new Ingredient("Pfirsichlikör (17%)", 0.17, 20),
                             new Ingredient("Orangensaft", 0, 40),
                             new Ingredient("Cranberrysaft", 0, 40)}));
             recipes.put(new Recipe(
