@@ -88,20 +88,30 @@ public class Recipe {
     public double getAmount() {
         double amount = 0;
         for (Ingredient ingr : ingredients) {
-            if (ingr.getPercentage() != 0) {
+            if (ingr.getPercentage() > 0) {
                 amount += ingr.getAmount();
             }
         }
         return amount; //Menge der Bestandteile des Getränks mit Alkohol
     }
+    
+    public double getAlc(){
+        double alc = 0;
+        for (Ingredient ingr : ingredients) {
+            if (ingr.getPercentage() > 0) {
+                alc += (ingr.getAmount() * ingr.getPercentage() * 0.8);
+            }
+        }
+        return alc; //Menge der Bestandteile des Getränks mit Alkohol
+    }
 
     public double getPercentage() {
         double a = 0;
         for (Ingredient ingr : ingredients) {
-            a += (ingr.getAmount() * ingr.getPercentage());
+            a += ingr.getAmount();
         }
         if (getAmount() > 0) {
-            return a / getAmount();
+            return getAlc() / a; // Gesamtlakohol / Gesamtflüssigkeit
         } else {
             return 0;
         }
