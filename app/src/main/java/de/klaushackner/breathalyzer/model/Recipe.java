@@ -111,7 +111,7 @@ public class Recipe {
             a += ingr.getAmount();
         }
         if (getAmount() > 0) {
-            return getAlc() / a; // Gesamtlakohol / Gesamtflüssigkeit
+            return getAlc() / a; // Gesamtalkohol / Gesamtflüssigkeit
         } else {
             return 0;
         }
