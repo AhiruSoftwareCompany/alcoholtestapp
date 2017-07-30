@@ -88,14 +88,12 @@ public class Recipe {
     public double getAmount() {
         double amount = 0;
         for (Ingredient ingr : ingredients) {
-            if (ingr.getPercentage() > 0) {
-                amount += ingr.getAmount();
-            }
+            amount += ingr.getAmount();
         }
-        return amount; //Menge der Bestandteile des Getränks mit Alkohol
+        return amount;
     }
-    
-    public double getAlc(){
+
+    public double getAlc() {
         double alc = 0;
         for (Ingredient ingr : ingredients) {
             if (ingr.getPercentage() > 0) {
@@ -179,6 +177,24 @@ public class Recipe {
                             new Ingredient("Ananassaft", 0, 120),
                             new Ingredient("Crushed-Ice (2 EL)", 0, 2),
                             new Ingredient("frische Ananas", 0, 1)}));
+
+            recipes.put(new Recipe(
+                    MixtureImage.cocktail,
+                    "GOASMAẞẞẞẞ",
+                    "Zutaten erst ohne, nach 10 Sekunden mit Eiswürfeln shaken\n\nGlas: Lang, dünn (Fancy)\nDekoration mit Ananasstück, Trinkhalm",
+                    new Ingredient[]{
+                            new Ingredient("Cola", 0, 500),
+                            new Ingredient("Weizen", 0.05, 500),
+                            new Ingredient("Kirsch", 0.20, 40)}));
+
+            recipes.put(new Recipe(
+                    MixtureImage.cocktail,
+                    "GOAS",
+                    "Zutaten erst ohne, nach 10 Sekunden mit Eiswürfeln shaken\n\nGlas: Lang, dünn (Fancy)\nDekoration mit Ananasstück, Trinkhalm",
+                    new Ingredient[]{
+                            new Ingredient("Cola", 0, 250),
+                            new Ingredient("Weizen", 0.05, 250),
+                            new Ingredient("Kirsch", 0.20, 20)}));
 
             for (int i = 0; i < customRecipe.length(); i++) {
                 recipes.put(customRecipe.get(i).toString());

@@ -17,10 +17,13 @@ import de.klaushackner.breathalyzer.model.Recipe;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
     private final Context mContext;
+    private final DecimalFormat format = new DecimalFormat();
 
     public RecipeAdapter(Context context, ArrayList<Recipe> arrayList) {
         super(context, R.layout.items_mixture, arrayList);
         mContext = context;
+        format.setDecimalSeparatorAlwaysShown(false);
+        format.setMaximumFractionDigits(2);
     }
 
     @NonNull
@@ -36,11 +39,8 @@ public class RecipeAdapter extends ArrayAdapter<Recipe> {
         TextView percentage = (TextView) v.findViewById(R.id.percentage);
         final ImageView image = (ImageView) v.findViewById(R.id.image);
 
-        DecimalFormat format = new DecimalFormat();
-        format.setDecimalSeparatorAlwaysShown(false);
-
         name.setText(recipe.getName());
-        if (recipe.getAmount() < 100) {
+        if (recipe.getAmount() < 200) {
             amount.setText(format.format(recipe.getAmount()) + " ml");
         } else {
             amount.setText(format.format(recipe.getAmount() / 1000) + " l");

@@ -95,8 +95,8 @@ public class Mixture {
             JSONArray mixtures = new JSONArray("[]");
             mixtures.put(new Mixture("Bier", 500, 0.05, MixtureImage.beer).toString());
             mixtures.put(new Mixture("Bier", 1000, 0.05, MixtureImage.morebeer).toString());
-            mixtures.put(new Mixture("Goaß", 270, 0.06296296296, MixtureImage.goass).toString());
-            mixtures.put(new Mixture("Goaßmaß", 540, 0.06296296296, MixtureImage.goass).toString());
+            mixtures.put(new Mixture("Goaß", 540, 0.25, MixtureImage.goass).toString());
+            mixtures.put(new Mixture("Goaßmaß", 1040, 0.25, MixtureImage.goass).toString());
             mixtures.put(new Mixture("Pils", 330, 0.048, MixtureImage.pils).toString());
             mixtures.put(new Mixture("Pils", 500, 0.048, MixtureImage.pils).toString());
             mixtures.put(new Mixture("Wein", 200, 0.10, MixtureImage.wine).toString());
@@ -104,6 +104,7 @@ public class Mixture {
             mixtures.put(new Mixture("Wodka", 20, 0.40, MixtureImage.vodka).toString());
             mixtures.put(new Mixture("Whisky", 20, 0.40, MixtureImage.whisky).toString());
             mixtures.put(new Mixture("Sekt", 200, 0.12, MixtureImage.sparklingwine).toString());
+            mixtures.put(new Mixture("Hugo", 150, 0.069, MixtureImage.sparklingwine).toString());
 
             for (int i = 0; i < customMixtures.length(); i++) {
                 mixtures.put(customMixtures.get(i).toString());

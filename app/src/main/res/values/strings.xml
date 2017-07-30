@@ -16,7 +16,7 @@
     <string name="about">Über diese App</string>
     <string name="name">Name</string>
     <string name="percentage">Alkoholgehalt (%)</string>
-    <string name="amount">Alk-Menge (ml)</string>
+    <string name="amount">Menge (ml)</string>
     <string name="sex">Geschlecht</string>
     <string name="female">Weiblich</string>
     <string name="male">Männlich</string>
