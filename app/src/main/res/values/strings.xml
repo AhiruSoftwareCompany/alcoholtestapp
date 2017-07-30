@@ -54,6 +54,8 @@
     <string name="email">E-Mail (Für Rückfragen/Antworten)</string>
     <string name="emailhint">E-Mail</string>
     <string name="recipes">Rezepte</string>
+    <string name="add_recipe">Ein Rezept hinzufügen</string>
     <string name="ingredience">Zutaten:</string>
+    <string name="description">Beschreibung</string>
     <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten sowie Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!</string>
 </resources>

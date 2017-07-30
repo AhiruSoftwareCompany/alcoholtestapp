@@ -1,21 +1,11 @@
 package de.klaushackner.breathalyzer.model;
 
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
-
-import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
 
 
 public class Mixture {

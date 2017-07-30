@@ -12,6 +12,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -133,7 +134,7 @@ public class ShowRecipes extends AppCompatActivity {
     }
 
     @Override
-    public void onResume(){
+    public void onResume() {
         super.onResume();
         updateRecipes();
     }
@@ -147,8 +148,23 @@ public class ShowRecipes extends AppCompatActivity {
     }
 
     public void addCustomRecipe() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_create_recipe);
+
+        dialog.setTitle(R.string.add_recipe);
+        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+        if (title != null) {
+            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            title.setPadding(0, 20, 0, 20);
+        }
+
+        ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        TextView name = (TextView) dialog.findViewById(R.id.name);
+        TextView text = (TextView) dialog.findViewById(R.id.text);
+        ListView ingredients = (ListView) dialog.findViewById(R.id.ingredients);
+
         //TODO
-        //Recipe.addCustomRecipe(c, new Recipe());
+        //Recipe.addCustomRecipe(c, new Recipe(MixtureImage.fromString(image.getTag().toString()), name.getText(), text.getText(), new Ingredient[]));
     }
 
     /**
