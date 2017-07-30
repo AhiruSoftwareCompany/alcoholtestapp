@@ -81,6 +81,13 @@ public class SendFeedback extends AppCompatActivity {
 
     public boolean isValidRequest() {
         if (message.getText().length() > 3) { //Should be enough for now
+            if (email.getText().length() > 0) {
+                if (email.getText().toString().contains("@") && email.getText().toString().contains(".")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             return true;
         }
         return false;

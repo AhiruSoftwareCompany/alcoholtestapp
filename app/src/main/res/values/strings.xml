@@ -59,5 +59,5 @@
     <string name="description">Beschreibung</string>
     <string name="feedback_sending">Feedback wird gesendet …</string>
     <string name="add_recipe_button">Rezept hinzufügen</string>
-    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten, Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!</string>
+    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten, Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!\nDie Angabe des Namens und der E-Mail-Adresse ist optional, aber für Rückfragen/Rückmeldungen sinnvoll.</string>
 </resources>
