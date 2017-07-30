@@ -46,6 +46,7 @@ public class ShowRecipes extends AppCompatActivity {
 
         if (getIntent().getLongExtra("currentUser", 0) == 0) {
             Toast.makeText(c, "MEH", Toast.LENGTH_SHORT).show();
+            finish();
         }
 
         list = (ListView) findViewById(R.id.list);
@@ -162,9 +163,16 @@ public class ShowRecipes extends AppCompatActivity {
         TextView name = (TextView) dialog.findViewById(R.id.name);
         TextView text = (TextView) dialog.findViewById(R.id.text);
         ListView ingredients = (ListView) dialog.findViewById(R.id.ingredients);
+        Button add = (Button) dialog.findViewById(R.id.add);
 
-        //TODO
-        //Recipe.addCustomRecipe(c, new Recipe(MixtureImage.fromString(image.getTag().toString()), name.getText(), text.getText(), new Ingredient[]));
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //TODO
+                //Recipe.addCustomRecipe(c, new Recipe(MixtureImage.fromString(image.getTag().toString()), name.getText(), text.getText(), new Ingredient[]));
+            }
+        });
+        dialog.show();
     }
 
     /**
@@ -174,6 +182,8 @@ public class ShowRecipes extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_show_recipes, menu);
+        MenuItem m = menu.getItem(0);
+        m.setEnabled(false);
         return true;
     }
 

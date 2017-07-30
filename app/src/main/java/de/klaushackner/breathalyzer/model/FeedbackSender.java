@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer;
+package de.klaushackner.breathalyzer.model;
 
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -10,6 +10,9 @@ import java.io.OutputStreamWriter;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
+
+import de.klaushackner.breathalyzer.R;
+import de.klaushackner.breathalyzer.SendFeedback;
 
 public class FeedbackSender extends AsyncTask<String, Void, String> {
     private int rc;
@@ -50,22 +53,23 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        sf.onResult();
-
         switch (rc) {
             case 400:
                 //irony: you can't report a error in the error report system, lol
                 Toast.makeText(sf, sf.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                sf.onResult(1);
                 break;
             case 200:
                 Toast.makeText(sf, sf.getResources().getString(R.string.feedback_sent), Toast.LENGTH_SHORT).show();
-                sf.finish();
+                sf.onResult(0);
                 break;
             case 0:
                 Toast.makeText(sf, "Fehler", Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                sf.onResult(1);
                 break;
             default:
                 Toast.makeText(sf, rc + " - Fehler", Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                sf.onResult(1);
                 break;
         }
     }

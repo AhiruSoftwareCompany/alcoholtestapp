@@ -1,9 +1,11 @@
 package de.klaushackner.breathalyzer;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,16 +13,23 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.klaushackner.breathalyzer.model.FeedbackSender;
+
 public class SendFeedback extends AppCompatActivity {
     private EditText name;
     private EditText email;
     private EditText message;
     private Button button;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_feedback);
+        dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //No title
+        dialog.setContentView(R.layout.loading);
 
         name = (EditText) findViewById(R.id.name);
         email = (EditText) findViewById(R.id.email);
@@ -47,6 +56,7 @@ public class SendFeedback extends AppCompatActivity {
 
             if (isValidRequest()) {
                 new FeedbackSender(toSend, this);
+                dialog.show();
                 button.setEnabled(false);
             } else {
                 Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
@@ -76,8 +86,14 @@ public class SendFeedback extends AppCompatActivity {
         return false;
     }
 
-    public void onResult() {
+    public void onResult(int code) {
+        dialog.dismiss();
         button.setEnabled(true);
+        switch (code) {
+            case 0:
+                finish();
+                break;
+        }
     }
 
 
