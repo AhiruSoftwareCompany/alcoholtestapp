@@ -134,7 +134,7 @@ const (
 
 ### Data saved by app on your phone
 
-Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
+Path: `/data/data/de.klaushackner.alkomat3000/shared_prefs/data.xml`
 
 #### Users-Array
 
