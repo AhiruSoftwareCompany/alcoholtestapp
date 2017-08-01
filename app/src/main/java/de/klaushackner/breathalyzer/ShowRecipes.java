@@ -12,6 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,9 +23,13 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
+import de.klaushackner.breathalyzer.adapter.IngredientAdapter;
+import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
 import de.klaushackner.breathalyzer.adapter.RecipeAdapter;
 import de.klaushackner.breathalyzer.model.Ingredient;
+import de.klaushackner.breathalyzer.model.IngredientsView;
 import de.klaushackner.breathalyzer.model.Mixture;
+import de.klaushackner.breathalyzer.model.MixtureImage;
 import de.klaushackner.breathalyzer.model.Recipe;
 import de.klaushackner.breathalyzer.model.User;
 
@@ -45,7 +51,7 @@ public class ShowRecipes extends AppCompatActivity {
         currentUser = User.getUserByCreated(c, getIntent().getLongExtra("currentUser", 0));
 
         if (getIntent().getLongExtra("currentUser", 0) == 0) {
-            Toast.makeText(c, "MEH", Toast.LENGTH_SHORT).show();
+            Toast.makeText(c, "Fehler", Toast.LENGTH_SHORT).show();
             finish();
         }
 
@@ -69,7 +75,6 @@ public class ShowRecipes extends AppCompatActivity {
 
                 Button add = (Button) dialog.findViewById(R.id.add);
                 Button cancel = (Button) dialog.findViewById(R.id.cancel);
-
                 TextView text = (TextView) dialog.findViewById(R.id.text);
 
                 String s = r.getText();
@@ -159,20 +164,126 @@ public class ShowRecipes extends AppCompatActivity {
             title.setPadding(0, 20, 0, 20);
         }
 
-        ImageView image = (ImageView) dialog.findViewById(R.id.image);
-        TextView name = (TextView) dialog.findViewById(R.id.name);
-        TextView text = (TextView) dialog.findViewById(R.id.text);
-        ListView ingredients = (ListView) dialog.findViewById(R.id.ingredients);
+        final ImageView image = (ImageView) dialog.findViewById(R.id.image);
+        final TextView name = (TextView) dialog.findViewById(R.id.name);
+        final TextView text = (TextView) dialog.findViewById(R.id.text);
+        final IngredientsView ingr = (IngredientsView) dialog.findViewById(R.id.ingredients);
+        Button addIngr = (Button) dialog.findViewById(R.id.addIngr);
         Button add = (Button) dialog.findViewById(R.id.add);
 
+        MixtureImage currentImage = MixtureImage.beer;
+        image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
+                getApplicationContext().getPackageName()));
+        image.setTag(currentImage);
+
+        image.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                final Dialog dialog = new Dialog(c);
+                dialog.setContentView(R.layout.dialog_switch_mixtureimage);
+
+                dialog.setTitle(R.string.switch_mixtureimage);
+                final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+                if (title != null) {
+                    title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    title.setPadding(0, 20, 0, 20);
+                }
+
+                final MixtureImageAdapter mA = new MixtureImageAdapter(c, new ArrayList<MixtureImage>());
+                GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
+                mixtureList.setAdapter(mA);
+
+                final MixtureImage[] mixtureItemArray = MixtureImage.values();
+
+                for (MixtureImage aMixtureItemArray : mixtureItemArray) {
+                    mA.add(aMixtureItemArray);
+                }
+
+                mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                        MixtureImage m = mixtureItemArray[position];
+
+                        image.setTag(m); //Updates tag if necessary
+                        image.setImageResource(getResources().getIdentifier(m.toString(), "mipmap",
+                                getApplicationContext().getPackageName()));
+                        dialog.dismiss();
+                    }
+                });
+                dialog.show();
+            }
+        });
+
+        final IngredientAdapter ingrAdapt = new IngredientAdapter(this, new ArrayList<Ingredient>());
+        ingr.setAdapter(ingrAdapt);
+
+        addIngr.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                final Dialog d = new Dialog(c);
+
+                d.setContentView(R.layout.dialog_add_ingredient);
+
+                d.setTitle(R.string.add_recipe);
+                final TextView title = (TextView) d.findViewById(android.R.id.title);
+                if (title != null) {
+                    title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                    title.setPadding(0, 20, 0, 20);
+                }
+
+                Button add = (Button) d.findViewById(R.id.add);
+
+                add.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final String name = ((EditText) d.findViewById(R.id.name)).getText().toString();
+                        final Double percentage = Double.parseDouble("0" + ((EditText) d.findViewById(R.id.percentage)).getText().toString());
+                        final Double amount = Double.parseDouble("0" + ((EditText) d.findViewById(R.id.amount)).getText().toString());
+
+                        if (isValidIngredient(name, percentage, amount)) {
+                            ingrAdapt.add(new Ingredient(name, percentage, amount));
+                            ingr.addIngredient(new Ingredient(name, percentage, amount));
+                            d.dismiss();
+                        } else {
+                            Toast.makeText(c, c.getResources().getString(R.string.wronginput).toString(), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+                d.show();
+            }
+        });
+/*
+        ingr.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ingrAdapt.remove(ingr.getIngredientById(position));
+                ingr.removeIngredient(position);
+                ingr.deferNotifyDataSetChanged();
+                ingrAdapt.notifyDataSetChanged();
+                return false;
+            }
+        });
+*/
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //TODO
-                //Recipe.addCustomRecipe(c, new Recipe(MixtureImage.fromString(image.getTag().toString()), name.getText(), text.getText(), new Ingredient[]));
+                if (ingr.getIngredients().length > 0) {
+                    Recipe.addCustomRecipe(c, new Recipe(MixtureImage.fromString(image.getTag().toString()),
+                            name.getText().toString(), text.getText().toString(), ingr.getIngredients()));
+                    dialog.dismiss();
+                } else {
+                    Toast.makeText(c, "Es wurden keine Zutaten angegeben", Toast.LENGTH_SHORT).show();
+                }
+                updateRecipes();
             }
         });
         dialog.show();
+    }
+
+    private boolean isValidIngredient(String name, double percentage, double amount) {
+        return name.length() > 3 && percentage >= 0 && amount > 0;
     }
 
     /**
@@ -182,8 +293,6 @@ public class ShowRecipes extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_show_recipes, menu);
-        MenuItem m = menu.getItem(0);
-        m.setEnabled(false);
         return true;
     }
 

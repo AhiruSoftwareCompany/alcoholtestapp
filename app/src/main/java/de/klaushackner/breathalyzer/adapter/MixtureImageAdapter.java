@@ -1,7 +1,6 @@
 package de.klaushackner.breathalyzer.adapter;
 
 import android.content.Context;
-import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,8 @@ public class MixtureImageAdapter extends ArrayAdapter<MixtureImage> {
         mContext = context;
     }
 
-    @NonNull
     @Override
-    public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+    public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_mixtureimage, parent, false);

@@ -36,13 +36,13 @@
                 android:ems="10"
                 android:hint="@string/name"
                 android:inputType="text"
-                android:singleLine="true"
-                android:text="Name" />
+                android:singleLine="true" />
         </LinearLayout>
 
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/description" />
@@ -52,22 +52,38 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="text"
-        android:text="Name" />
+        android:hint="@string/add_ingr_desc"
+        android:inputType="textMultiLine" />
 
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/ingredience" />
+        android:orientation="horizontal">
 
-    <ListView
+        <TextView
+            android:id="@+id/textView5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ingredience" />
+
+        <Button
+            android:id="@+id/addIngr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="+" />
+
+    </LinearLayout>
+
+    <de.klaushackner.breathalyzer.model.IngredientsView
         android:id="@+id/ingredients"
         android:layout_width="match_parent"
-        android:layout_height="231dp"
+        android:layout_height="0dp"
         android:layout_weight="1" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/add_recipe_button" />
