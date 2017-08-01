@@ -1,6 +1,7 @@
 package de.klaushackner.breathalyzer.model;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -34,7 +35,7 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestProperty("User-Agent", sf.getResources().getString(R.string.app_name));
+            conn.setRequestProperty("User-Agent", sf.getResources().getString(R.string.app_name) + "/" + Build.VERSION.INCREMENTAL);
 
             OutputStream os = conn.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
