@@ -134,7 +134,7 @@ const (
 
 ### Data saved by app on your phone
 
-Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
+Path: `/data/data/de.klaushackner.alkomat3000/shared_prefs/data.xml`
 
 #### Users-Array
 
@@ -234,7 +234,7 @@ The `LogTrace` is for future use: Logging every exception into a file.
 Found a bug? Want to request a new feature?  Please let us know by submitting an issue or use the in-app feedback function (in the options menu).
 
 ## Licensing
-This project stands unter the MIT-License. Bear in mind that the emojis used in this project have their own license!
+This project stands unter the MIT-License. Bear in mind that the pictures used in this project have their own license!
 
 ## Sources/Adaptions
 Readme adapted from [Esri](https://github.com/Esri/arcgis-runtime-samples-android)
