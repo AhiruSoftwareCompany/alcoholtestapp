@@ -97,5 +97,5 @@ func sendMail(subject, content string) error {
 	body := strings.Replace(content, "\n", "\r\n", -1)
 	msg := []byte(header + "\r\n" + body)
 
-	return smtp.SendMail(SMTPSrv+":587", auth, FromAddr, to, msg)
+	return smtp.SendMail(SMTPSrv+":"+SMTPPort, auth, FromAddr, to, msg)
 }
