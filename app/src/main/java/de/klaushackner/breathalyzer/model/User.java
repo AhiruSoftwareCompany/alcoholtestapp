@@ -220,4 +220,12 @@ public class User {
         return null;
     }
 
+    public boolean compareName(String compare) {
+        if (this.name.compareTo(compare) == 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 }
