@@ -52,8 +52,7 @@
             android:id="@+id/message"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/message"
-            android:maxLines="1" />
+            android:hint="@string/message"/>
 
         <Button
             android:id="@+id/sendFeedback"
@@ -62,11 +61,10 @@
             android:text="@string/send_message" />
 
         <TextView
-            android:id="@+id/textView4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/disclaimer"
-            android:textAllCaps="false" />
+            android:textSize="10sp" />
 
     </LinearLayout>
 </ScrollView>
