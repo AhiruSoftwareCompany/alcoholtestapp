@@ -56,6 +56,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	fbstr := string(body)
 
 	agent := r.Header.Get("user-agent")
+
 	log.Println("Received feedback from", agent, "(", r.RemoteAddr, ")")
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
@@ -97,5 +98,5 @@ func sendMail(subject, content string) error {
 	body := strings.Replace(content, "\n", "\r\n", -1)
 	msg := []byte(header + "\r\n" + body)
 
-	return smtp.SendMail(SMTPSrv+":587", auth, FromAddr, to, msg)
+	return smtp.SendMail(SMTPSrv+":"+SMTPPort, auth, FromAddr, to, msg)
 }
