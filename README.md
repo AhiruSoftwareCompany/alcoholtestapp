@@ -104,6 +104,7 @@ const (
 
         // SMTP server of the feedback bot
         SMTPSrv = "smtp-mail.bar.com"
+        SMTPPort = "587"
 
         // your mail address
         ToAddr = "cryonme@nobodycares.com"
