@@ -34,11 +34,11 @@ import de.klaushackner.breathalyzer.model.Recipe;
 import de.klaushackner.breathalyzer.model.User;
 
 public class ShowRecipes extends AppCompatActivity {
+    private final DecimalFormat format = new DecimalFormat();
     private ListView list;
     private Context c;
     private User currentUser;
     private RecipeAdapter rA;
-    private final DecimalFormat format = new DecimalFormat();
 
     public ShowRecipes() {
     }
@@ -67,8 +67,8 @@ public class ShowRecipes extends AppCompatActivity {
                 final Recipe r = Recipe.getRecipeArray(c)[position];
                 final Dialog dialog = new Dialog(c);
                 dialog.setContentView(R.layout.dialog_show_recipe);
-
                 dialog.setTitle(r.getName());
+
                 final TextView title = (TextView) dialog.findViewById(android.R.id.title);
                 title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                 title.setPadding(0, 20, 0, 20);
@@ -254,6 +254,7 @@ public class ShowRecipes extends AppCompatActivity {
                 d.show();
             }
         });
+
 /*
         ingr.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override

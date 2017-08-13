@@ -34,7 +34,7 @@ public class IngredientsView extends ListView {
             return;
         }
 
-        if (ingredients.length == 1) {
+        if (ingredients.length == 1 && ingredients[0].compareTo(ingredient)) {
             ingredients = null;
             return;
         }
@@ -66,8 +66,12 @@ public class IngredientsView extends ListView {
             return;
         }
 
-        if (ingredients.length == 1) {
+        if (ingredients.length == 1 && pos == 0) {
             ingredients = null;
+            return;
+        }
+
+        if (pos >= ingredients.length) {
             return;
         }
 
@@ -102,7 +106,7 @@ public class IngredientsView extends ListView {
             newIngr[i] = ingredients[i];
         }
 
-        newIngr[ingredients.length + 1] = ingredient;
+        newIngr[ingredients.length] = ingredient;
     }
 
     public Ingredient getIngredientById(int id) {
