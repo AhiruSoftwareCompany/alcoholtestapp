@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.R;
@@ -14,8 +15,11 @@ import de.klaushackner.breathalyzer.model.Ingredient;
 
 public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 
+    private final DecimalFormat format = new DecimalFormat();
+
     public IngredientAdapter(Context context, ArrayList<Ingredient> arrayList) {
         super(context, R.layout.items_ingredient, arrayList);
+        format.setDecimalSeparatorAlwaysShown(false);
     }
 
     @Override
@@ -30,8 +34,8 @@ public class IngredientAdapter extends ArrayAdapter<Ingredient> {
         TextView amount = (TextView) v.findViewById(R.id.amount);
 
         name.setText(i.getName());
-        percentage.setText(i.getPercentage()+ " %");
-        amount.setText(i.getAmount() + " ml");
+        percentage.setText(format.format(i.getPercentage()) + " %");
+        amount.setText(format.format(i.getAmount()) + " ml");
 
 
         return v;

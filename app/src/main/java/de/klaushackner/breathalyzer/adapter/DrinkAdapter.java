@@ -51,10 +51,10 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         Mixture m = d.getMixture();
         if (d.getMixture().getAmount() < 100) {
             name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
-            //name.setText(format.format(m.getAmount()) + " ml " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
+            // name.setText(format.format(m.getAmount()) + " ml " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         } else {
             name.setText(String.format(Locale.GERMAN, "%.2g l %s (%.2g %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
-            //name.setText(format.format(m.getAmount() / 1000) + " l " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
+            // name.setText(format.format(m.getAmount() / 1000) + " l " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         }
 
         takingTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.

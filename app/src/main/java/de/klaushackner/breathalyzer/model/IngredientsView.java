@@ -84,7 +84,7 @@ public class IngredientsView extends ListView {
                 newIngr[i] = ingredients[i + 1];
             } else {
                 if (ingredients[i] != null) {
-                    newIngr[i] = ingredients[i];
+                    newIngr[i - 1] = ingredients[i];
                 } else {
                     overTheNull = true;
                 }
@@ -107,13 +107,14 @@ public class IngredientsView extends ListView {
         }
 
         newIngr[ingredients.length] = ingredient;
+        ingredients = newIngr;
     }
 
     public Ingredient getIngredientById(int id) {
         if (ingredients == null) {
             return null;
         }
-        if (id < ingredients.length - 1) {
+        if (id <= ingredients.length - 1) {
             return ingredients[id];
         } else {
             return null;

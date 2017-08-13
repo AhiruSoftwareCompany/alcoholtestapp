@@ -45,6 +45,7 @@ import de.klaushackner.breathalyzer.model.User;
 
 public class MainActivity extends AppCompatActivity {
 
+    private final DecimalFormat format = new DecimalFormat();
     private boolean doubleBackToExitPressedOnce;
     private MainActivity ma;
     private Context c;
@@ -57,7 +58,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvBac;
     private Menu menu;
     private DrinkAdapter dA;
-    private final DecimalFormat format = new DecimalFormat();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

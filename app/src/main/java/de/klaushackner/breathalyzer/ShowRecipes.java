@@ -225,7 +225,7 @@ public class ShowRecipes extends AppCompatActivity {
 
                 d.setContentView(R.layout.dialog_add_ingredient);
 
-                d.setTitle(R.string.add_recipe);
+                d.setTitle(R.string.add_ingredient);
                 final TextView title = (TextView) d.findViewById(android.R.id.title);
                 if (title != null) {
                     title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
@@ -238,7 +238,7 @@ public class ShowRecipes extends AppCompatActivity {
                     @Override
                     public void onClick(View v) {
                         final String name = ((EditText) d.findViewById(R.id.name)).getText().toString();
-                        final Double percentage = Double.parseDouble("0" + ((EditText) d.findViewById(R.id.percentage)).getText().toString());
+                        final Double percentage = Double.parseDouble("0" + ((EditText) d.findViewById(R.id.percentage)).getText().toString()) / 100;
                         final Double amount = Double.parseDouble("0" + ((EditText) d.findViewById(R.id.amount)).getText().toString());
 
                         if (isValidIngredient(name, percentage, amount)) {
@@ -255,18 +255,24 @@ public class ShowRecipes extends AppCompatActivity {
             }
         });
 
-/*
+
         ingr.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                ingrAdapt.clear();
+                ingrAdapt.notifyDataSetChanged();
                 ingrAdapt.remove(ingr.getIngredientById(position));
                 ingr.removeIngredient(position);
-                ingr.deferNotifyDataSetChanged();
+
+                for (int i = 0; i < ingr.getIngredients().length; i++) {
+                    ingrAdapt.add(ingr.getIngredientById(i));
+                }
+
                 ingrAdapt.notifyDataSetChanged();
-                return false;
+                return true;
             }
         });
-*/
+
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -284,7 +290,7 @@ public class ShowRecipes extends AppCompatActivity {
     }
 
     private boolean isValidIngredient(String name, double percentage, double amount) {
-        return name.length() > 3 && percentage >= 0 && amount > 0;
+        return name.length() > 3 && percentage >= 0 && percentage <= 98 && amount > 0 && amount <= 2000;
     }
 
     /**
@@ -309,5 +315,3 @@ public class ShowRecipes extends AppCompatActivity {
     }
 
 }
-
-
