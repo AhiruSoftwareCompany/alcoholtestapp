@@ -56,6 +56,17 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	fbstr := string(body)
 
 	agent := r.Header.Get("user-agent")
+	
+	
+	f, err := os.OpenFile("filename", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}   
+
+	defer f.Close()
+	log.SetOutput(f)
+	
+	
 	log.Println("Received feedback from", agent, "(", r.RemoteAddr, ")")
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
