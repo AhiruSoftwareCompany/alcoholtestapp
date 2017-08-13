@@ -221,11 +221,7 @@ public class User {
     }
 
     public boolean compareName(String compare) {
-        if (this.name.compareTo(compare) == 0) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.name.compareTo(compare) == 0;
     }
 
 }

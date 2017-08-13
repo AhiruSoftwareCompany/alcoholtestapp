@@ -52,4 +52,8 @@ public class Ingredient {
     public String toString() {
         return toJSON().toString();
     }
+
+    public boolean compareTo(Ingredient compare) {
+        return this.toString().compareTo(compare.toString()) == 0;
+    }
 }
