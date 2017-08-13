@@ -362,7 +362,11 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.pick_user);
-                builder.setCancelable(false);
+
+                if (currentUser == null) {
+                    builder.setCancelable(false);
+                }
+
                 builder.setNeutralButton(R.string.add_user, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
