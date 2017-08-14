@@ -72,7 +72,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	err = decoder.Decode(&feedback)
 	
 	if err != nil {
-		defer f.Close()
 		log.SetOutput(f)
 		
 		log.Println("JSON decode error:", err)
