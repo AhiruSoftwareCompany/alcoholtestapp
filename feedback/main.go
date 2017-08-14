@@ -69,7 +69,7 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
 	var feedback Feedback
-	err = decoder.Decode(&feedback)
+	err := decoder.Decode(&feedback)
 	
 	if err != nil {
 		log.SetOutput(f)
