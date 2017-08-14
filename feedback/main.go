@@ -11,9 +11,17 @@ import (
 	"net/smtp"
 	"strings"
 	"time"
+	"os"
 )
 
 func main() {
+	f, err := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}  
+	defer f.Close()
+	log.SetOutput(f)
+	
 	if FromAddr == "foo@example.com" {
 		log.Fatal("Please set the constants in config.go and recompile")
 	}
@@ -23,7 +31,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", rootHandler)
-
+	
 	log.Println("Starting server on port", Port)
 	log.Fatal(http.ListenAndServeTLS(":"+Port, CertificatePath, PrivateKeyPath, nil))
 }
@@ -57,12 +65,24 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	agent := r.Header.Get("user-agent")
 
+	f, fileerr := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if fileerr != nil {
+		log.Fatal(fileerr)
+	}   
+
+	defer f.Close()
+	log.SetOutput(f)
+
 	log.Println("Received feedback from", agent, "(", r.RemoteAddr, ")")
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
-	var feedback Feedback
+	var feedback Feedback	
 	err := decoder.Decode(&feedback)
+	
 	if err != nil {
+		defer f.Close()
+		log.SetOutput(f)
+		
 		log.Println("JSON decode error:", err)
 	}
 
@@ -81,6 +101,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = sendMail(Subject, msg)
 	if err != nil {
+		f, err := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+		defer f.Close()
+		log.SetOutput(f)
+
 		log.Println("couldn't send mail:", err)
 		return
 	}
