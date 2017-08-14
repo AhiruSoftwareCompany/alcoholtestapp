@@ -15,10 +15,12 @@ import (
 )
 
 func main() {
-	f, err := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	t := time.Now()
+	
+	f, err := os.OpenFile("feedback" + t.Format("20060102-1504") + ".log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
-	}  
+	} 
 	defer f.Close()
 	log.SetOutput(f)
 	
