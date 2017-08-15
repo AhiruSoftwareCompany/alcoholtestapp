@@ -15,10 +15,12 @@ import (
 )
 
 func main() {
-	f, err := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	t := time.Now()
+	
+	f, err := os.OpenFile("feedback" + t.Format("20060102-1504") + ".log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
-	}  
+	} 
 	defer f.Close()
 	log.SetOutput(f)
 	
@@ -65,24 +67,13 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	agent := r.Header.Get("user-agent")
 
-	f, fileerr := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-	if fileerr != nil {
-		log.Fatal(fileerr)
-	}   
-
-	defer f.Close()
-	log.SetOutput(f)
-
 	log.Println("Received feedback from", agent, "(", r.RemoteAddr, ")")
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
-	var feedback Feedback	
+	var feedback Feedback
 	err := decoder.Decode(&feedback)
 	
-	if err != nil {
-		defer f.Close()
-		log.SetOutput(f)
-		
+	if err != nil {		
 		log.Println("JSON decode error:", err)
 	}
 
@@ -101,10 +92,6 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 
 	err = sendMail(Subject, msg)
 	if err != nil {
-		f, err := os.OpenFile("feedback.log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
-		defer f.Close()
-		log.SetOutput(f)
-
 		log.Println("couldn't send mail:", err)
 		return
 	}
