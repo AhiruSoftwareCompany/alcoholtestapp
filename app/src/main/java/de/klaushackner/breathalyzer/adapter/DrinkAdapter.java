@@ -67,7 +67,8 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
                     mContext.getApplicationContext().getPackageName()));
         }
 
-        bac.setText(format.format(d.getRelativeBac()) + " ‰");
+        bac.setText(format.format(d.getBac()) + " ‰");
+        //bac.setText(format.format(d.getRelativeBac()) + " ‰");
         return v;
     }
 }

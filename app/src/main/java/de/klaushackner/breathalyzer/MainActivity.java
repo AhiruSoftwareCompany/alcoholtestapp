@@ -233,14 +233,16 @@ public class MainActivity extends AppCompatActivity {
 
                     double bac = Mixture.getBac(mixture, currentUser); //alcohol content
 
-                    long expireTime = lastExpireDuration + takingTime + Math.round(bac * Drink.depletingFactor * 36000000); // 0,1 promille pro Stunde wird abgebaut
+                    long expireTime = lastExpireDuration + takingTime + Math.round(bac * 36000000);
+                    //long expireTime = lastExpireDuration + takingTime + Math.round(bac * Drink.depletingFactor * 36000000); // 0,1 promille pro Stunde wird abgebaut
                     lastExpireDuration = expireTime - takingTime;
 
                     final Drink d = new Drink(currentUser, mixture, takingTime, expireTime);
 
                     if (new Date().getTime() < expireTime) {
                         d.setBac(bac);
-                        currentBac += d.getRelativeBac();
+                        //currentBac += d.getRelativeBac();
+                        currentBac += d.getBac();
                         dA.add(d);
                     } else {
                         mixtures.remove(i);
