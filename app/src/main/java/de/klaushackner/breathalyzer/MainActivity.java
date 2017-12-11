@@ -691,13 +691,6 @@ public class MainActivity extends AppCompatActivity {
             case R.id.about:
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.dialog_about);
-
-                //Add dialog title and center it
-                dialog.setTitle(R.string.about);
-                final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-                title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                title.setPadding(0, 32, 0, 4);
-
                 dialog.show();
                 break;
         }
