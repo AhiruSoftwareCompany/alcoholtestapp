@@ -13,7 +13,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model.Mixture;
+import de.klaushackner.breathalyzer.model_old.Mixture;
 
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
     private final Context mContext;

@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model.User;
+import de.klaushackner.breathalyzer.model_old.User;
 
 public class CreateUser extends AppCompatActivity {
     private TextView tvName;

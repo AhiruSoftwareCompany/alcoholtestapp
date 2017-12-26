@@ -38,10 +38,10 @@ import de.klaushackner.breathalyzer.adapter.DrinkAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
 import de.klaushackner.breathalyzer.adapter.UserAdapter;
-import de.klaushackner.breathalyzer.model.Drink;
-import de.klaushackner.breathalyzer.model.Mixture;
-import de.klaushackner.breathalyzer.model.MixtureImage;
-import de.klaushackner.breathalyzer.model.User;
+import de.klaushackner.breathalyzer.model_old.Drink;
+import de.klaushackner.breathalyzer.model_old.Mixture;
+import de.klaushackner.breathalyzer.model_old.MixtureImage;
+import de.klaushackner.breathalyzer.model_old.User;
 
 public class MainActivity extends AppCompatActivity {
 

@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.model;
+package de.klaushackner.breathalyzer.model_old;
 
 import android.content.Context;
 import android.util.AttributeSet;

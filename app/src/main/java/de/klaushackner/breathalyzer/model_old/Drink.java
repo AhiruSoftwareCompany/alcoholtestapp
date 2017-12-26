@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.model;
+package de.klaushackner.breathalyzer.model_old;
 
 import org.json.JSONException;
 import org.json.JSONObject;

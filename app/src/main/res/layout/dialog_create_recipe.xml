@@ -76,7 +76,7 @@
 
     </LinearLayout>
 
-    <de.klaushackner.breathalyzer.model.IngredientsView
+    <de.klaushackner.breathalyzer.model_old.IngredientsView
         android:id="@+id/ingredients"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -26,12 +26,11 @@ import java.util.ArrayList;
 import de.klaushackner.breathalyzer.adapter.IngredientAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
 import de.klaushackner.breathalyzer.adapter.RecipeAdapter;
-import de.klaushackner.breathalyzer.model.Ingredient;
-import de.klaushackner.breathalyzer.model.IngredientsView;
-import de.klaushackner.breathalyzer.model.Mixture;
-import de.klaushackner.breathalyzer.model.MixtureImage;
-import de.klaushackner.breathalyzer.model.Recipe;
-import de.klaushackner.breathalyzer.model.User;
+import de.klaushackner.breathalyzer.model_old.IngredientsView;
+import de.klaushackner.breathalyzer.model_old.Mixture;
+import de.klaushackner.breathalyzer.model_old.MixtureImage;
+import de.klaushackner.breathalyzer.model_old.Recipe;
+import de.klaushackner.breathalyzer.model_old.User;
 
 public class ShowRecipes extends AppCompatActivity {
     private final DecimalFormat format = new DecimalFormat();

@@ -11,7 +11,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model.Ingredient;
 
 public class IngredientAdapter extends ArrayAdapter<Ingredient> {
 

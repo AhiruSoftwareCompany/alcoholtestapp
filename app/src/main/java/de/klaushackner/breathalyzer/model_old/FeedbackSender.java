@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.model;
+package de.klaushackner.breathalyzer.model_old;
 
 import android.os.AsyncTask;
 import android.os.Build;

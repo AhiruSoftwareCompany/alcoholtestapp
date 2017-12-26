@@ -16,8 +16,8 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model.Drink;
-import de.klaushackner.breathalyzer.model.Mixture;
+import de.klaushackner.breathalyzer.model_old.Drink;
+import de.klaushackner.breathalyzer.model_old.Mixture;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
