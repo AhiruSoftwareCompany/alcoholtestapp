@@ -14,7 +14,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model_old.User;
+import de.klaushackner.breathalyzer.model.User;
 
 public class EditUser extends AppCompatActivity {
     private TextView tvName;
@@ -52,11 +52,11 @@ public class EditUser extends AppCompatActivity {
                 JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
                     u = new User(new JSONObject(users.get(i).toString()));
-                    tvName.setText(u.getName());
-                    tvAge.setText(u.getAge() + "");
-                    tvWeight.setText(u.getWeight() + "");
-                    tvHeight.setText(u.getHeight() + "");
-                    if (!u.isMale()) {
+                    tvName.setText(u.name);
+                    tvAge.setText(u.age + "");
+                    tvWeight.setText(u.weight + "");
+                    tvHeight.setText(u.height + "");
+                    if (!u.isMale) {
                         female.toggle();
                     }
                     break;
@@ -95,11 +95,11 @@ public class EditUser extends AppCompatActivity {
             try {
                 SharedPreferences sharedPref = getSharedPreferences("data", 0);
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                User newUser = new User(name, male.isChecked(), age, weight, height, u.getCreated(), u.getDrinks());
+                User newUser = new User(name, male.isChecked(), age, weight, height, u.created, u.drinks);
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());
-                    if (j.getLong("created") == u.getCreated()) {
+                    if (j.getLong("created") == u.created) {
                         users.put(i, newUser.toJSON());
                     }
                 }

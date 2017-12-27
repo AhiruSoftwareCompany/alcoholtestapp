@@ -7,6 +7,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.klaushackner.breathalyzer.model.User;
+
 
 public class Mixture {
     private String name;

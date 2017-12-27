@@ -15,7 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model_old.User;
+import de.klaushackner.breathalyzer.model.User;
 
 public class CreateUser extends AppCompatActivity {
     private TextView tvName;
@@ -65,7 +65,7 @@ public class CreateUser extends AppCompatActivity {
         if (User.isValidUser(name, age, height, weight)) {
             try {
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis(), new JSONArray()).toJSON();
+                JSONObject user = new User(name, male.isChecked(), age, weight, height, System.currentTimeMillis()).toJSON();
                 users.put(user);
 
                 editor.putString("users", users.toString());

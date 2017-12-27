@@ -12,7 +12,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model_old.User;
+import de.klaushackner.breathalyzer.model.User;
 
 public class UserAdapter extends ArrayAdapter<User> {
 

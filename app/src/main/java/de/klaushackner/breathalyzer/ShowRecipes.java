@@ -26,11 +26,12 @@ import java.util.ArrayList;
 import de.klaushackner.breathalyzer.adapter.IngredientAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
 import de.klaushackner.breathalyzer.adapter.RecipeAdapter;
+import de.klaushackner.breathalyzer.model.Ingredient;
+import de.klaushackner.breathalyzer.model.User;
 import de.klaushackner.breathalyzer.model_old.IngredientsView;
 import de.klaushackner.breathalyzer.model_old.Mixture;
 import de.klaushackner.breathalyzer.model_old.MixtureImage;
 import de.klaushackner.breathalyzer.model_old.Recipe;
-import de.klaushackner.breathalyzer.model_old.User;
 
 public class ShowRecipes extends AppCompatActivity {
     private final DecimalFormat format = new DecimalFormat();
@@ -79,10 +80,10 @@ public class ShowRecipes extends AppCompatActivity {
                 String s = r.getText();
                 s += "\n\n" + getResources().getString(R.string.ingredience) + "\n";
                 for (Ingredient i : r.getIngredients()) {
-                    if (i.getAmount() < 10) {
-                        s += format.format(i.getAmount()) + "\t\t\t" + i.getName() + "\n";
+                    if (i.quantity < 10) {
+                        s += format.format(i.quantity) + "\t\t\t" + i.name + "\n";
                     } else {
-                        s += format.format(i.getAmount()) + " ml\t\t" + i.getName() + "\n";
+                        s += format.format(i.quantity) + " ml\t\t" + i.name + "\n";
                     }
                 }
                 text.setText(s);
@@ -93,7 +94,7 @@ public class ShowRecipes extends AppCompatActivity {
                     public void onClick(View v) {
                         currentUser.addDrink(new Mixture(r.getName(), r.getAmount(), r.getPercentage(), r.getImage()));
                         currentUser.saveUser(c);
-                        startActivity(new Intent(c, MainActivity.class).putExtra("fromShowRecipes", true).putExtra("currentUser", currentUser.getCreated()));
+                        startActivity(new Intent(c, MainActivity.class).putExtra("fromShowRecipes", true).putExtra("currentUser", currentUser.created));
                         finish();
                     }
                 });
