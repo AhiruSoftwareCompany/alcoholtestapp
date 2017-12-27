@@ -127,11 +127,10 @@ const (
 
 |term|description|
 |----|-----------|
-|`user`|A user|
-|`mixture`|A mixture for a drink (e.g. beer with 500ml and 5%)|
-|`ingredient`|A ingredient used to create a drink with a recipe|
-|`drink`|A consumed mixture|
-|`recipe`|A mixture for a drink with more then one ingredient|
+|`user`|Can consume `Recipes`|
+|`ingredient`|A `Ingredient` is a component of a `Recipe`|
+|`recipe`|A `Recipe` has one or more `Ingredient`s and can be consumed by a `User`|
+|`drink`|A consumed `Recipe`|
 
 ### Data saved by app on your phone
 
@@ -152,12 +151,10 @@ An array with every user currently existing including its drinks (updated on sta
     created:long,
     drinks:[
       [
-        takingTime[long],
         {
           name:String,
-          amount:double,
-          percentage:double,
-          image:String
+          recipe:Recipe as JSONObject,
+          takingTime:long,
         }
       ]
     ]
@@ -169,22 +166,17 @@ In addition to that: the "`uid`" (simply the creation date (with milliseconds)) 
 
 #### Drinks-Array
 
-`MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
-
-For custom mixtures saved by the user:
-
 ```
 [
   {
     name:String,
-    amount:double,
-    percentage:double,
-    image":MixtureImage
+    recipe:Recipe as String,
+    takingTime:long,
   }
 ]
 ```
 
-#### Recipes-Array
+#### Recipe-Array
 
 `MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
 
@@ -193,14 +185,14 @@ For custom recipes saved by the user:
 ```
 [
   {
-    image:MixtureImage,
     name:String,
     text:String,
+    imgString:String,
     ingredients:[
       {
         name:String,
-        percentage:double,
-        amount:double
+        alcContent:double,
+        quantity:double
       }
     ]
   }
