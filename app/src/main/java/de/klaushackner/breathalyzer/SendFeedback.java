@@ -13,7 +13,7 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model_old.FeedbackSender;
+import de.klaushackner.breathalyzer.model.FeedbackSender;
 
 public class SendFeedback extends AppCompatActivity {
     private EditText name;

@@ -7,6 +7,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import de.klaushackner.breathalyzer.model.MixtureImage;
 import de.klaushackner.breathalyzer.model.User;
 
 
@@ -112,7 +113,7 @@ public class Mixture {
                 mixtures.put(customMixtures.get(i).toString());
             }
 
-            if (u.compareName("Franzi")) {
+            if (u.name.compareTo("Franzi") == 0) {
                 mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, MixtureImage.custom_panda).toString());
             } else {
                 mixtures.put(new Mixture("Eigenes\nGetränk", 0, 0, MixtureImage.custom).toString());

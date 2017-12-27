@@ -1,6 +1,9 @@
 package de.klaushackner.breathalyzer.model;
 
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class User {
     public String name;
     public boolean isMale;
@@ -17,6 +20,20 @@ public class User {
         this.weight = weight;
         this.height = height;
         this.created = created;
+        this.drinks = drinks;
+    }
+
+    public User(JSONObject o) {
+        try {
+            this.name = o.getString("name");
+            this.isMale = o.getBoolean("isMale");
+            this.age = o.getInt("age");
+            this.weight = o.getInt("weight");
+            this.height = o.getInt("height");
+            this.created = o.getLong("created");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         this.drinks = drinks;
     }
 

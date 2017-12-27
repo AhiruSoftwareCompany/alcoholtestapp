@@ -13,7 +13,6 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model_old.Recipe;
 
 public class RecipeAdapter extends ArrayAdapter<Recipe> {
     private final Context mContext;

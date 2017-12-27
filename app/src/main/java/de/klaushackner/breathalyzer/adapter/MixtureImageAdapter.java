@@ -10,7 +10,7 @@ import android.widget.ImageView;
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model_old.MixtureImage;
+import de.klaushackner.breathalyzer.model.MixtureImage;
 
 public class MixtureImageAdapter extends ArrayAdapter<MixtureImage> {
     private final Context mContext;

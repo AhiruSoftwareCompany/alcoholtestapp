@@ -42,11 +42,11 @@ public class Ingredient {
     /**
      * @return mass of the alcohol = quantity [ml] * alcohol content * density of alcohol (0.8 g/ml)
      */
-    public double alc_mass() {
+    public double alcMass() {
         return quantity * alcContent * 0.8;
     }
 
-    public JSONObject json() {
+    public JSONObject toJSON() {
         try {
             return new JSONObject().put("name", name).put("alcContent", alcContent).put("quantity", quantity);
         } catch (JSONException e) {
