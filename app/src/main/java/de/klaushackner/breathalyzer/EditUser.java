@@ -28,13 +28,13 @@ public class EditUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_user);
-        tvName = (TextView) findViewById(R.id.name);
-        tvAge = (TextView) findViewById(R.id.age);
-        tvWeight = (TextView) findViewById(R.id.weight);
-        tvHeight = (TextView) findViewById(R.id.height);
-        male = (RadioButton) findViewById(R.id.sex_male);
-        RadioButton female = (RadioButton) findViewById(R.id.sex_female);
-        Button saveUser = (Button) findViewById(R.id.saveUser);
+        tvName = findViewById(R.id.name);
+        tvAge = findViewById(R.id.age);
+        tvWeight = findViewById(R.id.weight);
+        tvHeight = findViewById(R.id.height);
+        male = findViewById(R.id.sex_male);
+        RadioButton female = findViewById(R.id.sex_female);
+        Button saveUser = findViewById(R.id.saveUser);
 
         final EditUser eU = this;
         long created = getIntent().getLongExtra("created", 0);
