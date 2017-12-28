@@ -67,14 +67,14 @@ public class MainActivity extends AppCompatActivity {
         ma = this;
         format.setDecimalSeparatorAlwaysShown(false);
 
-        tvName = (TextView) findViewById(R.id.name);
-        tvAge = (TextView) findViewById(R.id.age);
-        tvWeight = (TextView) findViewById(R.id.weight);
-        tvHeight = (TextView) findViewById(R.id.height);
-        tvSex = (TextView) findViewById(R.id.sex);
-        Button btnAddDrink = (Button) findViewById(R.id.add_drink_button);
-        ListView drinks = (ListView) findViewById(R.id.drinks);
-        tvBac = (TextView) findViewById(R.id.bac);
+        tvName = (findViewById(R.id.name);
+        tvAge = (findViewById(R.id.age);
+        tvWeight = (findViewById(R.id.weight);
+        tvHeight = (findViewById(R.id.height);
+        tvSex = (findViewById(R.id.sex);
+        Button btnAddDrink = (findViewById(R.id.add_drink_button);
+        ListView drinks = (findViewById(R.id.drinks);
+        tvBac = findViewById(R.id.bac);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
