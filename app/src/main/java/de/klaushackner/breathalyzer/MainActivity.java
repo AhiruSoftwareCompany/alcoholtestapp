@@ -59,6 +59,7 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     private DrinkAdapter dA;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
