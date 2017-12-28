@@ -16,8 +16,8 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model_old.Drink;
-import de.klaushackner.breathalyzer.model_old.Mixture;
+import de.klaushackner.breathalyzer.model.Drink;
+import de.klaushackner.breathalyzer.model.Recipe;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
@@ -38,37 +38,34 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_drink, parent, false);
 
-        TextView name = (TextView) v.findViewById(R.id.name);
-        TextView takingTime = (TextView) v.findViewById(R.id.takingTime);
-        TextView expireTime = (TextView) v.findViewById(R.id.expireTime);
-        TextView bac = (TextView) v.findViewById(R.id.bac);
-        ImageView iv = (ImageView) v.findViewById(R.id.imageView);
+        TextView name = v.findViewById(R.id.name);
+        TextView takingTime = v.findViewById(R.id.takingTime);
+        TextView expireTime = v.findViewById(R.id.expireTime);
+        TextView bac = v.findViewById(R.id.bac);
+        ImageView iv = v.findViewById(R.id.imageView);
 
         Drink d = getItem(position);
-        long ago = new Date().getTime() - d.getTakingTime();
-        long expires = d.getExpireTime() - new Date().getTime();
+        long ago = new Date().getTime() - d.takingTime;
+        //long expires = d.expireTime(current User) - new Date().getTime();
 
-        Mixture m = d.getMixture();
-        if (d.getMixture().getAmount() < 100) {
-            name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", m.getAmount(), m.getName(), m.getPercentage() * 100.0));
-            // name.setText(format.format(m.getAmount()) + " ml " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
+        Recipe r = d.r;
+        if (r.amount() < 100) {
+            name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", r.amount(), r.name, r.alcContent() * 100.0));
         } else {
-            name.setText(String.format(Locale.GERMAN, "%.2g l %s (%.2g %%)", m.getAmount() / 1000, m.getName(), m.getPercentage() * 100.0));
-            // name.setText(format.format(m.getAmount() / 1000) + " l " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
+            name.setText(String.format(Locale.GERMAN, "%.2g l %s (%.2g %%)", r.amount() / 1000, r.name, r.alcContent() * 100.0));
         }
 
         takingTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)));
-        expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
-                MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
+        // expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
+        //        MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
 
-        if (d.getMixture().getImage() != null) {
-            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImageString(), "mipmap",
+        if (d.r.imgString != null) {
+            iv.setImageResource(mContext.getResources().getIdentifier(d.r.imgString.toString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
 
-        bac.setText(format.format(d.getBac()) + " ‰");
-        //bac.setText(format.format(d.getRelativeBac()) + " ‰");
+        //bac.setText(format.format(d.r.getBac(User)) + " ‰");
         return v;
     }
 }
