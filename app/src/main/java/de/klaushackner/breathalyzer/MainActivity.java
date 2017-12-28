@@ -38,10 +38,10 @@ import de.klaushackner.breathalyzer.adapter.DrinkAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
 import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
 import de.klaushackner.breathalyzer.adapter.UserAdapter;
-import de.klaushackner.breathalyzer.model_old.Drink;
+import de.klaushackner.breathalyzer.model.Drink;
+import de.klaushackner.breathalyzer.model.MixtureImage;
+import de.klaushackner.breathalyzer.model.User;
 import de.klaushackner.breathalyzer.model_old.Mixture;
-import de.klaushackner.breathalyzer.model_old.MixtureImage;
-import de.klaushackner.breathalyzer.model_old.User;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -67,13 +67,13 @@ public class MainActivity extends AppCompatActivity {
         ma = this;
         format.setDecimalSeparatorAlwaysShown(false);
 
-        tvName = (findViewById(R.id.name);
-        tvAge = (findViewById(R.id.age);
-        tvWeight = (findViewById(R.id.weight);
-        tvHeight = (findViewById(R.id.height);
-        tvSex = (findViewById(R.id.sex);
-        Button btnAddDrink = (findViewById(R.id.add_drink_button);
-        ListView drinks = (findViewById(R.id.drinks);
+        tvName = findViewById(R.id.name);
+        tvAge = findViewById(R.id.age);
+        tvWeight = findViewById(R.id.weight);
+        tvHeight = findViewById(R.id.height);
+        tvSex = findViewById(R.id.sex);
+        Button btnAddDrink = findViewById(R.id.add_drink_button);
+        ListView drinks = findViewById(R.id.drinks);
         tvBac = findViewById(R.id.bac);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
@@ -189,12 +189,12 @@ public class MainActivity extends AppCompatActivity {
      */
     public void updateGui() {
         if (currentUser != null) {
-            tvName.setText(currentUser.getName());
-            tvAge.setText(format.format(currentUser.getAge()) + " " + getString(R.string.years));
-            tvWeight.setText(format.format(currentUser.getWeight()) + " kg");
-            tvHeight.setText(format.format(currentUser.getHeight()) + " cm");
+            tvName.setText(currentUser.name);
+            tvAge.setText(format.format(currentUser.age) + " " + getString(R.string.years));
+            tvWeight.setText(format.format(currentUser.weight) + " kg");
+            tvHeight.setText(format.format(currentUser.height) + " cm");
 
-            if (currentUser.isMale()) {
+            if (currentUser.isMale) {
                 tvSex.setText(R.string.male);
             } else {
                 tvSex.setText(R.string.female);
@@ -282,7 +282,7 @@ public class MainActivity extends AppCompatActivity {
 
             for (int i = 0; i < User.getUserCount(c); i++) {
                 JSONObject user = new JSONObject(users.get(i).toString());
-                if (user.getString("name").compareTo(userToRemove.getName()) == 0) {
+                if (user.getString("name").compareTo(userToRemove.name) == 0) {
                     users.remove(i);
                     editor.putString("users", users.toString());
                     editor.commit();
@@ -313,7 +313,7 @@ public class MainActivity extends AppCompatActivity {
         currentUser.saveUser(c);
 
         Intent i = new Intent(this, EditUser.class);
-        i.putExtra("created", currentUser.getCreated());
+        i.putExtra("created", currentUser.created);
         startActivity(i);
     }
 
@@ -341,9 +341,9 @@ public class MainActivity extends AppCompatActivity {
                     if (lastUser != 0) {
                         for (int i = 0; i < User.getUserCount(c); i++) {
                             User u = new User(new JSONObject(users.get(i).toString()));
-                            if (u.getCreated() == lastUser) {
+                            if (u.created == lastUser) {
                                 currentUser = u;
-                                editor.putLong("lastUser", u.getCreated());
+                                editor.putLong("lastUser", u.created);
                                 editor.commit();
                                 return;
                             }
@@ -354,7 +354,7 @@ public class MainActivity extends AppCompatActivity {
                 //Wenn nur ein User vorhanden, wird dieser ausgewählt
                 if (User.getUserCount(c) == 1) {
                     currentUser = new User(new JSONObject(users.get(0).toString()));
-                    editor.putLong("lastUser", currentUser.getCreated());
+                    editor.putLong("lastUser", currentUser.created);
                     editor.commit();
                     return;
                 }
@@ -386,8 +386,8 @@ public class MainActivity extends AppCompatActivity {
                                                 int item) {
                                 currentUser = usersList.get(item);
                                 //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainActivity.this to c
-                                Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
-                                editor.putLong("lastUser", currentUser.getCreated());
+                                Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.name, Toast.LENGTH_LONG).show();
+                                editor.putLong("lastUser", currentUser.created);
                                 editor.commit();
 
                                 updateGui();
@@ -488,7 +488,7 @@ public class MainActivity extends AppCompatActivity {
         int nID = 1;
         if (currentBac > 0) {
             try {
-                JSONArray drinks = new JSONArray(currentUser.getDrinks().toString());
+                JSONArray drinks = new JSONArray(currentUser.drinks.toString());
                 Mixture m = new Mixture(new JSONObject(drinks.getJSONArray(drinks.length() - 1).get(1).toString()));
 
                 Intent i = new Intent(this, MainActivity.class);
@@ -536,7 +536,7 @@ public class MainActivity extends AppCompatActivity {
                 final ImageView image = (ImageView) d.findViewById(R.id.image);
                 MixtureImage currentImage;
 
-                if (currentUser.getName().compareTo("Franzi") == 0) {
+                if (currentUser.name.compareTo("Franzi") == 0) {
                     currentImage = MixtureImage.custom_panda;
                     image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
                             getApplicationContext().getPackageName()));
@@ -600,7 +600,7 @@ public class MainActivity extends AppCompatActivity {
 
                         if (Mixture.isValidMixture(name, amount, percentage)) {
                             MixtureImage m = MixtureImage.fromString(image.getTag().toString());
-                            if (currentUser.getName().compareTo("Franzi") == 0) {
+                            if (currentUser.name.compareTo("Franzi") == 0) {
                                 addCustomDrink(1, new Mixture(name, amount, percentage, m));
                             } else {
                                 addCustomDrink(1, new Mixture(name, amount, percentage, m));
@@ -685,7 +685,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.recipes:
                 Intent i = new Intent(this, ShowRecipes.class);
-                i.putExtra("currentUser", currentUser.getCreated());
+                i.putExtra("currentUser", currentUser.created);
                 startActivity(i);
                 break;
             case R.id.about:
