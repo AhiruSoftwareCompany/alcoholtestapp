@@ -1,7 +1,8 @@
 # Alkomat 3000
 
 ### Installing the app
-Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone. Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
+Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone.
+Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
 
 ### Fork & Clone the repo
 If you haven't already, fork [this repo](https://github.com/dieechtenilente/alcoholtestapp/fork).
@@ -127,20 +128,20 @@ const (
 
 |term|description|
 |----|-----------|
-|`user`|Can consume `Recipes`|
-|`ingredient`|A `Ingredient` is a component of a `Recipe`|
-|`recipe`|A `Recipe` has one or more `Ingredient`s and can be consumed by a `User`|
-|`drink`|A consumed `Recipe`|
+|`User`| Can consume `Mixture`s as `Drink`s which are stored in a `Drink`-Array|
+|`Drink`|A consumed `Mixture` with additional data (time of consume, ...)|
+|`Mixture`|A `Mixture` has one or more `Content`s and can be consumed by a `User`|
+|`Content`|A base content of a `Mixture` (e.g. beer, vodka, water, ...)|
 
-### Data saved by app on your phone
+### Data saved by the app on your phone
 
-Path: `/data/data/de.klaushackner.alkomat3000/shared_prefs/data.xml`
+Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
 
 #### Users-Array
 
 An array with every user currently existing including its drinks (updated on startup/resume/refresh button press)
 
-```
+```javascript
 [
   {
     name:String,
@@ -149,20 +150,25 @@ An array with every user currently existing including its drinks (updated on sta
     weight:int,
     height:int,
     created:long,
-    drinks:[
-      [
-        {
-          name:String,
-          recipe:Recipe as JSONObject,
-          takingTime:long,
-        }
-      ]
+    drinks: [
+      {
+        name:String,
+        description:String,
+        consumePoint:long,
+        content: [
+          {
+            name:String,
+            alcContent:double,
+            amount:double
+          }
+        ]
+      }
     ]
   }
 ]
 ```
 
-In addition to that: the "`uid`" (simply the creation date (with milliseconds)) from the last selected user
+In addition to that: `lastUser` (simply the creation date (with milliseconds)) from the last selected user
 
 #### Drinks-Array
 

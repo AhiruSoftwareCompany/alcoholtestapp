@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.adapter;
+package de.klaushackner.breathalyzer;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model_old.Mixture;
 
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
     private final Context mContext;
@@ -40,18 +37,18 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         DecimalFormat format = new DecimalFormat();
         format.setDecimalSeparatorAlwaysShown(false);
 
-        name.setText(mixture.getName());
+        name.setText(mixture.name);
         if (mixture.getAmount() < 100) {
             amount.setText(format.format(mixture.getAmount()) + " ml");
         } else {
             amount.setText(format.format(mixture.getAmount() / 1000) + " l");
         }
-        percentage.setText(format.format(mixture.getPercentage() * 100) + " %");
+        percentage.setText(format.format(mixture.getAlcContent() * 100) + " %");
 
-        if (mixture.getImage() != null) {
+       /* if (mixture.getImage() != null) {
             image.setImageResource(mContext.getResources().getIdentifier(mixture.getImageString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
-        }
+        }*/
         return v;
     }
 }

@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model.User;
 
 public class EditUser extends AppCompatActivity {
     private TextView tvName;
@@ -104,7 +103,7 @@ public class EditUser extends AppCompatActivity {
                     }
                 }
 
-                newUser.saveUser(this);
+                u.saveUser(this);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,4 +111,6 @@ public class EditUser extends AppCompatActivity {
         }
         return false;
     }
+
+
 }

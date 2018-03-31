@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.adapter;
+package de.klaushackner.breathalyzer;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -10,9 +10,6 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model.User;
 
 public class UserAdapter extends ArrayAdapter<User> {
 
@@ -32,17 +29,17 @@ public class UserAdapter extends ArrayAdapter<User> {
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_users, parent, false);
 
-        TextView tvName = (TextView) v.findViewById(R.id.name);
-        TextView tvAge = (TextView) v.findViewById(R.id.age);
-        TextView tvWeight = (TextView) v.findViewById(R.id.weight);
-        TextView tvHeight = (TextView) v.findViewById(R.id.height);
+        TextView tvName = v.findViewById(R.id.name);
+        TextView tvAge = v.findViewById(R.id.age);
+        TextView tvWeight = v.findViewById(R.id.weight);
+        TextView tvHeight = v.findViewById(R.id.height);
 
         User u = getItem(position);
 
-        tvName.setText(u != null ? u.getName() : null);
-        tvAge.setText(format.format(u != null ? u.getAge() : 0) + " " + mContext.getResources().getString(R.string.years));
-        tvWeight.setText(format.format(u != null ? u.getWeight() : 0) + " kg");
-        tvHeight.setText(format.format(u.getHeight()) + " cm");
+        tvName.setText(u != null ? u.name : null);
+        tvAge.setText(format.format(u != null ? u.age : 0) + " " + mContext.getResources().getString(R.string.years));
+        tvWeight.setText(format.format(u != null ? u.weight : 0) + " kg");
+        tvHeight.setText(format.format(u.height) + " cm");
         return v;
     }
 }

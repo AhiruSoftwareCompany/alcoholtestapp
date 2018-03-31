@@ -1,4 +1,5 @@
-package de.klaushackner.breathalyzer.adapter;
+package de.klaushackner.breathalyzer;
+
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,13 +12,9 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
-import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model.Drink;
-import de.klaushackner.breathalyzer.model.Recipe;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
@@ -45,27 +42,30 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
         ImageView iv = v.findViewById(R.id.imageView);
 
         Drink d = getItem(position);
-        long ago = new Date().getTime() - d.takingTime;
-        //long expires = d.expireTime(current User) - new Date().getTime();
+        long ago = System.currentTimeMillis() - d.consumePoint;
+        long expires = 0; //d.getExpireTime() - new Date().getTime();
 
-        Recipe r = d.r;
-        if (r.amount() < 100) {
-            name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", r.amount(), r.name, r.alcContent() * 100.0));
+        if (d.getAmount() < 100) {
+            name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", d.getAmount(), d.name, d.getAlcContent() * 100.0));
+            // name.setText(format.format(m.getAmount()) + " ml " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         } else {
-            name.setText(String.format(Locale.GERMAN, "%.2g l %s (%.2g %%)", r.amount() / 1000, r.name, r.alcContent() * 100.0));
+            name.setText(String.format(Locale.GERMAN, "%.2g l %s (%.2g %%)", d.getAmount() / 1000, d.name, d.getAlcContent() * 100.0));
+            // name.setText(format.format(m.getAmount() / 1000) + " l " + m.getName() + " (" + format.format(m.getPercentage() * 100) + " %)");
         }
 
         takingTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)));
-        // expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
-        //        MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
-
-        if (d.r.imgString != null) {
-            iv.setImageResource(mContext.getResources().getIdentifier(d.r.imgString.toString(), "mipmap",
+        expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
+                MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
+/*
+        if (d.getMixture().getImage() != null) {
+            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImageString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
+*/
 
-        //bac.setText(format.format(d.r.getBac(User)) + " ‰");
+        bac.setText(format.format(d.getBac()) + " ‰");
+        //bac.setText(format.format(d.getRelativeBac()) + " ‰");
         return v;
     }
 }
