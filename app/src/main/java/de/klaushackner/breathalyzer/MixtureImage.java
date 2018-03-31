@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.model_old;
+package de.klaushackner.breathalyzer;
 
 
 public enum MixtureImage {

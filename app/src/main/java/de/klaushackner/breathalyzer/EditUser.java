@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model_old.User;
 
 public class EditUser extends AppCompatActivity {
     private TextView tvName;
@@ -28,13 +27,13 @@ public class EditUser extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_user);
-        tvName = (TextView) findViewById(R.id.name);
-        tvAge = (TextView) findViewById(R.id.age);
-        tvWeight = (TextView) findViewById(R.id.weight);
-        tvHeight = (TextView) findViewById(R.id.height);
-        male = (RadioButton) findViewById(R.id.sex_male);
-        RadioButton female = (RadioButton) findViewById(R.id.sex_female);
-        Button saveUser = (Button) findViewById(R.id.saveUser);
+        tvName = findViewById(R.id.name);
+        tvAge = findViewById(R.id.age);
+        tvWeight = findViewById(R.id.weight);
+        tvHeight = findViewById(R.id.height);
+        male = findViewById(R.id.sex_male);
+        RadioButton female = findViewById(R.id.sex_female);
+        Button saveUser = findViewById(R.id.saveUser);
 
         final EditUser eU = this;
         long created = getIntent().getLongExtra("created", 0);
@@ -52,11 +51,11 @@ public class EditUser extends AppCompatActivity {
                 JSONObject j = new JSONObject(users.get(i).toString());
                 if (j.getLong("created") == created) {
                     u = new User(new JSONObject(users.get(i).toString()));
-                    tvName.setText(u.getName());
-                    tvAge.setText(u.getAge() + "");
-                    tvWeight.setText(u.getWeight() + "");
-                    tvHeight.setText(u.getHeight() + "");
-                    if (!u.isMale()) {
+                    tvName.setText(u.name);
+                    tvAge.setText(u.age + "");
+                    tvWeight.setText(u.weight + "");
+                    tvHeight.setText(u.height + "");
+                    if (!u.isMale) {
                         female.toggle();
                     }
                     break;
@@ -95,16 +94,16 @@ public class EditUser extends AppCompatActivity {
             try {
                 SharedPreferences sharedPref = getSharedPreferences("data", 0);
                 JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                User newUser = new User(name, male.isChecked(), age, weight, height, u.getCreated(), u.getDrinks());
+                User newUser = new User(name, male.isChecked(), age, weight, height, u.created, u.drinks);
 
                 for (int i = 0; i < users.length(); i++) {
                     JSONObject j = new JSONObject(users.get(i).toString());
-                    if (j.getLong("created") == u.getCreated()) {
+                    if (j.getLong("created") == u.created) {
                         users.put(i, newUser.toJSON());
                     }
                 }
 
-                newUser.saveUser(this);
+                u.saveUser(this);
             } catch (JSONException e) {
                 e.printStackTrace();
             }
@@ -112,4 +111,6 @@ public class EditUser extends AppCompatActivity {
         }
         return false;
     }
+
+
 }

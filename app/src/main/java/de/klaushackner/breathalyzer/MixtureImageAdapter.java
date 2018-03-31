@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.adapter;
+package de.klaushackner.breathalyzer;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,8 +9,6 @@ import android.widget.ImageView;
 
 import java.util.ArrayList;
 
-import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model_old.MixtureImage;
 
 public class MixtureImageAdapter extends ArrayAdapter<MixtureImage> {
     private final Context mContext;
