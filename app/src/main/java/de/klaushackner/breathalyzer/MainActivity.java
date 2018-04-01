@@ -48,6 +48,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         c = getApplicationContext();
         ma = this;
         format.setDecimalSeparatorAlwaysShown(false);
@@ -103,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton refresh = (ImageButton) findViewById(R.id.refresh);
+        ImageButton refresh = findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -579,15 +580,14 @@ public class MainActivity extends AppCompatActivity {
             m.setIcon(R.mipmap.switchuser);
         }
 
-        if (currentUser != null) { //TODO: After creating a user while showing the menu, currentUser is null
-            if (currentUser.isMale) {
-                m = menu.findItem(R.id.newUser);
-                m.setIcon(R.mipmap.male_new);
-                m = menu.findItem(R.id.editUser);
-                m.setIcon(R.mipmap.male_edit);
-                m = menu.findItem(R.id.removeUser);
-                m.setIcon(R.mipmap.male_delete);
-            } else {
+        m = menu.findItem(R.id.newUser);
+        m.setIcon(R.mipmap.male_new);
+        m = menu.findItem(R.id.editUser);
+        m.setIcon(R.mipmap.male_edit);
+        m = menu.findItem(R.id.removeUser);
+        m.setIcon(R.mipmap.male_delete);
+        if (currentUser != null) { //After creating a user while showing the menu, currentUser is null
+            if (!currentUser.isMale) {
                 m = menu.findItem(R.id.newUser);
                 m.setIcon(R.mipmap.female_new);
                 m = menu.findItem(R.id.editUser);
@@ -618,9 +618,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.newUser:
                 createUser();
                 break;
-            /*case R.id.sendFeedback:
+            case R.id.sendFeedback:
                 startActivity(new Intent(this, SendFeedback.class));
-                break;
+                break;/*
             case R.id.recipes:
                 Intent i = new Intent(this, ShowRecipes.class);
                 i.putExtra("currentUser", currentUser.getCreated());
