@@ -168,28 +168,36 @@ public class MainActivity extends AppCompatActivity {
         dA.clear();
         dA.notifyDataSetChanged();
         ArrayList<Drink> drinks = currentUser.drinks;
+        double totalBac = 0;
 
         //removing old drinks
         if (!drinks.isEmpty()) {
+            /*
+            If you have 2 items in your list and remove the first one, index 1 is gone and the for each loop throws an
+            error. Therefore I will remove all "old drinks" after looping through the list
+            */
+            ArrayList<Drink> toRemove = new ArrayList<>();
             for (Drink d : drinks) {
-                if(d.consumePoint + d.depletingDuration <= System.currentTimeMillis()){
-                    drinks.remove(d);
+                if (d.consumePoint + d.depletingDuration <= System.currentTimeMillis()) {
+                    toRemove.add(d);
                 }
             }
+            drinks.removeAll(toRemove);
         }
 
         if (!drinks.isEmpty()) {
             long totalDepletionDuration = drinks.get(0).consumePoint; //starting with the consume point of the first trink
-            double totalBac = 0;
 
             for (Drink d : drinks) {
                 totalDepletionDuration = totalDepletionDuration + d.depletingDuration; //adding depletion duration of current drink to the total depletion duration
                 totalBac = totalBac + d.getBac();
                 d.setDepletionPoint(totalDepletionDuration); //setting the depletion point to the consumePoint from the first drink + all n drink's depletionDurations
-                tvBac.setText(format.format(totalBac));
                 dA.add(d);
             }
         }
+
+        //Updating the bac of the current user after calculating the total bac
+        tvBac.setText(format.format(totalBac));
 
         //Saving user in case there was a depleted drink removed
         currentUser.saveUser(this);
