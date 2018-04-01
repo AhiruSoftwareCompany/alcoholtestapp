@@ -10,7 +10,7 @@ import org.json.JSONObject;
 public class Content {
 
     public String name;
-    public double alcContent; // %
+    public double alcContent; // absolute -> 5% = 0.05
     public double amount; // ml
 
 

@@ -51,7 +51,7 @@ public class Mixture {
         //Add new mixtures here!
         ArrayList<Mixture> mixtures = new ArrayList<>();
 
-        mixtures.add(new Mixture("Bier", "", 500, 5, MixtureImage.beer));
+        mixtures.add(new Mixture("Bier", "", 500, 0.05, MixtureImage.beer));
         mixtures.add(new Mixture("Bier", "", 1000, 0.05, MixtureImage.morebeer));
         mixtures.add(new Mixture("Goaß", "", 540, 0.025, MixtureImage.goass));
         mixtures.add(new Mixture("Goaßmaß", "", 1040, 0.025, MixtureImage.goass));
