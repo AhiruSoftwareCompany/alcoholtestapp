@@ -1,6 +1,5 @@
 package de.klaushackner.breathalyzer;
 
-
 public enum MixtureImage {
     beer("beer"),
     bluebeer("bluebeer"),

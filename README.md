@@ -155,6 +155,7 @@ An array with every user currently existing including its drinks (updated on sta
         name:String,
         description:String,
         consumePoint:long,
+        mixtureImage:String,
         content: [
           {
             name:String,
@@ -170,17 +171,6 @@ An array with every user currently existing including its drinks (updated on sta
 
 In addition to that: `lastUser` (simply the creation date (with milliseconds)) from the last selected user
 
-#### Drinks-Array
-
-```
-[
-  {
-    name:String,
-    recipe:Recipe as String,
-    takingTime:long,
-  }
-]
-```
 
 #### Recipe-Array
 
