@@ -57,12 +57,12 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)));
         expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
                 MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
-/*
-        if (d.getMixture().getImage() != null) {
-            iv.setImageResource(mContext.getResources().getIdentifier(d.getMixture().getImageString(), "mipmap",
+
+        if (d.mixtureImage != null) {
+            iv.setImageResource(mContext.getResources().getIdentifier(d.mixtureImage.toString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
-*/
+
 
         bac.setText(format.format(d.getBac()) + " ‰");
         //bac.setText(format.format(d.getRelativeBac()) + " ‰");

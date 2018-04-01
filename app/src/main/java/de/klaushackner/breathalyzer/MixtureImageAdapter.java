@@ -24,7 +24,7 @@ public class MixtureImageAdapter extends ArrayAdapter<MixtureImage> {
                 Context.LAYOUT_INFLATER_SERVICE);
         View v = inflater.inflate(R.layout.items_mixtureimage, parent, false);
         MixtureImage m = getItem(position);
-        ImageView image = (ImageView) v.findViewById(R.id.image);
+        ImageView image = v.findViewById(R.id.image);
 
         if (m != null) {
             image.setImageResource(mContext.getResources().getIdentifier(m.toString(), "mipmap",

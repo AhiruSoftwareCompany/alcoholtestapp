@@ -16,16 +16,18 @@ public class Drink {
     protected long consumePoint;
     protected long depletionPoint; //calculated by MainActivity.updateDrinkList()
     protected Content[] content;
+    protected MixtureImage mixtureImage;
 
     protected long depletingDuration;
     private User consumer;
     public static long depletingFactor = 1; //0.1 per unit
 
-    public Drink(String name, String description, long consumePoint, Content[] content, User consumer) {
+    public Drink(String name, String description, long consumePoint, Content[] content, MixtureImage mixtureImage, User consumer) {
         this.name = name;
         this.description = description;
         this.consumePoint = consumePoint;
         this.content = content;
+        this.mixtureImage = mixtureImage;
         this.consumer = consumer;
         depletingDuration = getDepletingDuration();
     }
@@ -35,6 +37,7 @@ public class Drink {
             this.name = drink.getString("name");
             this.description = drink.getString("description");
             this.consumePoint = drink.getLong("consumePoint");
+            this.mixtureImage = MixtureImage.fromString(drink.getString("mixtureImage"));
 
             JSONArray contentJSON = drink.getJSONArray("content");
             Content[] content = new Content[contentJSON.length()];
@@ -62,6 +65,7 @@ public class Drink {
             drink.put("name", name);
             drink.put("description", description);
             drink.put("consumePoint", consumePoint);
+            drink.put("mixtureImage", mixtureImage.toString());
 
             JSONArray content = new JSONArray();
 

@@ -93,7 +93,7 @@ public class User {
     }
 
     public void consumeDrink(Mixture m) {
-        drinks.add(new Drink(m.name, m.description, System.currentTimeMillis(), m.content, this));
+        drinks.add(new Drink(m.name, m.description, System.currentTimeMillis(), m.content, m.image, this));
     }
 
     public boolean removeDrink(long consumePoint) {
