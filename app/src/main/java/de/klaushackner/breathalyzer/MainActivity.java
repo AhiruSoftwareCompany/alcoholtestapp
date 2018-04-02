@@ -32,7 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private final DecimalFormat format = new DecimalFormat();
+    private final DecimalFormat format = new DecimalFormat("#.###");
     private boolean doubleBackToExitPressedOnce;
     private MainActivity ma;
     private Context c;
@@ -194,17 +194,20 @@ public class MainActivity extends AppCompatActivity {
 
             for (Drink d : drinks) {
                 totalDepletionDuration = totalDepletionDuration + d.depletingDuration; //adding depletion duration of current drink to the total depletion duration
-                totalBac = totalBac + d.getBac();
+                totalBac = totalBac + d.getRelativeBac();
                 d.setDepletionPoint(totalDepletionDuration); //setting the depletion point to the consumePoint from the first drink + all n drink's depletionDurations
                 dA.add(d);
             }
         }
 
         //Updating the bac of the current user after calculating the total bac
-        tvBac.setText(format.format(totalBac));
+        //At startup it is negative (for some reason)
+        if (totalBac >= 0) {
+            tvBac.setText(format.format(totalBac));
+        }
 
         //Saving user in case there was a depleted drink removed
-        currentUser.saveUser(ma);
+        currentUser.saveUser(this);
 
     }
 
@@ -390,13 +393,13 @@ public class MainActivity extends AppCompatActivity {
                     }
                 });
 
-                Button addDrink = (Button) d.findViewById(R.id.addDrink);
+                Button addDrink = d.findViewById(R.id.addDrink);
                 addDrink.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        TextView tvName = (TextView) d.findViewById(R.id.name);
-                        TextView tvAmount = (TextView) d.findViewById(R.id.amount);
-                        TextView tvPercentage = (TextView) d.findViewById(R.id.percentage);
+                        TextView tvName = d.findViewById(R.id.name);
+                        TextView tvAmount = d.findViewById(R.id.amount);
+                        TextView tvPercentage = d.findViewById(R.id.percentage);
 
                         String name = tvName.getText().toString();
                         double amount = Double.parseDouble("0" + tvAmount.getText());

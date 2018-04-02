@@ -118,5 +118,21 @@ public class Drink {
         return (getAmount() * getAlcContent() * 0.8) / (consumer.weight * r);
     }
 
+    public double getRelativeBac() {
+        double R;
+
+        if (consumer.isMale) {
+            R = 2.447 - 0.09516 * consumer.age + 0.1074 * consumer.height + 0.3362 * consumer.weight;
+        } else {
+            R = -2.097 + 0.1069 * consumer.height + 0.2466 * consumer.weight;
+        }
+
+        double r = (1.055 * R) / (0.8 * consumer.weight);
+        double bac = (getAmount() * getAlcContent() * 0.8) / (consumer.weight * r);
+
+        double relativeFactor = (depletionPoint - System.currentTimeMillis()) / (double) getDepletingDuration();
+        return bac * relativeFactor;
+    }
+
 
 }
