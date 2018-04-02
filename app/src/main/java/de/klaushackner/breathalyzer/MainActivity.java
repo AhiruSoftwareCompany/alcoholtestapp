@@ -32,7 +32,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-    private final DecimalFormat format = new DecimalFormat("#.###");
+    private final DecimalFormat format = new DecimalFormat();
     private boolean doubleBackToExitPressedOnce;
     private MainActivity ma;
     private Context c;
@@ -203,12 +203,11 @@ public class MainActivity extends AppCompatActivity {
         //Updating the bac of the current user after calculating the total bac
         //At startup it is negative (for some reason)
         if (totalBac >= 0) {
-            tvBac.setText(format.format(totalBac));
+            tvBac.setText(String.format("%s %s", format.format(totalBac), getResources().getString(R.string.per_mille)));
         }
 
         //Saving user in case there was a depleted drink removed
         currentUser.saveUser(this);
-
     }
 
 
