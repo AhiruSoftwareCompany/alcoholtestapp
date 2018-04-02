@@ -28,6 +28,8 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Set;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
     private final DecimalFormat format = new DecimalFormat();
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSex;
     private TextView tvBac;
     private Menu menu;
+    private Handler mHandler = new Handler();
     private DrinkAdapter dA;
 
     @Override
@@ -201,7 +204,8 @@ public class MainActivity extends AppCompatActivity {
         tvBac.setText(format.format(totalBac));
 
         //Saving user in case there was a depleted drink removed
-        currentUser.saveUser(this);
+        currentUser.saveUser(ma);
+
     }
 
 
@@ -289,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
                 currentUser.saveUser(c);
 
                 dialog.dismiss();
-                updateDrinkList();
+                updateGui();
             }
         });
         mixtureList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -417,7 +421,7 @@ public class MainActivity extends AppCompatActivity {
                 if (customMixture != null || currentUser != null) {
                     currentUser.consumeDrink(customMixture);
                     currentUser.saveUser(c);
-                    updateDrinkList();
+                    updateGui();
                 }
                 break;
         }
@@ -447,8 +451,6 @@ public class MainActivity extends AppCompatActivity {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             final SharedPreferences.Editor editor = sharedPref.edit();
 
-            System.out.println(sharedPref.getAll());
-
             //Ist die Users-datenbank leer, wird ein neuer User erstellt
             if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
                 createUser();
@@ -461,7 +463,6 @@ public class MainActivity extends AppCompatActivity {
 
                     if (lastUser != 0) {
                         for (int i = 0; i < User.getUserCount(c); i++) {
-                            System.out.println(users.get(i).toString());
                             User u = new User(new JSONObject(users.get(i).toString()));
                             if (u.created == lastUser) {
                                 currentUser = u;
@@ -557,9 +558,23 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
-            updateDrinkList();
+            mHandler.removeCallbacks(hMyTimeTask);
+
+            Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mHandler.postDelayed(hMyTimeTask, 0); //delay 0 seconds
+                }
+            }, 0, 1000);
         }
     }
+
+    private Runnable hMyTimeTask = new Runnable() {
+        public void run() {
+            updateDrinkList();
+        }
+    };
 
 
     /**

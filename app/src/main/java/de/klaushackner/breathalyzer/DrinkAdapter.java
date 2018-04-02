@@ -18,14 +18,13 @@ import java.util.concurrent.TimeUnit;
 
 public class DrinkAdapter extends ArrayAdapter<Drink> {
 
-    private final DecimalFormat format = new DecimalFormat();
+    private final DecimalFormat format = new DecimalFormat("#.##");
     private final Context mContext;
 
     public DrinkAdapter(Context context, ArrayList<Drink> arrayList) {
         super(context, R.layout.items_drink, arrayList);
         mContext = context;
         format.setDecimalSeparatorAlwaysShown(false);
-        format.setMaximumFractionDigits(2);
     }
 
     @NonNull
@@ -43,7 +42,7 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
 
         Drink d = getItem(position);
         long ago = System.currentTimeMillis() - d.consumePoint;
-        long expires = 0; //d.getExpireTime() - new Date().getTime();
+        long expires = d.depletionPoint - System.currentTimeMillis();
 
         if (d.getAmount() < 100) {
             name.setText(String.format(Locale.GERMAN, "%.2g ml %s (%.2g %%)", d.getAmount(), d.name, d.getAlcContent() * 100.0));
@@ -55,8 +54,10 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
 
         takingTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(ago), TimeUnit.
                 MILLISECONDS.toMinutes(ago) % TimeUnit.HOURS.toMinutes(1)));
+
         expireTime.setText(String.format(Locale.GERMAN, "%02d:%02d", TimeUnit.MILLISECONDS.toHours(expires), TimeUnit.
                 MILLISECONDS.toMinutes(expires) % TimeUnit.HOURS.toMinutes(1)));
+
 
         if (d.mixtureImage != null) {
             iv.setImageResource(mContext.getResources().getIdentifier(d.mixtureImage.toString(), "mipmap",

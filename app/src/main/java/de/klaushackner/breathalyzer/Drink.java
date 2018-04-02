@@ -115,7 +115,6 @@ public class Drink {
         }
 
         double r = (1.055 * R) / (0.8 * consumer.weight);
-        System.out.println((getAmount() * getAlcContent() * 0.8) / (consumer.weight * r));
         return (getAmount() * getAlcContent() * 0.8) / (consumer.weight * r);
     }
 
