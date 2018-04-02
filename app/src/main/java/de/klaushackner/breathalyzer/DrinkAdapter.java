@@ -42,7 +42,11 @@ public class DrinkAdapter extends ArrayAdapter<Drink> {
 
         Drink d = getItem(position);
 
-        bac.setText(format.format(d.getRelativeBac()) + " ‰");
+        if (position == 0){
+            bac.setText(format.format(d.getRelativeBac()) + " ‰");
+        } else {
+            bac.setText(format.format(d.getBac()) + " ‰");
+        }
 
         long ago = System.currentTimeMillis() - d.consumePoint;
         long expires = d.depletionPoint - System.currentTimeMillis();

@@ -191,10 +191,18 @@ public class MainActivity extends AppCompatActivity {
 
         if (!drinks.isEmpty()) {
             long totalDepletionDuration = drinks.get(0).consumePoint; //starting with the consume point of the first trink
+            boolean firstDrink = false;
 
             for (Drink d : drinks) {
                 totalDepletionDuration = totalDepletionDuration + d.depletingDuration; //adding depletion duration of current drink to the total depletion duration
-                totalBac = totalBac + d.getRelativeBac();
+
+                if(firstDrink){
+                    totalBac = totalBac + d.getBac();
+                } else {
+                    totalBac = totalBac + d.getRelativeBac();
+                    firstDrink = true;
+                }
+
                 d.setDepletionPoint(totalDepletionDuration); //setting the depletion point to the consumePoint from the first drink + all n drink's depletionDurations
                 dA.add(d);
             }
@@ -568,7 +576,7 @@ public class MainActivity extends AppCompatActivity {
                 public void run() {
                     mHandler.postDelayed(hMyTimeTask, 0); //delay 0 seconds
                 }
-            }, 0, 1000);
+            }, 0, 10000);
         }
     }
 
