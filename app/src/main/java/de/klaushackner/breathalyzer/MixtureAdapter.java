@@ -34,7 +34,7 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         TextView percentage = v.findViewById(R.id.percentage);
         ImageView image = v.findViewById(R.id.image);
 
-        DecimalFormat format = new DecimalFormat();
+        DecimalFormat format = new DecimalFormat("#.##");
         format.setDecimalSeparatorAlwaysShown(false);
 
         name.setText(mixture.name);
@@ -43,6 +43,7 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         } else {
             amount.setText(format.format(mixture.getAmount() / 1000) + " l");
         }
+
         percentage.setText(format.format(mixture.getAlcContent() * 100) + " %");
 
         if (mixture.image != null) {

@@ -14,23 +14,22 @@ public class Mixture {
         this.name = name;
         this.description = description;
         this.content = content;
+        System.out.println(content.toString());
         this.image = image;
     }
 
     public Mixture(String name, String description, double amount, double alcContent, MixtureImage image) {
         this.name = name;
         this.description = description;
-        this.content = new Content[1];
-        this.content[0] = new Content(name, alcContent, amount);
+        this.content = new Content[]{new Content(name, alcContent, amount)};
         this.image = image;
     }
-
 
     public double getAlcContent() {
         double totalAlcAmount = 0;
 
-        for (int i = 0; i < content.length; i++) {
-            totalAlcAmount = totalAlcAmount + content[i].alcContent * content[i].amount;
+        for (Content c : content) {
+            totalAlcAmount = totalAlcAmount + c.alcContent * c.amount;
         }
 
         return totalAlcAmount / getAmount();
@@ -39,8 +38,8 @@ public class Mixture {
     public double getAmount() {
         double totalAmount = 0;
 
-        for (int i = 0; i < content.length; i++) {
-            totalAmount = totalAmount + content[i].amount;
+        for (Content c : content) {
+            totalAmount = totalAmount + c.amount;
         }
 
         return totalAmount;
@@ -53,8 +52,12 @@ public class Mixture {
 
         mixtures.add(new Mixture("Bier", "", 500, 0.05, MixtureImage.beer));
         mixtures.add(new Mixture("Bier", "", 1000, 0.05, MixtureImage.morebeer));
-        mixtures.add(new Mixture("Goaß", "", 540, 0.025, MixtureImage.goass));
-        mixtures.add(new Mixture("Goaßmaß", "", 1040, 0.025, MixtureImage.goass));
+
+        mixtures.add(new Mixture("Goaß", "", new Content[]{new Content("Bier", 0.05, 250),
+                new Content("Cola", 0, 250), new Content("Kirschlikör", 0.20, 20)}, MixtureImage.goass));
+        mixtures.add(new Mixture("Goaßmaß", "", new Content[]{new Content("Bier", 0.05, 500),
+                new Content("Cola", 0, 500), new Content("Kirschlikör", 0.20, 40)}, MixtureImage.goass));
+
         mixtures.add(new Mixture("Pils", "", 330, 0.048, MixtureImage.pils));
         mixtures.add(new Mixture("Pils", "", 500, 0.048, MixtureImage.pils));
         mixtures.add(new Mixture("Wein", "", 200, 0.10, MixtureImage.wine));
