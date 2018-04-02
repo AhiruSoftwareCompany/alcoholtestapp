@@ -8,7 +8,7 @@ public class Mixture {
     protected String name;
     protected String description;
     protected Content[] content;
-    private MixtureImage image;
+    protected MixtureImage image;
 
     public Mixture(String name, String description, Content[] content, MixtureImage image) {
         this.name = name;

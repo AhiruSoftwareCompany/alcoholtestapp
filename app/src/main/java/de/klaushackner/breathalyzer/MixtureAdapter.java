@@ -29,10 +29,10 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         Mixture mixture = getItem(position);
 
 
-        TextView name = (TextView) v.findViewById(R.id.name);
-        TextView amount = (TextView) v.findViewById(R.id.amount);
-        TextView percentage = (TextView) v.findViewById(R.id.percentage);
-        ImageView image = (ImageView) v.findViewById(R.id.image);
+        TextView name = v.findViewById(R.id.name);
+        TextView amount = v.findViewById(R.id.amount);
+        TextView percentage = v.findViewById(R.id.percentage);
+        ImageView image = v.findViewById(R.id.image);
 
         DecimalFormat format = new DecimalFormat();
         format.setDecimalSeparatorAlwaysShown(false);
@@ -45,10 +45,10 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         }
         percentage.setText(format.format(mixture.getAlcContent() * 100) + " %");
 
-       /* if (mixture.getImage() != null) {
-            image.setImageResource(mContext.getResources().getIdentifier(mixture.getImageString(), "mipmap",
+        if (mixture.image != null) {
+            image.setImageResource(mContext.getResources().getIdentifier(mixture.image.toString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
-        }*/
+        }
         return v;
     }
 }
