@@ -21,6 +21,11 @@ out/
 .gradle/
 build/
 build.gradle
+gradlew
+gradlew.bat
+gradle.properties
+settings.gradle
+local.properties
 
 # Local configuration file (sdk path, etc)
 local.properties
@@ -42,18 +47,7 @@ proguard-rules.pro
 captures/
 
 # Intellij / User-specific configurations
-.idea/libraries/
-.idea/workspace.xml
-.idea/tasks.xml
-.idea/.name
-.idea/compiler.xml
-.idea/copyright/profiles_settings.xml
-.idea/encodings.xml
-.idea/misc.xml
-.idea/dictionaries
-.idea/modules.xml
-.idea/scopes/scope_settings.xml
-.idea/vcs.xml
+.idea/*
 *.iml
 
 # Keystore files
@@ -81,3 +75,4 @@ freeline_project_description.json
 .Trashes
 ehthumbs.db
 Thumbs.db
+desktop.ini

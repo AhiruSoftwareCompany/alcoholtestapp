@@ -11,9 +11,19 @@ import (
 	"net/smtp"
 	"strings"
 	"time"
+	"os"
 )
 
 func main() {
+	t := time.Now()
+	
+	f, err := os.OpenFile("feedback" + t.Format("20060102-1504") + ".log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+	if err != nil {
+		log.Fatal(err)
+	} 
+	defer f.Close()
+	log.SetOutput(f)
+	
 	if FromAddr == "foo@example.com" {
 		log.Fatal("Please set the constants in config.go and recompile")
 	}
@@ -23,7 +33,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", rootHandler)
-
+	
 	log.Println("Starting server on port", Port)
 	log.Fatal(http.ListenAndServeTLS(":"+Port, CertificatePath, PrivateKeyPath, nil))
 }
@@ -56,12 +66,14 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	fbstr := string(body)
 
 	agent := r.Header.Get("user-agent")
+
 	log.Println("Received feedback from", agent, "(", r.RemoteAddr, ")")
 
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
 	var feedback Feedback
 	err := decoder.Decode(&feedback)
-	if err != nil {
+	
+	if err != nil {		
 		log.Println("JSON decode error:", err)
 	}
 
@@ -97,5 +109,5 @@ func sendMail(subject, content string) error {
 	body := strings.Replace(content, "\n", "\r\n", -1)
 	msg := []byte(header + "\r\n" + body)
 
-	return smtp.SendMail(SMTPSrv+":587", auth, FromAddr, to, msg)
+	return smtp.SendMail(SMTPSrv+":"+SMTPPort, auth, FromAddr, to, msg)
 }

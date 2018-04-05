@@ -1,5 +1,4 @@
-package de.klaushackner.breathalyzer.model;
-
+package de.klaushackner.breathalyzer;
 
 public enum MixtureImage {
     beer("beer"),

@@ -2,10 +2,6 @@ package de.klaushackner.breathalyzer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -31,20 +27,12 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.Set;
-
-import de.klaushackner.breathalyzer.adapter.DrinkAdapter;
-import de.klaushackner.breathalyzer.adapter.MixtureAdapter;
-import de.klaushackner.breathalyzer.adapter.MixtureImageAdapter;
-import de.klaushackner.breathalyzer.adapter.UserAdapter;
-import de.klaushackner.breathalyzer.model.Drink;
-import de.klaushackner.breathalyzer.model.Mixture;
-import de.klaushackner.breathalyzer.model.MixtureImage;
-import de.klaushackner.breathalyzer.model.User;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class MainActivity extends AppCompatActivity {
-
+    private final DecimalFormat format = new DecimalFormat();
     private boolean doubleBackToExitPressedOnce;
     private MainActivity ma;
     private Context c;
@@ -56,25 +44,26 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvSex;
     private TextView tvBac;
     private Menu menu;
+    private Handler mHandler = new Handler();
     private DrinkAdapter dA;
-    private final DecimalFormat format = new DecimalFormat();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         c = getApplicationContext();
         ma = this;
         format.setDecimalSeparatorAlwaysShown(false);
 
-        tvName = (TextView) findViewById(R.id.name);
-        tvAge = (TextView) findViewById(R.id.age);
-        tvWeight = (TextView) findViewById(R.id.weight);
-        tvHeight = (TextView) findViewById(R.id.height);
-        tvSex = (TextView) findViewById(R.id.sex);
-        Button btnAddDrink = (Button) findViewById(R.id.add_drink_button);
-        ListView drinks = (ListView) findViewById(R.id.drinks);
-        tvBac = (TextView) findViewById(R.id.bac);
+        tvName = findViewById(R.id.name);
+        tvAge = findViewById(R.id.age);
+        tvWeight = findViewById(R.id.weight);
+        tvHeight = findViewById(R.id.height);
+        tvSex = findViewById(R.id.sex);
+        Button btnAddDrink = findViewById(R.id.add_drink_button);
+        ListView drinks = findViewById(R.id.drinks);
+        tvBac = findViewById(R.id.bac);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,27 +83,16 @@ public class MainActivity extends AppCompatActivity {
                 builder.setTitle(R.string.dialog_drink_question);
                 builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try {
-                            JSONArray mixture = currentUser.getDrinks().getJSONArray(pos);
-                            currentUser.removeDrink(mixture.getLong(0));
-                            currentUser.saveUser(c);
-                            updateGui();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Drink d = currentUser.drinks.get(pos);
+                        currentUser.removeDrink(d.consumePoint);
+                        currentUser.saveUser(c);
+                        updateGui();
                     }
                 });
                 builder.setNeutralButton(R.string.add_as_mixture, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        try {
-                            JSONArray mixtures = currentUser.getDrinks().getJSONArray(pos);
-                            long l = mixtures.getLong(0);
-                            Mixture m = currentUser.getMixture(l);
-                            Mixture.addCustomMixture(c, m);
-
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        Drink d = currentUser.drinks.get(pos);
+                        //Handle mixture saving
 
                     }
                 });
@@ -129,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        ImageButton refresh = (ImageButton) findViewById(R.id.refresh);
+        ImageButton refresh = findViewById(R.id.refresh);
         refresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -144,16 +122,16 @@ public class MainActivity extends AppCompatActivity {
         }
 
         //If coming from a notication, the mixture will be added to the current user
-        String m = getIntent().getStringExtra("mixtureToAdd");
+        /*String m = getIntent().getStringExtra("mixtureToAdd");
         if (m != null) {
             try {
-                currentUser.addDrink(new Mixture(new JSONObject(m)));
+                currentUser.consumeDrink(new Mixture(new JSONObject(m));
                 currentUser.saveUser(c);
                 updateGui();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-        }
+        }*/
     }
 
     protected boolean isStartedByLauncher() {
@@ -184,33 +162,6 @@ public class MainActivity extends AppCompatActivity {
         updateGui();
     }
 
-    /**
-     * Updates GUI to match the current selected user, then calls updateDrinkList()
-     */
-    public void updateGui() {
-        if (currentUser != null) {
-            tvName.setText(currentUser.getName());
-            tvAge.setText(format.format(currentUser.getAge()) + " " + getString(R.string.years));
-            tvWeight.setText(format.format(currentUser.getWeight()) + " kg");
-            tvHeight.setText(format.format(currentUser.getHeight()) + " cm");
-
-            if (currentUser.isMale()) {
-                tvSex.setText(R.string.male);
-            } else {
-                tvSex.setText(R.string.female);
-            }
-
-            if (User.getUserCount(c) == 1) {
-                try {
-                    menu.removeItem(R.id.switchUser);
-                } catch (Exception e) {
-                    //Nobody cares about you, e.
-                }
-            }
-
-            updateDrinkList();
-        }
-    }
 
     /**
      * Adds drinks from the current person to the list view
@@ -220,40 +171,53 @@ public class MainActivity extends AppCompatActivity {
     private void updateDrinkList() {
         dA.clear();
         dA.notifyDataSetChanged();
-        double currentBac = 0;
-        long lastExpireDuration = 0;
+        ArrayList<Drink> drinks = currentUser.drinks;
+        double totalBac = 0;
 
-        try {
-            JSONArray mixtures = currentUser.getDrinks();
-            if (mixtures.length() > 0) {
-                for (int i = 0; i < mixtures.length(); i++) {
-                    JSONArray j = new JSONArray(mixtures.get(i).toString());  //0 = timestamp, 1 = mixture
-                    long takingTime = j.getLong(0);
-                    Mixture mixture = new Mixture(new JSONObject(j.get(1).toString()));
-
-                    double bac = Mixture.getBac(mixture, currentUser); //alcohol content
-
-                    long expireTime = lastExpireDuration + takingTime + Math.round(bac * Drink.depletingFactor * 36000000); // 0,1 promille pro Stunde wird abgebaut
-                    lastExpireDuration = expireTime - takingTime;
-
-                    final Drink d = new Drink(currentUser, mixture, takingTime, expireTime);
-
-                    if (new Date().getTime() < expireTime) {
-                        d.setBac(bac);
-                        currentBac += d.getRelativeBac();
-                        dA.add(d);
-                    } else {
-                        mixtures.remove(i);
-                    }
+        //removing old drinks
+        if (!drinks.isEmpty()) {
+            /*
+            If you have 2 items in your list and remove the first one, index 1 is gone and the for each loop throws an
+            error. Therefore I will remove all "old drinks" after looping through the list
+            */
+            ArrayList<Drink> toRemove = new ArrayList<>();
+            for (Drink d : drinks) {
+                if (d.consumePoint + d.depletingDuration <= System.currentTimeMillis()) {
+                    toRemove.add(d);
                 }
             }
-
-            tvBac.setText(format.format(currentBac));
-            createBacNotification(currentBac);
-        } catch (JSONException e) {
-            e.printStackTrace();
+            drinks.removeAll(toRemove);
         }
+
+        if (!drinks.isEmpty()) {
+            long totalDepletionDuration = drinks.get(0).consumePoint; //starting with the consume point of the first trink
+            boolean firstDrink = false;
+
+            for (Drink d : drinks) {
+                totalDepletionDuration = totalDepletionDuration + d.depletingDuration; //adding depletion duration of current drink to the total depletion duration
+
+                if(firstDrink){
+                    totalBac = totalBac + d.getBac();
+                } else {
+                    totalBac = totalBac + d.getRelativeBac();
+                    firstDrink = true;
+                }
+
+                d.setDepletionPoint(totalDepletionDuration); //setting the depletion point to the consumePoint from the first drink + all n drink's depletionDurations
+                dA.add(d);
+            }
+        }
+
+        //Updating the bac of the current user after calculating the total bac
+        //At startup it is negative (for some reason)
+        if (totalBac >= 0) {
+            tvBac.setText(String.format("%s %s", format.format(totalBac), getResources().getString(R.string.per_mille)));
+        }
+
+        //Saving user in case there was a depleted drink removed
+        currentUser.saveUser(this);
     }
+
 
     /**
      * Creates a user and opens select dialog afterwards
@@ -277,7 +241,7 @@ public class MainActivity extends AppCompatActivity {
 
             for (int i = 0; i < User.getUserCount(c); i++) {
                 JSONObject user = new JSONObject(users.get(i).toString());
-                if (user.getString("name").compareTo(userToRemove.getName()) == 0) {
+                if (user.getString("name").compareTo(userToRemove.name) == 0) {
                     users.remove(i);
                     editor.putString("users", users.toString());
                     editor.commit();
@@ -300,6 +264,180 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+
+    /**
+     * Adds mixtures to dialog and handles its events
+     * Here you can addCustomRecipe more mixtures
+     */
+    private void addDrink() {
+        final Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_add_drink);
+
+        dialog.setTitle(R.string.add_drink);
+        final TextView title = dialog.findViewById(android.R.id.title);
+        if (title != null) {
+            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            title.setPadding(0, 20, 0, 20);
+        }
+
+        final MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
+        GridView mixtureList = dialog.findViewById(R.id.mixtureList);
+        mixtureList.setAdapter(mixtureAdapter);
+
+        final ArrayList<Mixture> mixtures = Mixture.getMixtureArray(currentUser);
+
+        for (Mixture aMixtureArray : mixtures) {
+            mixtureAdapter.add(aMixtureArray);
+        }
+
+        mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                if (mixtures.get(0).getAlcContent() == 0) {
+                    addCustomDrink(0, null);
+                    dialog.dismiss();
+                    return;
+                }
+
+                currentUser.consumeDrink(mixtures.get(position));
+                currentUser.saveUser(c);
+
+                dialog.dismiss();
+                updateGui();
+            }
+        });
+        mixtureList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                final int pos = position;
+                final Dialog d = dialog;
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(ma);
+                builder.setTitle(R.string.remove_custom_mixture);
+                builder.setPositiveButton(R.string.remove_mixture, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        //Mixture m = mixtures.get(pos));
+                        //Mixture.removeCustomMixture(c, m);
+                        d.dismiss();
+
+                    }
+                });
+
+                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
+                });
+
+                builder.create().show();
+                return true;
+            }
+        });
+
+        dialog.show();
+    }
+
+    /**
+     * @param stage         0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
+     * @param customMixture from "addCustomRecipe custom drink" dialog
+     */
+    private void addCustomDrink(int stage, Mixture customMixture) {
+        switch (stage) {
+            case 0: //0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
+                //Open dialog and wait for result
+                final Dialog d = new Dialog(this);
+                d.setContentView(R.layout.dialog_add_custom_drink);
+
+                final ImageView image = (ImageView) d.findViewById(R.id.image);
+                MixtureImage currentImage;
+
+                if (currentUser.name.compareTo("Franzi") == 0) {
+                    currentImage = MixtureImage.custom_panda;
+                    image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
+                            getApplicationContext().getPackageName()));
+                } else {
+                    currentImage = MixtureImage.custom;
+                    image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
+                            getApplicationContext().getPackageName()));
+                }
+
+                image.setTag(currentImage);
+
+                image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        final Dialog dialog = new Dialog(ma);
+                        dialog.setContentView(R.layout.dialog_switch_mixtureimage);
+
+                        dialog.setTitle(R.string.switch_mixtureimage);
+                        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+                        if (title != null) {
+                            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+                            title.setPadding(0, 20, 0, 20);
+                        }
+
+                        final MixtureImageAdapter mA = new MixtureImageAdapter(ma, new ArrayList<MixtureImage>());
+                        GridView mixtureList = dialog.findViewById(R.id.mixtureList);
+                        mixtureList.setAdapter(mA);
+
+                        final MixtureImage[] mixtureItemArray = MixtureImage.values();
+
+                        for (MixtureImage aMixtureItemArray : mixtureItemArray) {
+                            mA.add(aMixtureItemArray);
+                        }
+
+                        mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
+                                MixtureImage m = mixtureItemArray[position];
+
+                                image.setTag(m); //Updates tag if necessary
+                                image.setImageResource(getResources().getIdentifier(m.toString(), "mipmap",
+                                        getApplicationContext().getPackageName()));
+                                dialog.dismiss();
+                            }
+                        });
+                        dialog.show();
+                    }
+                });
+
+                Button addDrink = d.findViewById(R.id.addDrink);
+                addDrink.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        TextView tvName = d.findViewById(R.id.name);
+                        TextView tvAmount = d.findViewById(R.id.amount);
+                        TextView tvPercentage = d.findViewById(R.id.percentage);
+
+                        String name = tvName.getText().toString();
+                        double amount = Double.parseDouble("0" + tvAmount.getText());
+                        double percentage = Double.parseDouble("0" + tvPercentage.getText()) / 100;
+
+                        if (Mixture.isValidMixture(name, amount, percentage)) {
+                            MixtureImage m = MixtureImage.fromString(image.getTag().toString());
+                            if (currentUser.name.compareTo("Franzi") == 0) {
+                                addCustomDrink(1, new Mixture(name, "Custom drink", amount, percentage, m));
+                            } else {
+                                addCustomDrink(1, new Mixture(name, "Custom drink", amount, percentage, m));
+                            }
+                            d.dismiss();
+                        } else {
+                            Toast.makeText(c, c.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+                d.show();
+                break;
+            case 1: //from "addCustomRecipe custom drink" dialog
+                if (customMixture != null || currentUser != null) {
+                    currentUser.consumeDrink(customMixture);
+                    currentUser.saveUser(c);
+                    updateGui();
+                }
+                break;
+        }
+    }
+
+
     /**
      * Opens activity to edit the current user
      */
@@ -308,7 +446,7 @@ public class MainActivity extends AppCompatActivity {
         currentUser.saveUser(c);
 
         Intent i = new Intent(this, EditUser.class);
-        i.putExtra("created", currentUser.getCreated());
+        i.putExtra("created", currentUser.created);
         startActivity(i);
     }
 
@@ -336,9 +474,9 @@ public class MainActivity extends AppCompatActivity {
                     if (lastUser != 0) {
                         for (int i = 0; i < User.getUserCount(c); i++) {
                             User u = new User(new JSONObject(users.get(i).toString()));
-                            if (u.getCreated() == lastUser) {
+                            if (u.created == lastUser) {
                                 currentUser = u;
-                                editor.putLong("lastUser", u.getCreated());
+                                editor.putLong("lastUser", u.created);
                                 editor.commit();
                                 return;
                             }
@@ -349,7 +487,7 @@ public class MainActivity extends AppCompatActivity {
                 //Wenn nur ein User vorhanden, wird dieser ausgewählt
                 if (User.getUserCount(c) == 1) {
                     currentUser = new User(new JSONObject(users.get(0).toString()));
-                    editor.putLong("lastUser", currentUser.getCreated());
+                    editor.putLong("lastUser", currentUser.created);
                     editor.commit();
                     return;
                 }
@@ -362,7 +500,11 @@ public class MainActivity extends AppCompatActivity {
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle(R.string.pick_user);
-                builder.setCancelable(false);
+
+                if (currentUser == null) {
+                    builder.setCancelable(false);
+                }
+
                 builder.setNeutralButton(R.string.add_user, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -377,8 +519,8 @@ public class MainActivity extends AppCompatActivity {
                                                 int item) {
                                 currentUser = usersList.get(item);
                                 //For some reason "R.string.you_selected" doesn't work anymore, maybe because I changed MainActivity.this to c
-                                Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.getName(), Toast.LENGTH_LONG).show();
-                                editor.putLong("lastUser", currentUser.getCreated());
+                                Toast.makeText(c, getResources().getString(R.string.you_selected) + " " + currentUser.name, Toast.LENGTH_LONG).show();
+                                editor.putLong("lastUser", currentUser.created);
                                 editor.commit();
 
                                 updateGui();
@@ -403,216 +545,47 @@ public class MainActivity extends AppCompatActivity {
     }
 
     /**
-     * Adds mixtures to dialog and handles its events
-     * Here you can addCustomRecipe more mixtures
+     * Updates GUI to match the current selected user, then calls updateDrinkList()
      */
-    private void addDrink() {
-        final Dialog dialog = new Dialog(this);
-        dialog.setContentView(R.layout.dialog_add_drink);
+    public void updateGui() {
+        if (currentUser != null) {
+            tvName.setText(currentUser.name);
+            tvAge.setText(format.format(currentUser.age) + " " + getString(R.string.years));
+            tvWeight.setText(format.format(currentUser.weight) + " kg");
+            tvHeight.setText(format.format(currentUser.height) + " cm");
 
-        dialog.setTitle(R.string.add_drink);
-        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-        if (title != null) {
-            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            title.setPadding(0, 20, 0, 20);
-        }
+            if (currentUser.isMale) {
+                tvSex.setText(R.string.male);
+            } else {
+                tvSex.setText(R.string.female);
+            }
 
-        final MixtureAdapter mixtureAdapter = new MixtureAdapter(this, new ArrayList<Mixture>());
-        GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
-        mixtureList.setAdapter(mixtureAdapter);
-
-        final Mixture[] mixtureArray = Mixture.getMixtureArray(c, currentUser);
-
-        for (Mixture aMixtureArray : mixtureArray) {
-            mixtureAdapter.add(aMixtureArray);
-        }
-
-        mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (mixtureArray[position].getPercentage() == 0) {
-                    addCustomDrink(0, null);
-                    dialog.dismiss();
-                    return;
+            if (User.getUserCount(c) == 1) {
+                try {
+                    menu.removeItem(R.id.switchUser);
+                } catch (Exception e) {
+                    //Nobody cares about you, e.
                 }
-
-                currentUser.addDrink(mixtureArray[position]);
-                currentUser.saveUser(c);
-
-                dialog.dismiss();
-                updateDrinkList();
             }
-        });
 
-        mixtureList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                final int pos = position;
-                final Dialog d = dialog;
+            mHandler.removeCallbacks(hMyTimeTask);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(ma);
-                builder.setTitle(R.string.remove_custom_mixture);
-                builder.setPositiveButton(R.string.remove_mixture, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        Mixture m = mixtureArray[pos];
-                        Mixture.removeCustomMixture(c, m);
-                        d.dismiss();
-
-                    }
-                });
-
-                builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                    }
-                });
-
-                builder.create().show();
-                return true;
-            }
-        });
-
-        dialog.show();
-    }
-
-    public void createBacNotification(double currentBac) {
-        NotificationManager notMngr = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        int nID = 1;
-        if (currentBac > 0) {
-            try {
-                JSONArray drinks = new JSONArray(currentUser.getDrinks().toString());
-                Mixture m = new Mixture(new JSONObject(drinks.getJSONArray(drinks.length() - 1).get(1).toString()));
-
-                Intent i = new Intent(this, MainActivity.class);
-
-                //Pretend that we come from the home launcher
-                i.setAction(getIntent().getAction());
-                i.addCategory(Intent.CATEGORY_LAUNCHER);
-                i.putExtra("mixtureToAdd", drinks.getJSONArray(drinks.length() - 1).get(1).toString());
-
-                TaskStackBuilder tSB = TaskStackBuilder.create(this);
-                tSB.addParentStack(MainActivity.class);
-                tSB.addNextIntent(i);
-
-                PendingIntent p = tSB.getPendingIntent(0,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-
-                Notification n = new Notification.Builder(this)
-                        .setSmallIcon(R.mipmap.ic_launcher)
-                        .setContentTitle(getString(R.string.notification_alert))
-                        .setContentText(String.format(getString(R.string.notification_text_current_bac), format.format(currentBac)))
-                        .setOnlyAlertOnce(true)
-                        .addAction(getResources().getIdentifier(m.getImageString(), "mipmap", getPackageName()), "Das selbe nochmal", p)
-                        .build();
-
-                notMngr.notify(nID, n);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        } else {
-            notMngr.cancel(nID);
+            Timer t = new Timer();
+            t.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                    mHandler.postDelayed(hMyTimeTask, 0); //delay 0 seconds
+                }
+            }, 0, 10000);
         }
     }
 
-    /**
-     * @param stage         0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
-     * @param customMixture from "addCustomRecipe custom drink" dialog
-     */
-    private void addCustomDrink(int stage, Mixture customMixture) {
-        switch (stage) {
-            case 0: //0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
-                //Open dialog and wait for result
-                final Dialog d = new Dialog(this);
-                d.setContentView(R.layout.dialog_add_custom_drink);
-
-                final ImageView image = (ImageView) d.findViewById(R.id.image);
-                MixtureImage currentImage;
-
-                if (currentUser.getName().compareTo("Franzi") == 0) {
-                    currentImage = MixtureImage.custom_panda;
-                    image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
-                            getApplicationContext().getPackageName()));
-                } else {
-                    currentImage = MixtureImage.custom;
-                    image.setImageResource(getResources().getIdentifier(currentImage.toString(), "mipmap",
-                            getApplicationContext().getPackageName()));
-                }
-
-                image.setTag(currentImage);
-
-                image.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        final Dialog dialog = new Dialog(ma);
-                        dialog.setContentView(R.layout.dialog_switch_mixtureimage);
-
-                        dialog.setTitle(R.string.switch_mixtureimage);
-                        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-                        if (title != null) {
-                            title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                            title.setPadding(0, 20, 0, 20);
-                        }
-
-                        final MixtureImageAdapter mA = new MixtureImageAdapter(ma, new ArrayList<MixtureImage>());
-                        GridView mixtureList = (GridView) dialog.findViewById(R.id.mixtureList);
-                        mixtureList.setAdapter(mA);
-
-                        final MixtureImage[] mixtureItemArray = MixtureImage.values();
-
-                        for (MixtureImage aMixtureItemArray : mixtureItemArray) {
-                            mA.add(aMixtureItemArray);
-                        }
-
-                        mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            @Override
-                            public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                                MixtureImage m = mixtureItemArray[position];
-
-                                image.setTag(m); //Updates tag if necessary
-                                image.setImageResource(getResources().getIdentifier(m.toString(), "mipmap",
-                                        getApplicationContext().getPackageName()));
-                                dialog.dismiss();
-                            }
-                        });
-                        dialog.show();
-                    }
-                });
-
-                Button addDrink = (Button) d.findViewById(R.id.addDrink);
-                addDrink.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        TextView tvName = (TextView) d.findViewById(R.id.name);
-                        TextView tvAmount = (TextView) d.findViewById(R.id.amount);
-                        TextView tvPercentage = (TextView) d.findViewById(R.id.percentage);
-
-                        String name = tvName.getText().toString();
-                        double amount = Double.parseDouble("0" + tvAmount.getText());
-                        double percentage = Double.parseDouble("0" + tvPercentage.getText()) / 100;
-
-                        if (Mixture.isValidMixture(name, amount, percentage)) {
-                            MixtureImage m = MixtureImage.fromString(image.getTag().toString());
-                            if (currentUser.getName().compareTo("Franzi") == 0) {
-                                addCustomDrink(1, new Mixture(name, amount, percentage, m));
-                            } else {
-                                addCustomDrink(1, new Mixture(name, amount, percentage, m));
-                            }
-                            d.dismiss();
-                        } else {
-                            Toast.makeText(c, c.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                d.show();
-                break;
-            case 1: //from "addCustomRecipe custom drink" dialog
-                if (customMixture != null || currentUser != null) {
-                    currentUser.addDrink(customMixture);
-                    currentUser.saveUser(c);
-                    updateDrinkList();
-                }
-                break;
+    private Runnable hMyTimeTask = new Runnable() {
+        public void run() {
+            updateDrinkList();
         }
-    }
+    };
+
 
     /**
      * Layout-Stuff
@@ -632,15 +605,14 @@ public class MainActivity extends AppCompatActivity {
             m.setIcon(R.mipmap.switchuser);
         }
 
-        if (currentUser != null) { //TODO: After creating a user while showing the menu, currentUser is null
-            if (currentUser.isMale()) {
-                m = menu.findItem(R.id.newUser);
-                m.setIcon(R.mipmap.male_new);
-                m = menu.findItem(R.id.editUser);
-                m.setIcon(R.mipmap.male_edit);
-                m = menu.findItem(R.id.removeUser);
-                m.setIcon(R.mipmap.male_delete);
-            } else {
+        m = menu.findItem(R.id.newUser);
+        m.setIcon(R.mipmap.male_new);
+        m = menu.findItem(R.id.editUser);
+        m.setIcon(R.mipmap.male_edit);
+        m = menu.findItem(R.id.removeUser);
+        m.setIcon(R.mipmap.male_delete);
+        if (currentUser != null) { //After creating a user while showing the menu, currentUser is null
+            if (!currentUser.isMale) {
                 m = menu.findItem(R.id.newUser);
                 m.setIcon(R.mipmap.female_new);
                 m = menu.findItem(R.id.editUser);
@@ -673,22 +645,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.sendFeedback:
                 startActivity(new Intent(this, SendFeedback.class));
-                break;
+                break;/*
             case R.id.recipes:
                 Intent i = new Intent(this, ShowRecipes.class);
                 i.putExtra("currentUser", currentUser.getCreated());
                 startActivity(i);
-                break;
+                break;*/
             case R.id.about:
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.dialog_about);
-
-                //Add dialog title and center it
-                dialog.setTitle(R.string.about);
-                final TextView title = (TextView) dialog.findViewById(android.R.id.title);
-                title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-                title.setPadding(0, 32, 0, 4);
-
                 dialog.show();
                 break;
         }

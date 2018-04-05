@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Alkomat 3000</string>
+    <string name="app_name" translatable="false">Alkomat 3000</string>
     <string name="press_back_again_to_leave">Nochmal drücken, um zu Verlassen</string>
-    <string name="about_text">© 2017 Klaus Hackner\n\nAlkomat 3000 for Android\n\nSource: https://github.com/dieechtenilente/alcoholtestapp\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
+    <string name="about_text" translatable="false">© 2017 Klaus Hackner\n\nAlkomat 3000 for Android\n\nSource: https://github.com/dieechtenilente/alcoholtestapp\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="wronginput">Fehler! Bitte überprüfe Deine Eingaben</string>
     <string name="no_information">k. A.</string>
     <string name="only_one_user_there">Es ist nur ein Benutzer vorhanden. Dieser wurde jetzt ausgewählt</string>
@@ -16,7 +16,7 @@
     <string name="about">Über diese App</string>
     <string name="name">Name</string>
     <string name="percentage">Alkoholgehalt (%)</string>
-    <string name="amount">Alk-Menge (ml)</string>
+    <string name="amount">Menge (ml)</string>
     <string name="sex">Geschlecht</string>
     <string name="female">Weiblich</string>
     <string name="male">Männlich</string>
@@ -27,7 +27,8 @@
     <string name="weight_with_unit">Körpergewicht (kg)</string>
     <string name="height_with_unit">Körpergröße (cm)</string>
     <string name="image">Bild</string>
-    <string name="bac">Promille (‰)</string>
+    <string name="bac">Promille</string>
+    <string name="per_mille">‰</string>
     <string name="bacNoChar">Promille</string>
     <string name="create_user">Benutzer erstellen</string>
     <string name="save_user">Benutzer speichern</string>
@@ -54,6 +55,12 @@
     <string name="email">E-Mail (Für Rückfragen/Antworten)</string>
     <string name="emailhint">E-Mail</string>
     <string name="recipes">Rezepte</string>
+    <string name="add_recipe">Ein Rezept hinzufügen</string>
     <string name="ingredience">Zutaten:</string>
-    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten sowie Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!</string>
+    <string name="description">Beschreibung</string>
+    <string name="feedback_sending">Feedback wird gesendet …</string>
+    <string name="add_recipe_button">Rezept hinzufügen</string>
+    <string name="add_ingredient">Zutat hinzufügen</string>
+    <string name="add_ingr_desc">Eine Beschreibung, beispielsweise wie die Zutaten zusammen gemischt werden oder welches Glas, welche Dekoration verwendet werden kann.</string>
+    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten, Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!\nDie Angabe des Namens und der E-Mail-Adresse ist optional, aber für Rückfragen/Rückmeldungen sinnvoll.</string>
 </resources>

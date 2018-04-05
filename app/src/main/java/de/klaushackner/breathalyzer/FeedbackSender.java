@@ -1,13 +1,13 @@
 package de.klaushackner.breathalyzer;
 
 import android.os.AsyncTask;
+import android.os.Build;
 import android.widget.Toast;
 
 import org.json.JSONObject;
 
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -26,13 +26,13 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            URL url = new URL("https://dieechtenilente.duckdns.org:9444");
+            URL url = new URL("https://alkomat.duckdns.org:9444");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
             conn.setConnectTimeout(5000);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
-            conn.setRequestProperty("User-Agent", sf.getResources().getString(R.string.app_name));
+            conn.setRequestProperty("User-Agent", sf.getResources().getString(R.string.app_name) + "/" + Build.VERSION.INCREMENTAL);
 
             OutputStream os = conn.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
@@ -51,22 +51,23 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-        sf.onResult();
-
         switch (rc) {
             case 400:
                 //irony: you can't report a error in the error report system, lol
                 Toast.makeText(sf, sf.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                sf.onResult(1);
                 break;
             case 200:
                 Toast.makeText(sf, sf.getResources().getString(R.string.feedback_sent), Toast.LENGTH_SHORT).show();
-                sf.finish();
+                sf.onResult(0);
                 break;
             case 0:
                 Toast.makeText(sf, "Fehler", Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                sf.onResult(1);
                 break;
             default:
                 Toast.makeText(sf, rc + " - Fehler", Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                sf.onResult(1);
                 break;
         }
     }

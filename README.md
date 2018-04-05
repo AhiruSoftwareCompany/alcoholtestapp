@@ -1,7 +1,8 @@
 # Alkomat 3000
 
 ### Installing the app
-Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone. Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
+Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone.
+Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
 
 ### Fork & Clone the repo
 If you haven't already, fork [this repo](https://github.com/dieechtenilente/alcoholtestapp/fork).
@@ -86,8 +87,7 @@ Once the project is cloned to disk you can import into Android Studio:
 
 The feedback server is used by the feedback feature in the app, which allows users to
 send a message and general device diagnostics to the developer. It is an HTTPS server
-written in [Go](https://golang.org/). It takes messages in JSON (see below for the format)
-and forwards them to the specified e-mail address.
+written in [Go](https://golang.org/). It takes messages in JSON (see [below](https://github.com/dieechtenilente/alcoholtestapp#feedback) for the format) and forwards them to the specified e-mail address.
 
 You need a new file called `config.go` in the `feedback` directory. The file is .gitignored
 since it holds the password for the feedback server's mail account.
@@ -104,6 +104,7 @@ const (
 
         // SMTP server of the feedback bot
         SMTPSrv = "smtp-mail.bar.com"
+        SMTPPort = "587"
 
         // your mail address
         ToAddr = "cryonme@nobodycares.com"
@@ -126,13 +127,12 @@ const (
 
 |term|description|
 |----|-----------|
-|`user`|A user|
-|`mixture`|A mixture for a drink (e.g. beer with 500ml and 5%)|
-|`ingredient`|A ingredient used to create a drink with a recipe|
-|`drink`|A consumed mixture|
-|`recipe`|A mixture for a drink with more then one ingredient|
+|`User`| Can consume `Mixture`s as `Drink`s which are stored in a `Drink`-Array|
+|`Drink`|A consumed `Mixture` with additional data (time of consume, ...)|
+|`Mixture`|A `Mixture` has one or more `Content`s and can be consumed by a `User`|
+|`Content`|A base content of a `Mixture` (e.g. beer, vodka, water, ...)|
 
-### Data saved by app on your phone
+### Data saved by the app on your phone
 
 Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
 
@@ -140,7 +140,7 @@ Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
 
 An array with every user currently existing including its drinks (updated on startup/resume/refresh button press)
 
-```
+```javascript
 [
   {
     name:String,
@@ -149,41 +149,29 @@ An array with every user currently existing including its drinks (updated on sta
     weight:int,
     height:int,
     created:long,
-    drinks:[
-      [
-        takingTime[long],
-        {
-          name:String,
-          amount:double,
-          percentage:double,
-          image:String
-        }
-      ]
+    drinks: [
+      {
+        name:String,
+        description:String,
+        consumePoint:long,
+        mixtureImage:String,
+        content: [
+          {
+            name:String,
+            alcContent:double,
+            amount:double
+          }
+        ]
+      }
     ]
   }
 ]
 ```
 
-In addition to that: the "`uid`" (simply the creation date (with milliseconds)) from the last selected user
+In addition to that: `lastUser` (simply the creation date (with milliseconds)) from the last selected user
 
-#### Drinks-Array
 
-`MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
-
-For custom mixtures saved by the user:
-
-```
-[
-  {
-    name:String,
-    amount:double,
-    percentage:double,
-    image":MixtureImage
-  }
-]
-```
-
-#### Recipes-Array
+#### Recipe-Array
 
 `MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
 
@@ -192,14 +180,14 @@ For custom recipes saved by the user:
 ```
 [
   {
-    image:MixtureImage,
     name:String,
     text:String,
+    imgString:String,
     ingredients:[
       {
         name:String,
-        percentage:double,
-        amount:double
+        alcContent:double,
+        quantity:double
       }
     ]
   }
@@ -232,6 +220,9 @@ The `LogTrace` is for future use: Logging every exception into a file.
 
 ## Issues
 Found a bug? Want to request a new feature?  Please let us know by submitting an issue or use the in-app feedback function (in the options menu).
+
+## Licensing
+This project stands unter the MIT-License. Bear in mind that the pictures used in this project have their own license!
 
 ## Sources/Adaptions
 Readme adapted from [Esri](https://github.com/Esri/arcgis-runtime-samples-android)

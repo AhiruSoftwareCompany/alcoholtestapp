@@ -1,9 +1,11 @@
 package de.klaushackner.breathalyzer;
 
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -11,21 +13,27 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+
 public class SendFeedback extends AppCompatActivity {
     private EditText name;
     private EditText email;
     private EditText message;
     private Button button;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_send_feedback);
+        dialog = new Dialog(this);
+        dialog.setCancelable(false);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //No title
+        dialog.setContentView(R.layout.loading);
 
-        name = (EditText) findViewById(R.id.name);
-        email = (EditText) findViewById(R.id.email);
-        message = (EditText) findViewById(R.id.message);
-        button = (Button) findViewById(R.id.sendFeedback);
+        name = findViewById(R.id.name);
+        email = findViewById(R.id.email);
+        message = findViewById(R.id.message);
+        button = findViewById(R.id.sendFeedback);
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,6 +55,7 @@ public class SendFeedback extends AppCompatActivity {
 
             if (isValidRequest()) {
                 new FeedbackSender(toSend, this);
+                dialog.show();
                 button.setEnabled(false);
             } else {
                 Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
@@ -71,13 +80,26 @@ public class SendFeedback extends AppCompatActivity {
 
     public boolean isValidRequest() {
         if (message.getText().length() > 3) { //Should be enough for now
+            if (email.getText().length() > 0) {
+                if (email.getText().toString().contains("@") && email.getText().toString().contains(".")) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
             return true;
         }
         return false;
     }
 
-    public void onResult() {
+    public void onResult(int code) {
+        dialog.dismiss();
         button.setEnabled(true);
+        switch (code) {
+            case 0:
+                finish();
+                break;
+        }
     }
 
 

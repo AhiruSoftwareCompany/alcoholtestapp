@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.adapter;
+package de.klaushackner.breathalyzer;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -11,9 +11,6 @@ import android.widget.TextView;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-
-import de.klaushackner.breathalyzer.R;
-import de.klaushackner.breathalyzer.model.Mixture;
 
 public class MixtureAdapter extends ArrayAdapter<Mixture> {
     private final Context mContext;
@@ -32,24 +29,25 @@ public class MixtureAdapter extends ArrayAdapter<Mixture> {
         Mixture mixture = getItem(position);
 
 
-        TextView name = (TextView) v.findViewById(R.id.name);
-        TextView amount = (TextView) v.findViewById(R.id.amount);
-        TextView percentage = (TextView) v.findViewById(R.id.percentage);
-        ImageView image = (ImageView) v.findViewById(R.id.image);
+        TextView name = v.findViewById(R.id.name);
+        TextView amount = v.findViewById(R.id.amount);
+        TextView percentage = v.findViewById(R.id.percentage);
+        ImageView image = v.findViewById(R.id.image);
 
-        DecimalFormat format = new DecimalFormat();
+        DecimalFormat format = new DecimalFormat("#.##");
         format.setDecimalSeparatorAlwaysShown(false);
 
-        name.setText(mixture.getName());
+        name.setText(mixture.name);
         if (mixture.getAmount() < 100) {
             amount.setText(format.format(mixture.getAmount()) + " ml");
         } else {
             amount.setText(format.format(mixture.getAmount() / 1000) + " l");
         }
-        percentage.setText(format.format(mixture.getPercentage() * 100) + " %");
 
-        if (mixture.getImage() != null) {
-            image.setImageResource(mContext.getResources().getIdentifier(mixture.getImageString(), "mipmap",
+        percentage.setText(format.format(mixture.getAlcContent() * 100) + " %");
+
+        if (mixture.image != null) {
+            image.setImageResource(mContext.getResources().getIdentifier(mixture.image.toString(), "mipmap",
                     mContext.getApplicationContext().getPackageName()));
         }
         return v;
