@@ -128,7 +128,7 @@ func sendStdMail(subject, content string) error {
 // sendLoginMail uses the LOGIN auth implemented using gomail instead.
 func sendLoginMail(subject, content string) error {
 	auth := gomail.LoginAuth(FromAddr, Passwd, SMTPSrv)
-	mailer := gomail.NewCustomMailer(SMTPSrv, auth)
+	mailer := gomail.NewCustomMailer(SMTPSrv+":"+SMTPPort, auth)
 
 	body := strings.Replace(content, "\n", "\r\n", -1)
 
