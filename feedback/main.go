@@ -4,26 +4,39 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
 	"net/smtp"
+	"os"
 	"strings"
 	"time"
-	"os"
+
+	"gopkg.in/gomail.v1"
 )
 
+var sendMail = sendStdMail
+
+var useLoginAuth = flag.Bool("L", false, "Use LOGIN auth")
+
 func main() {
+	flag.Parse()
+
+	if *useLoginAuth {
+		sendMail = sendLoginMail
+	}
+
 	t := time.Now()
-	
-	f, err := os.OpenFile("feedback" + t.Format("20060102-1504") + ".log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
+
+	f, err := os.OpenFile("feedback"+t.Format("20060102-1504")+".log", os.O_WRONLY|os.O_CREATE|os.O_APPEND, 0644)
 	if err != nil {
 		log.Fatal(err)
-	} 
+	}
 	defer f.Close()
 	log.SetOutput(f)
-	
+
 	if FromAddr == "foo@example.com" {
 		log.Fatal("Please set the constants in config.go and recompile")
 	}
@@ -33,7 +46,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", rootHandler)
-	
+
 	log.Println("Starting server on port", Port)
 	log.Fatal(http.ListenAndServeTLS(":"+Port, CertificatePath, PrivateKeyPath, nil))
 }
@@ -72,8 +85,8 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	decoder := json.NewDecoder(strings.NewReader(fbstr))
 	var feedback Feedback
 	err := decoder.Decode(&feedback)
-	
-	if err != nil {		
+
+	if err != nil {
 		log.Println("JSON decode error:", err)
 	}
 
@@ -97,10 +110,10 @@ func rootHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// sendMail sends a mail with the given subject and content. The content must have Unix
+// sendStdMail sends a mail with the given subject and content. The content must have Unix
 // newlines (\n) and end in a newline. These newlines will be converted to SMTP's CRLF
 // automatically.
-func sendMail(subject, content string) error {
+func sendStdMail(subject, content string) error {
 	auth := smtp.PlainAuth("", FromAddr, Passwd, SMTPSrv)
 	to := []string{ToAddr}
 	date := time.Now().Format(time.RFC822Z)
@@ -109,5 +122,24 @@ func sendMail(subject, content string) error {
 	body := strings.Replace(content, "\n", "\r\n", -1)
 	msg := []byte(header + "\r\n" + body)
 
-	return smtp.SendMail(SMTPSrv+":"+SMTPPort, auth, FromAddr, to, msg)
+	return smtp.SendMail(SMTPSrv+":"+Port, auth, FromAddr, to, msg)
+}
+
+// sendLoginMail uses the LOGIN auth implemented using gomail instead.
+func sendLoginMail(subject, content string) error {
+	auth := gomail.LoginAuth(FromAddr, Passwd, SMTPSrv)
+	mailer := gomail.NewCustomMailer(SMTPSrv+":"+SMTPPort, auth)
+
+	body := strings.Replace(content, "\n", "\r\n", -1)
+
+	msg := gomail.NewMessage()
+	msg.SetHeaders(map[string][]string{
+		"From":    {FromAddr},
+		"To":      {ToAddr},
+		"Subject": {subject},
+	})
+	msg.SetDateHeader("Date", time.Now())
+	msg.SetBody("text/plain", body)
+
+	return mailer.Send(msg)
 }
