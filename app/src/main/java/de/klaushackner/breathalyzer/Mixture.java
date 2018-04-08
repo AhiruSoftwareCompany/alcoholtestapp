@@ -1,5 +1,7 @@
 package de.klaushackner.breathalyzer;
 
+import android.content.res.Resources;
+
 import java.util.ArrayList;
 
 import de.klaushackner.breathalyzer.model.Content;
@@ -49,13 +51,14 @@ public class Mixture {
 
         //Add new mixtures here!
         ArrayList<Mixture> mixtures = new ArrayList<>();
+        Resources r = Resources.getSystem();
 
-        mixtures.add(new Mixture("Bier", "", 500, 0.05, MixtureImage.beer));
-        mixtures.add(new Mixture("Bier", "", 1000, 0.05, MixtureImage.morebeer));
+        mixtures.add(new Mixture(r.getString(R.string.beer), r.getString(R.string.beer_desc), 500, 0.05, MixtureImage.beer));
+        mixtures.add(new Mixture(r.getString(R.string.beer), r.getString(R.string.beer_desc), 1000, 0.05, MixtureImage.morebeer));
 
-        mixtures.add(new Mixture("Goaß", "", new Content[]{new Content("Bier", 0.05, 250),
+        mixtures.add(new Mixture("Goaß", "", new Content[]{new Content(r.getString(R.string.beer), 0.05, 250),
                 new Content("Cola", 0, 250), new Content("Kirschlikör", 0.20, 20)}, MixtureImage.goass));
-        mixtures.add(new Mixture("Goaßmaß", "", new Content[]{new Content("Bier", 0.05, 500),
+        mixtures.add(new Mixture("Goaßmaß", "", new Content[]{new Content(r.getString(R.string.beer), 0.05, 500),
                 new Content("Cola", 0, 500), new Content("Kirschlikör", 0.20, 40)}, MixtureImage.goass));
 
         mixtures.add(new Mixture("Pils", "", 330, 0.048, MixtureImage.pils));
