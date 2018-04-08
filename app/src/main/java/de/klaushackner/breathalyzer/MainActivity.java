@@ -568,6 +568,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
 
+            updateDrinkList();
             mHandler.removeCallbacks(hMyTimeTask);
 
             Timer t = new Timer();
