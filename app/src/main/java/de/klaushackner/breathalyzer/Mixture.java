@@ -60,9 +60,12 @@ public class Mixture {
 
         mixtures.add(new Mixture("Pils", "", 330, 0.048, MixtureImage.pils));
         mixtures.add(new Mixture("Pils", "", 500, 0.048, MixtureImage.pils));
+        mixtures.add(new Mixture("Red Cider", "", 500, 0.04, MixtureImage.redcider));
         mixtures.add(new Mixture("Wein", "", 200, 0.10, MixtureImage.wine));
         mixtures.add(new Mixture("Wodka", "", 20, 0.30, MixtureImage.vodka));
         mixtures.add(new Mixture("Wodka", "", 20, 0.40, MixtureImage.vodka));
+        mixtures.add(new Mixture("Irish Flag", "", new Content[]{new Content("Baileys Irish Creme", 0.17, 20),
+                new Content("Creme de Menthe", 0.24, 20), new Content("Irish whiskey", 0.40, 20)}, MixtureImage.irishflag));
         mixtures.add(new Mixture("Whisky", "", 20, 0.40, MixtureImage.whisky));
         mixtures.add(new Mixture("Sekt", "", 200, 0.12, MixtureImage.sparklingwine));
         mixtures.add(new Mixture("Hugo", "", 300, 0.069, MixtureImage.sparklingwine));
