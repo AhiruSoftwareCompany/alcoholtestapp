@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNeutralButton(R.string.add_as_mixture, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         Drink d = currentUser.drinks.get(pos);
-                        //Handle mixture saving
+                        //TODO Handle mixture saving
 
                     }
                 });
@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
             for (Drink d : drinks) {
                 totalDepletionDuration = totalDepletionDuration + d.depletingDuration; //adding depletion duration of current drink to the total depletion duration
 
-                if(firstDrink){
+                if (firstDrink) {
                     totalBac = totalBac + d.getBac();
                 } else {
                     totalBac = totalBac + d.getRelativeBac();
@@ -293,7 +293,7 @@ public class MainActivity extends AppCompatActivity {
         mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (mixtures.get(0).getAlcContent() == 0) {
+                if (mixtures.get(position).getAlcContent() == 0) {
                     addCustomDrink(0, null);
                     dialog.dismiss();
                     return;
@@ -347,7 +347,7 @@ public class MainActivity extends AppCompatActivity {
                 final Dialog d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_custom_drink);
 
-                final ImageView image = (ImageView) d.findViewById(R.id.image);
+                final ImageView image = d.findViewById(R.id.image);
                 MixtureImage currentImage;
 
                 if (currentUser.name.compareTo("Franzi") == 0) {
@@ -369,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
                         dialog.setContentView(R.layout.dialog_switch_mixtureimage);
 
                         dialog.setTitle(R.string.switch_mixtureimage);
-                        final TextView title = (TextView) dialog.findViewById(android.R.id.title);
+                        final TextView title = dialog.findViewById(android.R.id.title);
                         if (title != null) {
                             title.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
                             title.setPadding(0, 20, 0, 20);
