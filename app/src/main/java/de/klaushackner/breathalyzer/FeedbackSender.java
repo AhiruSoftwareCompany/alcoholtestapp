@@ -54,7 +54,7 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
         switch (rc) {
             case 400:
                 //irony: you can't report a error in the error report system, lol
-                Toast.makeText(sf, sf.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                Toast.makeText(sf, sf.getResources().getString(R.string.wronginput), Toast.LENGTH_SHORT).show();
                 sf.onResult(1);
                 break;
             case 200:
@@ -62,11 +62,11 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
                 sf.onResult(0);
                 break;
             case 0:
-                Toast.makeText(sf, "Fehler", Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                Toast.makeText(sf, sf.getResources().getString(R.string.error), Toast.LENGTH_SHORT).show();
                 sf.onResult(1);
                 break;
             default:
-                Toast.makeText(sf, rc + " - Fehler", Toast.LENGTH_SHORT).show(); //TODO: Extra string for that
+                Toast.makeText(sf, String.format("%d - %d", rc, sf.getResources().getString(R.string.error)), Toast.LENGTH_SHORT).show();
                 sf.onResult(1);
                 break;
         }
