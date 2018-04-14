@@ -58,7 +58,7 @@
     <string name="add_recipe">Ein Rezept hinzufügen</string>
     <string name="ingredience">Zutaten:</string>
     <string name="description">Beschreibung</string>
-    <string name="feedback_sending">Feedbac1Feedback wird gesendet …</string>
+    <string name="feedback_sending">Feedback wird gesendet …</string>
     <string name="add_recipe_button">Rezept hinzufügen</string>
     <string name="add_ingredient">Zutat hinzufügen</string>
     <string name="add_ingr_desc">Eine Beschreibung, beispielsweise wie die Zutaten zusammen gemischt werden oder welches Glas, welche Dekoration verwendet werden kann.</string>
