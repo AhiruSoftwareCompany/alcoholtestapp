@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private Menu menu;
     private Handler mHandler = new Handler();
     private DrinkAdapter dA;
+    private TimerTask timerTask; //updates the gui
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,6 +163,15 @@ public class MainActivity extends AppCompatActivity {
         updateGui();
     }
 
+    /**
+     * Stops timer when pausing MainActivity
+     */
+    @Override
+    public void onPause() {
+        super.onPause();
+        stopTimer();
+    }
+
 
     /**
      * Adds drinks from the current person to the list view
@@ -223,6 +233,7 @@ public class MainActivity extends AppCompatActivity {
      * Creates a user and opens select dialog afterwards
      */
     private void createUser() {
+        stopTimer();
         startActivity(new Intent(this, CreateUser.class));
     }
 
@@ -233,6 +244,7 @@ public class MainActivity extends AppCompatActivity {
      * @param userToRemove user to remove
      */
     private void removeUser(User userToRemove) {
+        stopTimer();
         SharedPreferences sharedPref = getSharedPreferences("data", 0);
         SharedPreferences.Editor editor = sharedPref.edit();
         JSONArray users;
@@ -442,6 +454,7 @@ public class MainActivity extends AppCompatActivity {
      * Opens activity to edit the current user
      */
     private void editUser() {
+        stopTimer();
         //Save old user before selecting a new one
         currentUser.saveUser(c);
 
@@ -569,15 +582,32 @@ public class MainActivity extends AppCompatActivity {
             }
 
             updateDrinkList();
-            mHandler.removeCallbacks(hMyTimeTask);
+            startTimer();
+        }
+    }
 
-            Timer t = new Timer();
-            t.schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    mHandler.postDelayed(hMyTimeTask, 0); //delay 0 seconds
-                }
-            }, 0, 10000);
+    /**
+     * starts the timer which updates the gui every 10 seconds
+     * it will call a stopTimer() before starting a new timer
+     */
+    private void startTimer() {
+        Timer timer = new Timer();
+        stopTimer();
+        timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                mHandler.postDelayed(hMyTimeTask, 0); //delay 0 seconds
+            }
+        };
+        timer.schedule(timerTask, 0, 10000);
+    }
+
+    private void stopTimer() {
+        mHandler.removeCallbacks(hMyTimeTask);
+        try {
+            timerTask.cancel();
+        } catch (Exception e) {
+            //can be null at first call
         }
     }
 

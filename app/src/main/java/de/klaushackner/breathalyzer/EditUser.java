@@ -14,7 +14,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-
 public class EditUser extends AppCompatActivity {
     private TextView tvName;
     private TextView tvAge;
@@ -91,25 +90,14 @@ public class EditUser extends AppCompatActivity {
         int height = Integer.parseInt("0" + tvHeight.getText());
 
         if (User.isValidUser(name, age, height, weight)) {
-            try {
-                SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
-                User newUser = new User(name, male.isChecked(), age, weight, height, u.created, u.drinks);
-
-                for (int i = 0; i < users.length(); i++) {
-                    JSONObject j = new JSONObject(users.get(i).toString());
-                    if (j.getLong("created") == u.created) {
-                        users.put(i, newUser.toJSON());
-                    }
-                }
-
-                u.saveUser(this);
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+            User newUser = new User(name, male.isChecked(), age, weight, height, u.created, u.drinks);
+            newUser.saveUser(this);
             return true;
+        } else {
+            return false;
         }
-        return false;
+
+
     }
 
 
