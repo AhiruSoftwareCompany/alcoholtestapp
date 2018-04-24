@@ -12,6 +12,7 @@
             android:id="@+id/image"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="20dp"
             android:contentDescription="@string/image"
             android:cropToPadding="true"
             android:gravity="center"
@@ -99,6 +100,7 @@
             android:id="@+id/addDrink"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="10dp"
             android:text="@string/add_drink_button" />
 
     </LinearLayout>
