@@ -1,5 +1,8 @@
 # Alkomat 3000
 
+![](screenshots/adddrink.png)
+![](screenshots/mainscreen.png)
+
 ### Installing the app
 Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone.
 Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
@@ -168,7 +171,7 @@ An array with every user currently existing including its drinks (updated on sta
 ]
 ```
 
-In addition to that: `lastUser` (simply the creation date (with milliseconds)) from the last selected user
+In addition to that: `lastUser` as `long` (simply the creation date (with milliseconds)) from the last selected user
 
 
 #### Recipe-Array
