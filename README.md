@@ -1,7 +1,7 @@
 # Alkomat 3000
 
-![](screenshots/adddrink.png)
 ![](screenshots/mainscreen.png)
+![](screenshots/adddrink.png)
 
 ### Installing the app
 Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone.
