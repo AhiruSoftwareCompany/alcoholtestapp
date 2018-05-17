@@ -26,6 +26,7 @@
     <string name="height_with_unit">Körpergröße (cm)</string>
     <string name="image">Bild</string>
     <string name="bac">Promille</string>
+    <string name="per_mille" translatable="false">‰</string>
     <string name="bacNoChar">Promille</string>
     <string name="create_user">Benutzer erstellen</string>
     <string name="save_user">Benutzer speichern</string>
