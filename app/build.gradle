@@ -5,8 +5,8 @@ android {
     buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "de.klaushackner.alkomat3000"
-        versionCode 7
-        versionName "1.7"
+        versionCode 8
+        versionName "1.8"
         targetSdkVersion 25
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
