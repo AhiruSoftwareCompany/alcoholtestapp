@@ -296,7 +296,7 @@ public class MainActivity extends AppCompatActivity {
         GridView mixtureList = dialog.findViewById(R.id.mixtureList);
         mixtureList.setAdapter(mixtureAdapter);
 
-        final ArrayList<Mixture> mixtures = Mixture.getMixtureArray(currentUser);
+        final ArrayList<Mixture> mixtures = Mixture.getMixtureArray(c, currentUser);
 
         for (Mixture aMixtureArray : mixtures) {
             mixtureAdapter.add(aMixtureArray);
@@ -636,6 +636,9 @@ public class MainActivity extends AppCompatActivity {
             m.setIcon(R.mipmap.switchuser);
         }
 
+        m = menu.findItem(R.id.recipes);
+        m.setIcon(R.mipmap.cocktail2);
+
         m = menu.findItem(R.id.newUser);
         m.setIcon(R.mipmap.male_new);
         m = menu.findItem(R.id.editUser);
@@ -674,14 +677,14 @@ public class MainActivity extends AppCompatActivity {
             case R.id.newUser:
                 createUser();
                 break;
-            case R.id.sendFeedback:
-                startActivity(new Intent(this, SendFeedback.class));
-                break;/*
             case R.id.recipes:
                 Intent i = new Intent(this, ShowRecipes.class);
-                i.putExtra("currentUser", currentUser.getCreated());
+                i.putExtra("currentUser", currentUser.created);
                 startActivity(i);
-                break;*/
+                break;
+            case R.id.sendFeedback:
+                startActivity(new Intent(this, SendFeedback.class));
+                break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);
                 dialog.setContentView(R.layout.dialog_about);

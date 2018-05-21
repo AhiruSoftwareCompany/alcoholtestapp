@@ -2,27 +2,28 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:breathalyzer="http://schemas.android.com/apk/res-auto">
     <item
+        android:id="@+id/recipes"
+        android:title="@string/recipes"
+        breathalyzer:showAsAction="ifRoom" />
+    <item
         android:id="@+id/switchUser"
-        breathalyzer:showAsAction="ifRoom"
-        android:title="@string/switch_user" />
+        android:title="@string/switch_user"
+        breathalyzer:showAsAction="ifRoom" />
     <item
         android:id="@+id/newUser"
         android:title="@string/create_new_user"
         breathalyzer:showAsAction="ifRoom" />
     <item
         android:id="@+id/editUser"
-        breathalyzer:showAsAction="ifRoom"
-        android:title="@string/edit_current_user" />
+        android:title="@string/edit_current_user"
+        breathalyzer:showAsAction="ifRoom" />
     <item
         android:id="@+id/removeUser"
-        breathalyzer:showAsAction="ifRoom"
-        android:title="@string/remove_current_user" />
+        android:title="@string/remove_current_user"
+        breathalyzer:showAsAction="ifRoom" />
     <item
         android:id="@+id/sendFeedback"
         android:title="@string/send_feedback" />
-    <item
-        android:id="@+id/recipes"
-        android:title="@string/recipes" />
     <item
         android:id="@+id/about"
         android:title="@string/about" />
