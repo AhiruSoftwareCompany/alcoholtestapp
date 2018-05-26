@@ -26,7 +26,6 @@
     <string name="height_with_unit">Körpergröße (cm)</string>
     <string name="image">Bild</string>
     <string name="bac">Promille</string>
-    <string name="per_mille" translatable="false">‰</string>
     <string name="bacNoChar">Promille</string>
     <string name="create_user">Benutzer erstellen</string>
     <string name="save_user">Benutzer speichern</string>
@@ -60,9 +59,11 @@
     <string name="add_recipe_button">Rezept hinzufügen</string>
     <string name="add_ingredient">Zutat hinzufügen</string>
     <string name="add_ingr_desc">Eine Beschreibung, beispielsweise wie die Zutaten zusammen gemischt werden oder welches Glas, welche Dekoration verwendet werden kann.</string>
-    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten, Informationen über dein Gerät (Hersteller, Modell, Betriebssystem) sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!\nDie Angabe des Namens und der E-Mail-Adresse ist optional, aber für Rückfragen/Rückmeldungen sinnvoll.</string>
+    <string name="disclaimer">*Per Druck auf \"Nachricht senden\" stimmst du zu, dass die oben angezeigten Daten, Informationen über dein Gerät (Hersteller, Modell, Betriebssystem), deine aktuelle IP-Adresse sowie Informationen über die App (Versionsnummer, Logdateien, gespeicherte Mixturen/Rezepte) sicher versendet werden.\nEs werden keine weiteren persönlichen Daten (Fotos, Videos, etc.) gesendet!\nDie Angabe des Namens und der E-Mail-Adresse ist optional, aber für Rückfragen/Rückmeldungen sinnvoll. Für weitere Informationen kannst du uns gerne kontaktieren: privacy-duck@outlook.de</string>
     <string name="error">Fehler</string>
     <string name="beer">Bier</string>
     <string name="beer_desc">Bier ist ein Getränk, das durch Gärung aus stärkehaltigen Stoffen gewonnen und nicht destilliert wird. Bei der Herstellung des kohlensäurehaltigen Getränks werden Hopfen oder andere Würzstoffe zugesetzt, etwa Früchte, Kräuter wie Grut oder andere Gewürze.</string>
     <string name="add">Hinzufügen</string>
+    <string name="show_feedback_trace">Zu sendende Informationen anzeigen</string>
+    <string name="and_your_IP_Adress">Und deine IP-Adresse.</string>
 </resources>

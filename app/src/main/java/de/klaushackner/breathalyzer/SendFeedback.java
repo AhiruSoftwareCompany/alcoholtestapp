@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONException;
@@ -18,8 +19,9 @@ public class SendFeedback extends AppCompatActivity {
     private EditText name;
     private EditText email;
     private EditText message;
-    private Button button;
+    private Button sendFeedback;
     private Dialog dialog;
+    private Button showFeedback;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,17 +35,25 @@ public class SendFeedback extends AppCompatActivity {
         name = findViewById(R.id.name);
         email = findViewById(R.id.email);
         message = findViewById(R.id.message);
-        button = findViewById(R.id.sendFeedback);
+        sendFeedback = findViewById(R.id.sendFeedback);
+        showFeedback = findViewById(R.id.show_feedback_trace);
 
-        button.setOnClickListener(new View.OnClickListener() {
+        sendFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 sendMessage();
             }
         });
+
+        showFeedback.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showMessage();
+            }
+        });
     }
 
-    private void sendMessage() {
+    private JSONObject getToSendObject() {
         JSONObject toSend = new JSONObject();
         try {
             toSend.put("Device", getDeviceInfo());
@@ -52,17 +62,32 @@ public class SendFeedback extends AppCompatActivity {
             toSend.put("Sender", name.getText());
             toSend.put("SenderMail", email.getText());
             toSend.put("Message", message.getText());
-
-            if (isValidRequest()) {
-                new FeedbackSender(toSend, this);
-                dialog.show();
-                button.setEnabled(false);
-            } else {
-                Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
-            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        return toSend;
+    }
+
+    private void sendMessage() {
+        JSONObject toSend = getToSendObject();
+
+        if (isValidRequest()) {
+            new FeedbackSender(toSend, this);
+            dialog.show();
+            sendFeedback.setEnabled(false);
+        } else {
+            Toast.makeText(this, R.string.wronginput, Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private void showMessage() {
+        dialog = new Dialog(this);
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE); //No title
+        dialog.setContentView(R.layout.dialog_show_feedback_trace);
+        dialog.setCancelable(true);
+        TextView text = dialog.findViewById(R.id.text);
+        text.setText(String.format("%s\n%s", getToSendObject().toString(), getResources().getString(R.string.and_your_IP_Adress)));
+        dialog.show();
     }
 
     public JSONObject getDeviceInfo() {
@@ -94,7 +119,7 @@ public class SendFeedback extends AppCompatActivity {
 
     public void onResult(int code) {
         dialog.dismiss();
-        button.setEnabled(true);
+        sendFeedback.setEnabled(true);
         switch (code) {
             case 0:
                 finish();

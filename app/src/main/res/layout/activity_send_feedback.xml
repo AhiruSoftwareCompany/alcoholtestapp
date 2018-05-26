@@ -66,5 +66,11 @@
             android:text="@string/disclaimer"
             android:textSize="10sp" />
 
+        <Button
+            android:id="@+id/show_feedback_trace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/show_feedback_trace" />
+
     </LinearLayout>
 </ScrollView>
