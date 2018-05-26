@@ -221,6 +221,11 @@ Example of the string sent by the app:
 
 The `LogTrace` is for future use: Logging every exception into a file.
 
+Disclaimer for the sake of the EU-GDPR
+```
+By pressing the "send message" button in the "Send Feedback" form you agree that the data entered above, information about your device (manufacturer, model, operating system and its version), your current IP-Address and the opt-in date as well as information about the app (version number, log files, stored mixtures/recipes) will be sent securely. Data beyond the one provided by you optional (Name, E-Mail-Address, Message) is used to ensure a better problem solving process and are stored until revocation and are deleted after 10 years (except there are other valid lawfully retention periods).\nNo other personal data (photos, videos, etc.) are sent!\nThe name and the e-mail address are optional, but useful for inquiries/feedback.\nYou can always contact us via e-mail (privacy-duck@outlook.com) about your saved data and request a copy, cancellation or rectification. In addition, you have the right to contact the data protection authority responsible for you (for example your national data protection officer).
+```
+
 ## Issues
 Found a bug? Want to request a new feature?  Please let us know by submitting an issue or use the in-app feedback function (in the options menu).
 
