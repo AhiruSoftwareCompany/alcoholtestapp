@@ -224,19 +224,20 @@ The `LogTrace` is for future use: Logging every exception into a file.
 Disclaimer for the sake of the EU-GDPR
 
 ```
-By pressing the "send message" button in the "Send Feedback" form you agree that the data entered above, information about
-your device (manufacturer, model, operating system and its version), your current IP-Address and the opt-in date as well as
-information about the app (version number, log files, stored mixtures/recipes) will be sent securely. Data beyond the one
-provided by you optional (Name, E-Mail-Address, Message) is used to ensure a better problem solving process and are stored
-until revocation and are deleted after 10 years (except there are other valid lawfully retention periods).
+By pressing the "send message" button in the "Send Feedback" form you agree that the data entered above,
+information about your device (manufacturer, model, operating system and its version), your current
+IP-Address and the opt-in date as well as information about the app (version number, log files, stored
+mixtures/recipes) will be sent securely. Data beyond the one provided by you optional (Name,
+E-Mail-Address, Message) is used to ensure a better problem solving process and are stored until
+revocation and are deleted after 10 years (except there are other valid lawfully retention periods).
 
 No other personal data (photos, videos, etc.) are sent!
 
 The name and the e-mail address are optional, but useful for inquiries/feedback.
 
-You can always contact us via e-mail (privacy-duck@outlook.com) about your saved data and request a copy, cancellation or
-rectification. In addition, you have the right to contact the data protection authority responsible for you (for example your
-national data protection officer).
+You can always contact us via e-mail (privacy-duck@outlook.com) about your saved data and request a copy,
+cancellation or rectification. In addition, you have the right to contact the data protection authority
+responsible for you (for example your national data protection officer).
 ```
 
 ## Issues
