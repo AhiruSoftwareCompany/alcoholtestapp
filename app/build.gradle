@@ -3,10 +3,12 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 27
     buildToolsVersion '27.0.3'
+
+
     defaultConfig {
         applicationId "de.klaushackner.alkomat3000"
-        versionCode 8
-        versionName "1.8"
+        versionCode 9
+        versionName "1.9"
         targetSdkVersion 25
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }

@@ -14,6 +14,8 @@ import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Iterator;
+
 
 public class SendFeedback extends AppCompatActivity {
     private EditText name;
@@ -65,7 +67,7 @@ public class SendFeedback extends AppCompatActivity {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return toSend;
+        return shrinkJSON(toSend);
     }
 
     private void sendMessage() {
@@ -86,15 +88,65 @@ public class SendFeedback extends AppCompatActivity {
         dialog.setContentView(R.layout.dialog_show_feedback_trace);
         dialog.setCancelable(true);
         TextView text = dialog.findViewById(R.id.text);
-        text.setText(String.format("%s\n%s", getToSendObject().toString(), getResources().getString(R.string.and_your_IP_Adress)));
+        text.setText(String.format("%s\n%s", formatJSON(getToSendObject()), getResources().getString(R.string.and_your_IP_Adress)))
+        ;
         dialog.show();
+    }
+
+    /**
+     * Removes empty entries in a JSONObject
+     */
+    public JSONObject shrinkJSON(JSONObject toShrink) {
+        try {
+            JSONObject s = new JSONObject(toShrink.toString());
+            Iterator<String> i = toShrink.keys();
+
+            while (i.hasNext()) {
+                String n = i.next();
+                if (s.get(n).toString().isEmpty()) {
+                    s.remove(n);
+                }
+            }
+            return s;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return toShrink;
+    }
+
+    /**
+     * Returns every value (including nested JSONObjects) in a human-readable version
+     */
+    public String formatJSON(JSONObject toFormat) {
+        String formatted = "";
+        try {
+            JSONObject s = new JSONObject(toFormat.toString());
+            Iterator<String> i = toFormat.keys();
+
+            while (i.hasNext()) {
+                String n = i.next();
+
+                //Is the current object a String or a JSONObject?
+                if (s.get(n).getClass().equals(JSONObject.class)) {
+                    //recursively formatting every JSONObject
+                    formatted = String.format("%s%s", formatted, formatJSON(s.getJSONObject(n)));
+                } else {
+                    formatted = String.format("%s%s: %s\n", formatted, n, s.get(n));
+                }
+            }
+
+            return formatted;
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return toFormat.toString();
     }
 
     public JSONObject getDeviceInfo() {
         JSONObject deviceInfo = new JSONObject();
         try {
             deviceInfo.put("OsVer", System.getProperty("os.version") + "(" + Build.VERSION.INCREMENTAL + ")");
-            deviceInfo.put("OsApiLvl", android.os.Build.VERSION.SDK_INT);
+            deviceInfo.put("OsApiLvl", android.os.Build.VERSION.SDK_INT + "");
             deviceInfo.put("Device", android.os.Build.DEVICE + " (" + Build.MANUFACTURER + ", " + Build.MODEL + ")");
             deviceInfo.put("Model", android.os.Build.MODEL + " (" + android.os.Build.PRODUCT + ")");
         } catch (JSONException e) {
