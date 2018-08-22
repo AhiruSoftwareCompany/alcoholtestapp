@@ -26,11 +26,11 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            URL url = new URL("https://alkomat.duckdns.org:9444");
+            URL url = new URL("https://alkomat.duckdns.org/post");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
-            conn.setConnectTimeout(5000);
+            conn.setConnectTimeout(10000);
             conn.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
             conn.setRequestProperty("User-Agent", sf.getResources().getString(R.string.app_name) + "/" + Build.VERSION.INCREMENTAL);
 
