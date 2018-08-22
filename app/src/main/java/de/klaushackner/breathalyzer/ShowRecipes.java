@@ -145,6 +145,7 @@ public class ShowRecipes extends AppCompatActivity {
     public void addCustomMixture() {
         final Dialog dialog = new Dialog(this);
         dialog.setContentView(R.layout.dialog_create_recipe);
+
 /*
         dialog.setTitle(R.string.add_Mixture);
         final TextView title = (TextView) dialog.findViewById(android.R.id.title);
