@@ -13,7 +13,6 @@ import (
 	"os"
 	"strings"
 	"time"
-
 	"gopkg.in/gomail.v1"
 )
 
@@ -53,19 +52,29 @@ func main() {
 
 type Device struct {
 	OSVer    string
-	OSAPILvl int
+	OSAPILvl string
 	Device   string
 	Model    string
 }
 
+type AppInfo struct {
+	FriendlyName   string
+	VersionCode    string
+}
+
 func (d Device) String() string {
-	return fmt.Sprintf("\tOS version: %s (API %d)\n\tDevice: %s\n\tModel: %s\n",
+	return fmt.Sprintf("\tOS version: %s (API %s)\n\tDevice: %s\n\tModel: %s\n",
 		d.OSVer, d.OSAPILvl, d.Device, d.Model)
+}
+
+func (a AppInfo) String() string {
+	return fmt.Sprintf("\tApp Friendly Name: %s (Version Code %s)",
+		a.FriendlyName, a.VersionCode)
 }
 
 type Feedback struct {
 	Device     Device
-	AppInfo    string
+	AppInfo    AppInfo
 	LogTrace   string
 	Sender     string
 	SenderMail string
@@ -122,7 +131,7 @@ func sendStdMail(subject, content string) error {
 	body := strings.Replace(content, "\n", "\r\n", -1)
 	msg := []byte(header + "\r\n" + body)
 
-	return smtp.SendMail(SMTPSrv+":"+Port, auth, FromAddr, to, msg)
+	return smtp.SendMail(SMTPSrv+":"+SMTPPort, auth, FromAddr, to, msg)
 }
 
 // sendLoginMail uses the LOGIN auth implemented using gomail instead.

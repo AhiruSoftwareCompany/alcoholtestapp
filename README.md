@@ -92,6 +92,12 @@ The feedback server is used by the feedback feature in the app, which allows use
 send a message and general device diagnostics to the developer. It is an HTTPS server
 written in [Go](https://golang.org/). It takes messages in JSON (see [below](https://github.com/dieechtenilente/alcoholtestapp#feedback) for the format) and forwards them to the specified e-mail address.
 
+First, install the `gomail` package to compile the feedback server.
+
+```
+go get gopkg.in/gomail.v1
+```
+
 You need a new file called `config.go` in the `feedback` directory. The file is .gitignored
 since it holds the password for the feedback server's mail account.
 
