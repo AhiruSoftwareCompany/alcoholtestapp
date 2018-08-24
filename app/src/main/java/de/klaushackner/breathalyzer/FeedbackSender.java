@@ -2,6 +2,7 @@ package de.klaushackner.breathalyzer;
 
 import android.os.AsyncTask;
 import android.os.Build;
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -26,7 +27,9 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
     @Override
     protected String doInBackground(String... params) {
         try {
-            URL url = new URL("https://alkomat.duckdns.org/post");
+            //URL url = new URL("https://alkomat.duckdns.org/post");
+            URL url = new URL("https://alkomat.duckdns.org:9444");
+
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
 
             conn.setRequestMethod("POST");
@@ -36,6 +39,8 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
 
             OutputStream os = conn.getOutputStream();
             OutputStreamWriter osw = new OutputStreamWriter(os, "UTF-8");
+            Log.i("FeedbackSender", "Feedback to send: " + toSend);
+            Log.i("FeedbackSender", "User-Agent: " + sf.getResources().getString(R.string.app_name) + "/" + Build.VERSION.INCREMENTAL);
             osw.write(toSend.toString());
             osw.flush();
             osw.close();
@@ -66,7 +71,7 @@ public class FeedbackSender extends AsyncTask<String, Void, String> {
                 sf.onResult(1);
                 break;
             default:
-                Toast.makeText(sf, String.format("%d - %d", rc, sf.getResources().getString(R.string.error)), Toast.LENGTH_SHORT).show();
+                Toast.makeText(sf, String.format("%s - %s", rc, sf.getResources().getString(R.string.error)), Toast.LENGTH_SHORT).show();
                 sf.onResult(1);
                 break;
         }

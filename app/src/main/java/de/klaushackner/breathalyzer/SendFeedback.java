@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
@@ -46,7 +47,6 @@ public class SendFeedback extends AppCompatActivity {
                 sendMessage();
             }
         });
-
         showFeedback.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -59,7 +59,7 @@ public class SendFeedback extends AppCompatActivity {
         JSONObject toSend = new JSONObject();
         try {
             toSend.put("Device", getDeviceInfo());
-            toSend.put("AppInfo", "Friendly name: " + BuildConfig.VERSION_NAME + ", version code: " + BuildConfig.VERSION_CODE);
+            toSend.put("AppInfo", getAppInfo());
             toSend.put("LogTrace", ""); //TODO
             toSend.put("Sender", name.getText());
             toSend.put("SenderMail", email.getText());
@@ -155,6 +155,17 @@ public class SendFeedback extends AppCompatActivity {
         return deviceInfo;
     }
 
+    public JSONObject getAppInfo() {
+        JSONObject appInfo = new JSONObject();
+        try {
+            appInfo.put("FriendlyName", BuildConfig.VERSION_NAME + "");
+            appInfo.put("VersionCode", BuildConfig.VERSION_CODE + "");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return appInfo;
+    }
+
     public boolean isValidRequest() {
         if (message.getText().length() > 3) { //Should be enough for now
             if (email.getText().length() > 0) {
@@ -171,6 +182,7 @@ public class SendFeedback extends AppCompatActivity {
 
     public void onResult(int code) {
         dialog.dismiss();
+        Log.i("SendFeedback", "Result: " + code);
         sendFeedback.setEnabled(true);
         switch (code) {
             case 0:
