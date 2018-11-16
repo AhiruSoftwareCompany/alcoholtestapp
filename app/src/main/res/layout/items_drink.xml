@@ -23,7 +23,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/no_information"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TableLayout
             android:layout_width="match_parent"
@@ -42,13 +42,14 @@
                     android:paddingStart="20dp">
 
                     <TextView
+                        android:id="@+id/alcoholLevel"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:gravity="center"
                         android:text="@string/bacNoChar"
                         android:textAlignment="center"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/bac"
@@ -58,7 +59,7 @@
                         android:gravity="center"
                         android:text="@string/no_information"
                         android:textAlignment="center"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -69,12 +70,13 @@
                     android:paddingStart="20dp">
 
                     <TextView
+                        android:id="@+id/elap"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/time_ago"
                         android:textAlignment="center"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/takingTime"
@@ -83,7 +85,7 @@
                         android:gravity="center"
                         android:text="@string/no_information"
                         android:textAlignment="center"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                 </LinearLayout>
 
@@ -95,12 +97,13 @@
                     android:paddingStart="20dp">
 
                     <TextView
+                        android:id="@+id/left"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center"
                         android:text="@string/time_left"
                         android:textAlignment="center"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
 
                     <TextView
                         android:id="@+id/expireTime"
@@ -109,7 +112,7 @@
                         android:gravity="center"
                         android:text="@string/no_information"
                         android:textAlignment="center"
-                        android:textSize="20sp" />
+                        android:textSize="18sp" />
                 </LinearLayout>
 
             </TableRow>

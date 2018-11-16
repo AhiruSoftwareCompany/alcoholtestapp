@@ -23,37 +23,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/name"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/age"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/height"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/weight"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/sex"
-                android:textSize="24sp" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/bac"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
         </LinearLayout>
 
@@ -61,7 +43,7 @@
             class="android.support.v4.widget.Space"
             android:layout_width="25dp"
             android:layout_height="wrap_content"
-            android:textSize="24sp" />
+            android:textSize="18sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -73,42 +55,87 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/age"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/height"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <view
+            class="android.support.v4.widget.Space"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/sex"
+                android:textSize="18sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bac"
+                android:textSize="18sp" />
+
+        </LinearLayout>
+
+        <view
+            class="android.support.v4.widget.Space"
+            android:layout_width="25dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/weight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/sex"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
 
             <TextView
                 android:id="@+id/bac"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="24sp" />
+                android:textSize="18sp" />
         </LinearLayout>
 
     </LinearLayout>
@@ -129,7 +156,7 @@
             android:layout_height="fill_parent"
             android:gravity="center|start"
             android:text="@string/consumed_drinks"
-            android:textSize="18sp" />
+            android:textSize="16sp" />
 
         <Space
             android:layout_width="0dp"
@@ -148,7 +175,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:elevation="0dp"
-            android:text="@string/add_drink_button" />
+            android:text="@string/add_drink_button"
+            android:textSize="12sp" />
 
     </LinearLayout>
 
