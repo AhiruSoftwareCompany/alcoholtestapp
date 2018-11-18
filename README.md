@@ -173,6 +173,21 @@ An array with every user currently existing including its drinks (updated on sta
         ]
       }
     ]
+    depletedDrinks: [
+      {
+        name:String,
+        description:String,
+        consumePoint:long,
+        mixtureImage:String,
+        content: [
+          {
+            name:String,
+            alcContent:double,
+            amount:double
+          }
+        ]
+      }
+    ]
   }
 ]
 ```

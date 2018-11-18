@@ -27,6 +27,8 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -84,15 +86,20 @@ public class MainActivity extends AppCompatActivity {
                 builder.setTitle(R.string.dialog_drink_question);
                 builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Drink d = currentUser.drinks.get(pos);
-                        currentUser.removeDrink(d.consumePoint);
-                        currentUser.saveUser(c);
+                        // if the drink is depleted, currentUser.depletedDrinks.get(pos) would be out of bounce
+                        // because depleted drinks are stored in a seperate array.
+                        if (pos >= currentUser.drinks.size()) {
+                            currentUser.removeDrink(currentUser.depletedDrinks.get(pos - currentUser.drinks.size()));
+                            currentUser.saveUser(c);
+                        } else {
+                            currentUser.removeDrink(currentUser.drinks.get(pos));
+                            currentUser.saveUser(c);
+                        }
                         updateGui();
                     }
                 });
                 builder.setNeutralButton(R.string.add_as_mixture, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        Drink d = currentUser.drinks.get(pos);
                         //TODO Handle mixture saving
 
                     }
@@ -182,17 +189,19 @@ public class MainActivity extends AppCompatActivity {
         dA.clear();
         dA.notifyDataSetChanged();
         ArrayList<Drink> drinks = currentUser.drinks;
+        ArrayList<Drink> depletedDrinks = currentUser.depletedDrinks;
         double totalBac = 0;
 
-        //removing old drinks
         if (!drinks.isEmpty()) {
             /*
             If you have 2 items in your list and remove the first one, index 1 is gone and the for each loop throws an
             error. Therefore I will remove all "old drinks" after looping through the list
+            In addition to that depleted Drinks
             */
             ArrayList<Drink> toRemove = new ArrayList<>();
             for (Drink d : drinks) {
-                if (d.consumePoint + d.depletingDuration <= System.currentTimeMillis()) {
+                if (d.getConsumePoint() + d.getDepletingDuration() <= System.currentTimeMillis()) {
+                    depletedDrinks.add(d);
                     toRemove.add(d);
                 }
             }
@@ -200,11 +209,13 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!drinks.isEmpty()) {
-            long totalDepletionDuration = drinks.get(0).consumePoint; //starting with the consume point of the first trink
+            // starting with the consume point of the first drink
+            long totalDepletionDuration = drinks.get(0).getConsumePoint();
             boolean firstDrink = false;
 
             for (Drink d : drinks) {
-                totalDepletionDuration = totalDepletionDuration + d.depletingDuration; //adding depletion duration of current drink to the total depletion duration
+                // adding depletion duration of current drink to the total depletion duration
+                totalDepletionDuration = totalDepletionDuration + d.getDepletingDuration();
 
                 if (firstDrink) {
                     totalBac = totalBac + d.getBac();
@@ -213,15 +224,52 @@ public class MainActivity extends AppCompatActivity {
                     firstDrink = true;
                 }
 
-                d.setDepletionPoint(totalDepletionDuration); //setting the depletion point to the consumePoint from the first drink + all n drink's depletionDurations
+                // setting the depletion point to the consumePoint from the first drink + all n drink's depletionDurations
+                d.setDepletionPoint(totalDepletionDuration);
+
                 dA.add(d);
+
             }
+
+        }
+
+        // sorting the depleted drinks from recently to long ago
+        // Since Collections are not yet supported in Android we have to go this way
+        ArrayList<Drink> dD = depletedDrinks;
+        depletedDrinks = new ArrayList<>();
+        for (int i = dD.size() - 1; i >= 0; i--) {
+            depletedDrinks.add(dD.get(i));
+        }
+
+        for (Drink d : dD) {
+            dA.add(d);
         }
 
         //Updating the bac of the current user after calculating the total bac
         //At startup it is negative (for some reason)
         if (totalBac >= 0) {
             tvBac.setText(String.format("%s %s", format.format(totalBac), getResources().getString(R.string.per_mille)));
+        }
+
+        //Saving user in case there was a depleted drink removed
+        currentUser.saveUser(this);
+    }
+
+    private void removeDepletedDrinks() {
+        dA.clear();
+        dA.notifyDataSetChanged();
+        ArrayList<Drink> drinks = currentUser.drinks;
+
+        //removing old drinks
+        if (!drinks.isEmpty()) {
+
+            ArrayList<Drink> toRemove = new ArrayList<>();
+            for (Drink d : drinks) {
+                if (d.getConsumePoint() + d.getDepletingDuration() <= System.currentTimeMillis()) {
+                    //toRemove.add(d);
+                }
+            }
+            drinks.removeAll(toRemove);
         }
 
         //Saving user in case there was a depleted drink removed
@@ -683,7 +731,8 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(i);
                 break;
             case R.id.sendFeedback:
-                startActivity(new Intent(this, SendFeedback.class));
+                //startActivity(new Intent(this, SendFeedback.class));
+                Toast.makeText(this, "currently unavailable", Toast.LENGTH_SHORT);
                 break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);

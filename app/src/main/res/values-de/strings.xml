@@ -8,7 +8,7 @@
     <string name="create_new_user">Neuen Benutzer erstellen</string>
     <string name="edit_existing_user">Benutzer bearbeiten</string>
     <string name="you_selected">Ausgewählt:</string>
-    <string name="consumed_drinks">Alkoholische Getränke\nintus</string>
+    <string name="consumed_drinks">Alkoholische Getränke intus</string>
     <string name="add_drink">Ein Getränk hinzufügen …</string>
     <string name="pick_user">Wähle einen Benutzer</string>
     <string name="about">Über diese App</string>
@@ -66,4 +66,6 @@
     <string name="add">Hinzufügen</string>
     <string name="show_feedback_trace">Zu sendende Informationen anzeigen</string>
     <string name="and_your_IP_Adress">Und deine IP-Adresse.</string>
+    <string name="drinking_beginning">"Trinkbeginn: "</string>
+    <string name="depleted_since">"Abgebaut seit: "</string>
 </resources>

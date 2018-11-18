@@ -90,7 +90,7 @@ public class EditUser extends AppCompatActivity {
         int height = Integer.parseInt("0" + tvHeight.getText());
 
         if (User.isValidUser(name, age, height, weight)) {
-            User newUser = new User(name, male.isChecked(), age, weight, height, u.created, u.drinks);
+            User newUser = new User(name, male.isChecked(), age, weight, height, u.created, u.drinks, u.depletedDrinks);
             newUser.saveUser(this);
             return true;
         } else {

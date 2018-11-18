@@ -19,8 +19,9 @@ public class User {
     protected int height; //cm
     protected long created;
     protected ArrayList<Drink> drinks;
+    protected ArrayList<Drink> depletedDrinks;
 
-    public User(String name, boolean isMale, int age, int weight, int height, long created, ArrayList<Drink> drinks) {
+    public User(String name, boolean isMale, int age, int weight, int height, long created, ArrayList<Drink> drinks, ArrayList<Drink> depletedDrinks) {
         this.name = name;
         this.isMale = isMale;
         this.age = age;
@@ -28,6 +29,7 @@ public class User {
         this.height = height;
         this.created = created;
         this.drinks = drinks;
+        this.depletedDrinks = depletedDrinks;
     }
 
     //creating a new User
@@ -39,6 +41,7 @@ public class User {
         this.height = height;
         this.created = System.currentTimeMillis();
         this.drinks = new ArrayList<Drink>();
+        this.depletedDrinks = new ArrayList<Drink>();
     }
 
     public User(JSONObject user) {
@@ -55,6 +58,19 @@ public class User {
 
             for (int i = 0; i < drinksJSON.length(); i++) {
                 drinks.add(new Drink(drinksJSON.getJSONObject(i), this));
+            }
+
+            System.out.println(user.getJSONArray("depletedDrinks"));
+            JSONArray depletedDrinksJSON = user.getJSONArray("depletedDrinks");
+            // Converting from Alkomat 3000 v1.9 and older
+            if (depletedDrinksJSON == null) {
+                depletedDrinksJSON = new JSONArray();
+            } else {
+                depletedDrinks = new ArrayList<Drink>();
+            }
+
+            for (int i = 0; i < depletedDrinksJSON.length(); i++) {
+                depletedDrinks.add(new Drink(depletedDrinksJSON.getJSONObject(i), this));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -79,6 +95,17 @@ public class User {
 
             user.put("drinks", drinks);
 
+
+            JSONArray depletedDrinks = new JSONArray();
+            // Converting from Alkomat 3000 v1.9 and older
+            if (this.depletedDrinks != null) {
+                for (Drink d : this.depletedDrinks) {
+                    depletedDrinks.put(d.toJSON());
+                }
+            }
+
+            user.put("depletedDrinks", depletedDrinks);
+
             return user;
 
         } catch (JSONException e) {
@@ -98,12 +125,22 @@ public class User {
 
     public boolean removeDrink(long consumePoint) {
         for (Drink d : drinks) {
-            if (d.consumePoint == consumePoint) {
+            if (d.getConsumePoint() == consumePoint) {
                 drinks.remove(d);
                 return true;
             }
         }
+        for (Drink d : depletedDrinks) {
+            if (d.getConsumePoint() == consumePoint) {
+                depletedDrinks.remove(d);
+                return true;
+            }
+        }
         return false;
+    }
+
+    public boolean removeDrink(Drink d) {
+        return removeDrink(d.getConsumePoint());
     }
 
     /**

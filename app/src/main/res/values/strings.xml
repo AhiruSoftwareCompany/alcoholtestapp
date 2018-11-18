@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Alkomat 3000</string>
-    <string name="about_text" translatable="false">© 2018 DieEchteNilente\n\nAlkomat 3000 for Android\n\nSource: https://github.com/dieechtenilente/alcoholtestapp\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
+    <string name="about_text" translatable="false">© 2018 AhiruSoftware\n\nAlkomat 3000 for Android\n\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="per_mille" translatable="false">‰</string>
     <string name="ingredients">Ingredients:</string>
     <string name="female">Female</string>
@@ -52,7 +52,7 @@
     <string name="edit_current_user">Edit current user</string>
     <string name="remove_current_user">Remove current user</string>
     <string name="percentage">Alcohol content (%)</string>
-    <string name="consumed_drinks">Drank alcohol-\ncontaining drinks</string>
+    <string name="consumed_drinks">Drank alcohol containing drinks</string>
     <string name="switch_mixtureimage">Select different image</string>
     <string name="you_selected">Selected:</string>
     <string name="edit_existing_user">Edit user</string>
@@ -70,4 +70,6 @@
     <string name="add">Add</string>
     <string name="show_feedback_trace">Show information to send</string>
     <string name="and_your_IP_Adress">And your IP-Address.</string>
+    <string name="drinking_beginning">Drinking beginning:</string>
+    <string name="depleted_since">Depleted since:</string>
 </resources>

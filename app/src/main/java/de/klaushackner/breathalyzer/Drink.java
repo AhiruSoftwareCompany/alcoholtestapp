@@ -1,5 +1,7 @@
 package de.klaushackner.breathalyzer;
 
+import android.support.annotation.NonNull;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,17 +12,16 @@ import de.klaushackner.breathalyzer.model.Content;
  * A consumed mixture bound to user
  */
 
-public class Drink {
-    protected String name;
-    protected String description;
-    protected long consumePoint;
-    protected long depletionPoint; //calculated by MainActivity.updateDrinkList()
-    protected Content[] content;
-    protected MixtureImage mixtureImage;
-
-    protected long depletingDuration;
+public class Drink implements Comparable<Drink> {
+    private String name;
+    private String description;
+    private long consumePoint;
+    private long depletionPoint; //calculated by MainActivity.updateDrinkList()
+    private Content[] content;
+    private MixtureImage mixtureImage;
+    private long depletingDuration;
     private User consumer;
-    public static long depletingFactor = 1; //0.1 per unit
+    public static long DEPLETINGFACTOR = 1; //0.1 per unit
 
     public Drink(String name, String description, long consumePoint, Content[] content, MixtureImage mixtureImage, User consumer) {
         this.name = name;
@@ -82,7 +83,7 @@ public class Drink {
     }
 
     public long getDepletingDuration() {
-        return Math.round(getBac() * Drink.depletingFactor * 36000000); //deplete 0.1 per-mill alcohol per hour
+        return Math.round(getBac() * Drink.DEPLETINGFACTOR * 36000000); //deplete 0.1 per-mill alcohol per hour
     }
 
     public double getAlcContent() {
@@ -134,5 +135,40 @@ public class Drink {
         return bac * relativeFactor;
     }
 
+    public String getName() {
+        return name;
+    }
 
+    public String getDescription() {
+        return description;
+    }
+
+    public long getConsumePoint() {
+        return consumePoint;
+    }
+
+    public long getDepletionPoint() {
+        return depletionPoint;
+    }
+
+    public Content[] getContent() {
+        return content;
+    }
+
+    public MixtureImage getMixtureImage() {
+        return mixtureImage;
+    }
+
+    // From JavaDoc: a negative integer, zero, or a positive integer as this object
+    // is less than, equal to, or greater than the specified object.
+    @Override
+    public int compareTo(@NonNull Drink o) {
+        if (o.getConsumePoint() == this.getConsumePoint()) {
+            return 0;
+        }
+        if (o.getConsumePoint() > this.getConsumePoint()) {
+            return 1;
+        }
+        return -1;
+    }
 }
