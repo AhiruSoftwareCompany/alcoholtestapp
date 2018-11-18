@@ -3,10 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:layout_marginLeft="@dimen/activity_horizontal_margin"
-    android:layout_marginRight="@dimen/activity_horizontal_margin"
     android:layout_marginTop="@dimen/activity_vertical_margin"
+    android:layout_marginRight="@dimen/activity_horizontal_margin"
+    android:layout_marginBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical">
 
     <LinearLayout
@@ -106,7 +106,7 @@
 
         <view
             class="android.support.v4.widget.Space"
-            android:layout_width="25dp"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:textSize="18sp" />
@@ -149,32 +149,37 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:gravity="fill_horizontal"
+        android:orientation="horizontal"
+        android:weightSum="2.5">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:layout_weight="0.5"
             android:gravity="center|start"
             android:text="@string/consumed_drinks"
             android:textSize="16sp" />
 
-        <Space
+        <View
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_weight="1" />
 
         <ImageButton
             android:id="@+id/refresh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="0dp"
+            android:layout_gravity="center|end"
+            android:layout_weight="1"
             app:srcCompat="@android:drawable/ic_popup_sync" />
 
         <Button
             android:id="@+id/add_drink_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:elevation="0dp"
+            android:layout_gravity="center|end"
+            android:layout_weight="1"
             android:text="@string/add_drink_button"
             android:textSize="12sp" />
 
