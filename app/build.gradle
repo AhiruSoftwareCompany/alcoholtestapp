@@ -7,7 +7,7 @@ android {
 
     defaultConfig {
         applicationId "de.klaushackner.alkomat3000"
-        versionCode 10
+        versionCode 11
         versionName "2"
         targetSdkVersion 27
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
