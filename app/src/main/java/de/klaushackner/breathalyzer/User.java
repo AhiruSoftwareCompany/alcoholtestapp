@@ -40,8 +40,8 @@ public class User {
         this.weight = weight;
         this.height = height;
         this.created = System.currentTimeMillis();
-        this.drinks = new ArrayList<Drink>();
-        this.depletedDrinks = new ArrayList<Drink>();
+        this.drinks = new ArrayList<>();
+        this.depletedDrinks = new ArrayList<>();
     }
 
     public User(JSONObject user) {
@@ -54,7 +54,7 @@ public class User {
             this.created = user.getLong("created");
 
             JSONArray drinksJSON = user.getJSONArray("drinks");
-            drinks = new ArrayList<Drink>();
+            drinks = new ArrayList<>();
 
             for (int i = 0; i < drinksJSON.length(); i++) {
                 drinks.add(new Drink(drinksJSON.getJSONObject(i), this));
@@ -66,7 +66,7 @@ public class User {
             if (depletedDrinksJSON == null) {
                 depletedDrinksJSON = new JSONArray();
             } else {
-                depletedDrinks = new ArrayList<Drink>();
+                depletedDrinks = new ArrayList<>();
             }
 
             for (int i = 0; i < depletedDrinksJSON.length(); i++) {

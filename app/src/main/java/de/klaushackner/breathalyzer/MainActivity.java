@@ -192,6 +192,11 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<Drink> depletedDrinks = currentUser.depletedDrinks;
         double totalBac = 0;
 
+        // Converting from Alkomat 3000 v1.9 and older
+        if (depletedDrinks == null) {
+            depletedDrinks = new ArrayList<>();
+        }
+
         if (!drinks.isEmpty()) {
             /*
             If you have 2 items in your list and remove the first one, index 1 is gone and the for each loop throws an
