@@ -16,8 +16,8 @@
     <string name="percentage">Alkoholgehalt (%)</string>
     <string name="amount">Menge (ml)</string>
     <string name="sex">Geschlecht</string>
-    <string name="female">Weiblich</string>
-    <string name="male">Männlich</string>
+    <string name="female">w</string>
+    <string name="male">m</string>
     <string name="age">Alter</string>
     <string name="years">Jahre</string>
     <string name="weight">Körpergewicht</string>

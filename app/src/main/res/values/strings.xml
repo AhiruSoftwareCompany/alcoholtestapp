@@ -4,7 +4,7 @@
     <string name="about_text" translatable="false">© 2018 AhiruSoftware\n\nAlkomat 3000 for Android\n\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
     <string name="per_mille" translatable="false">‰</string>
     <string name="ingredients">Ingredients:</string>
-    <string name="female">Female</string>
+    <string name="female">f</string>
     <string name="pick_user">Pick a user</string>
     <string name="time_left">left</string>
     <string name="time_ago">elap.</string>
@@ -24,7 +24,7 @@
     <string name="send_message">Send message*</string>
     <string name="message">Message</string>
     <string name="amount">Amount (ml)</string>
-    <string name="male">Male</string>
+    <string name="male">m</string>
     <string name="height_with_unit">Height (cm)</string>
     <string name="height">Height</string>
     <string name="weight_with_unit">Weight (kg)</string>

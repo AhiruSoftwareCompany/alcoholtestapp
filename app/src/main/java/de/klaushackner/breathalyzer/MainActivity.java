@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
@@ -17,6 +18,7 @@ import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,8 +29,6 @@ import org.json.JSONObject;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -39,12 +39,9 @@ public class MainActivity extends AppCompatActivity {
     private MainActivity ma;
     private Context c;
     private User currentUser;
-    private TextView tvName;
-    private TextView tvAge;
-    private TextView tvWeight;
-    private TextView tvHeight;
-    private TextView tvSex;
+    private TextView tvNameString;
     private TextView tvBac;
+    private LinearLayout nameLayout;
     private Menu menu;
     private Handler mHandler = new Handler();
     private DrinkAdapter dA;
@@ -59,19 +56,23 @@ public class MainActivity extends AppCompatActivity {
         ma = this;
         format.setDecimalSeparatorAlwaysShown(false);
 
-        tvName = findViewById(R.id.name);
-        tvAge = findViewById(R.id.age);
-        tvWeight = findViewById(R.id.weight);
-        tvHeight = findViewById(R.id.height);
-        tvSex = findViewById(R.id.sex);
         Button btnAddDrink = findViewById(R.id.add_drink_button);
         ListView drinks = findViewById(R.id.drinks);
+        tvNameString = findViewById(R.id.nameString);
         tvBac = findViewById(R.id.bac);
+        nameLayout = findViewById(R.id.nameLayout);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 addDrink();
+            }
+        });
+
+        nameLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Maybe adding a dialog displaying stats about the current user (height, weight, ...)
             }
         });
 
@@ -615,16 +616,15 @@ public class MainActivity extends AppCompatActivity {
      */
     public void updateGui() {
         if (currentUser != null) {
-            tvName.setText(currentUser.name);
-            tvAge.setText(format.format(currentUser.age) + " " + getString(R.string.years));
-            tvWeight.setText(format.format(currentUser.weight) + " kg");
-            tvHeight.setText(format.format(currentUser.height) + " cm");
-
+            String sex;
             if (currentUser.isMale) {
-                tvSex.setText(R.string.male);
+                sex = getResources().getString(R.string.male);
             } else {
-                tvSex.setText(R.string.female);
+                sex = getResources().getString(R.string.female);
             }
+
+            tvNameString.setText(currentUser.name + " (" + currentUser.age + ", " + sex + ")");
+
 
             if (User.getUserCount(c) == 1) {
                 try {
