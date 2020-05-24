@@ -15,7 +15,8 @@ public class FileHandler {
         // Build file name
         //String date = DateFormat.getDateInstance().format(new Date(System.currentTimeMillis()));
         String appName = c.getApplicationInfo().packageName;
-        String filename = String.format("%s", appName);
+        //String filename = String.format("%s.json", appName);
+        String filename = "alcoholtestapp.json";
 
         // Is external storage available?
         if (!Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
