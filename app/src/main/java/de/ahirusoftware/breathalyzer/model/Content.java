@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer.model;
+package de.ahirusoftware.breathalyzer.model;
 
 import org.json.JSONException;
 import org.json.JSONObject;

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="de.klaushackner.breathalyzer">
+    package="de.ahirusoftware.breathalyzer">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -13,7 +13,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="de.klaushackner.breathalyzer.MainActivity"
+            android:name="de.ahirusoftware.breathalyzer.MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -21,16 +21,16 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="de.klaushackner.breathalyzer.CreateUser"
+            android:name="de.ahirusoftware.breathalyzer.CreateUser"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="de.klaushackner.breathalyzer.EditUser"
+            android:name="de.ahirusoftware.breathalyzer.EditUser"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="de.klaushackner.breathalyzer.SendFeedback"
+            android:name="de.ahirusoftware.breathalyzer.SendFeedback"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name="de.klaushackner.breathalyzer.ShowRecipes"
+            android:name="de.ahirusoftware.breathalyzer.ShowRecipes"
             android:screenOrientation="portrait"></activity>
     </application>
 

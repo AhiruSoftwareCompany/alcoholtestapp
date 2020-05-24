@@ -1,10 +1,10 @@
-package de.klaushackner.breathalyzer;
+package de.ahirusoftware.breathalyzer;
 
 import android.content.Context;
 
 import java.util.ArrayList;
 
-import de.klaushackner.breathalyzer.model.Content;
+import de.ahirusoftware.breathalyzer.model.Content;
 
 public class Mixture {
     protected String name;

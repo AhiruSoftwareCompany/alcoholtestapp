@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer;
+package de.ahirusoftware.breathalyzer;
 
 import androidx.annotation.NonNull;
 
@@ -6,7 +6,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import de.klaushackner.breathalyzer.model.Content;
+import de.ahirusoftware.breathalyzer.model.Content;
 
 /**
  * A consumed mixture bound to user

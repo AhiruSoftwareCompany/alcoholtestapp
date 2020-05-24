@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer;
+package de.ahirusoftware.breathalyzer;
 
 public enum MixtureImage {
     beer("beer"),

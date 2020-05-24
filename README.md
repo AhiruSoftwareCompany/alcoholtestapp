@@ -143,7 +143,7 @@ const (
 
 ### Data saved by the app on your phone
 
-Path: `/data/data/de.klaushackner.breathalyzer/shared_prefs/data.xml`
+Path: `/data/data/ahirusoftware.breathalyzer/shared_prefs/data.xml`
 
 #### Users-Array
 

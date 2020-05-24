@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer;
+package de.ahirusoftware.breathalyzer;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -18,7 +18,7 @@ import android.widget.Toast;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 
-import de.klaushackner.breathalyzer.model.Content;
+import de.ahirusoftware.breathalyzer.model.Content;
 
 public class ShowRecipes extends AppCompatActivity {
     private User currentUser;
