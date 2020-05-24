@@ -33,7 +33,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "de.ahirusoftware.alcoholtestapp"
+        applicationId "de.ahirusoftware.alkomat3000"
         minSdkVersion 19
         targetSdkVersion 29
         versionCode versionBuild
