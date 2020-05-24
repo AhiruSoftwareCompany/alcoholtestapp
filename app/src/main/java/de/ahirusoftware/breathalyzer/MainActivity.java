@@ -1,15 +1,20 @@
 package de.ahirusoftware.breathalyzer;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+
 import androidx.appcompat.app.AppCompatActivity;
+
+import android.provider.DocumentsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,6 +32,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Set;
@@ -50,17 +61,18 @@ public class MainActivity extends AppCompatActivity {
     private DrinkAdapter dA;
     private TimerTask timerTask; //updates the gui
 
+    private static final int PICK_BACKUP_FILE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE,READ_EXTERNAL_STORAGE}, 1);
-        } else{
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, 1);
+        } else {
             // do something for phones running an SDK before lollipop
         }
-
 
         c = getApplicationContext();
         ma = this;
@@ -152,6 +164,68 @@ public class MainActivity extends AppCompatActivity {
             }
         }*/
     }
+
+
+    public void loadBackup(String path) {
+
+        // File file = new File(path);
+        File file = new File("/storage/emulated/0/Download/alcoholtestapp.json");
+        try {
+            FileInputStream fis = new FileInputStream(file);
+            InputStreamReader isr = new InputStreamReader(fis);
+            BufferedReader bufferedReader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String fileContent = null;
+            String backup = "";
+
+            try {
+                while ((fileContent = bufferedReader.readLine()) != null) {
+                    sb.append(fileContent);
+                    backup = fileContent;
+                }
+                //Save loaded file
+                SharedPreferences sharedPref = c.getSharedPreferences("data", 0);
+                SharedPreferences.Editor editor = sharedPref.edit();
+
+                try {
+                    JSONArray users = new JSONArray(backup);
+
+                    for (int i = 0; i < users.length(); i++) {
+                        User user = new User(new JSONObject(users.get(i).toString()));
+                        users.put(i, user.toJSON());
+                        System.out.println("loadBackup: " + users.toString());
+                        editor.putString("users", users.toString());
+                        editor.commit();
+                        switchUser(false);
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode,
+                                 Intent resultData) {
+        super.onActivityResult(requestCode, resultCode, resultData);
+        loadBackup("");
+        if ((requestCode == PICK_BACKUP_FILE) && (resultCode == Activity.RESULT_OK)) {
+            Uri uri = null;
+            if (resultData != null) {
+                uri = resultData.getData();
+                //call loadBackup with working uri
+            }
+        }
+    }
+
 
     protected boolean isStartedByLauncher() {
         if (getIntent() == null) {
@@ -295,12 +369,13 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Creates a user and opens select dialog afterwards
+     *
      * @param initialUser Whether the user to be created is the first/only one
      */
     private void createUser(boolean initialUser) {
         stopTimer();
         Intent createUserIntent = new Intent(this, CreateUser.class);
-        if(initialUser) {
+        if (initialUser) {
             // Clears task history and prevent user to switch back to MainActivity without any user existing
             createUserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         }
@@ -544,6 +619,8 @@ public class MainActivity extends AppCompatActivity {
         try {
             SharedPreferences sharedPref = getSharedPreferences("data", 0);
             final SharedPreferences.Editor editor = sharedPref.edit();
+            System.out.println("SharedPrefs: " + sharedPref.getAll());
+
 
             //Ist die Users-datenbank leer, wird ein neuer User erstellt
             if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
@@ -757,6 +834,34 @@ public class MainActivity extends AppCompatActivity {
             case R.id.sendFeedback:
                 //startActivity(new Intent(this, SendFeedback.class));
                 Toast.makeText(this, "currently unavailable", Toast.LENGTH_SHORT);
+                break;
+            case R.id.createBackup:
+                // Creates backup of all current users
+                SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                final SharedPreferences.Editor editor = sharedPref.edit();
+                System.out.println("SharedPrefs: " + sharedPref.getAll());
+
+                //Ist die Users-datenbank leer, wird ein neuer User erstellt
+                if (sharedPref.getString("users", "[]").compareTo("[]") != 0) {
+                    final JSONArray users;
+                    try {
+                        users = new JSONArray(sharedPref.getString("users", "[]"));
+                        FileHandler.writeToFile(users.toString(), c);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(this, "No users available!", Toast.LENGTH_SHORT);
+                }
+                break;
+            case R.id.loadBackup:
+                // Opens File Picker Intent and calls onActivityResult afterwards
+                // Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                //  intent.addCategory(Intent.CATEGORY_OPENABLE);
+                //  intent.setType("*/*");
+                //  startActivityForResult(intent, PICK_BACKUP_FILE);
+                // just load the backup from default path
+                loadBackup("");
                 break;
             case R.id.about:
                 final Dialog dialog = new Dialog(this);
