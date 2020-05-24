@@ -72,4 +72,6 @@
     <string name="and_your_IP_Adress">And your IP-Address.</string>
     <string name="drinking_beginning">Drinking beginning:</string>
     <string name="depleted_since">Depleted since:</string>
+    <string name="create_backup">Create Backup</string>
+    <string name="load_backup">Load Backup</string>
 </resources>

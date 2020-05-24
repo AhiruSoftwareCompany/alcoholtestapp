@@ -25,6 +25,14 @@
         android:id="@+id/sendFeedback"
         android:title="@string/send_feedback" />
     <item
+        android:id="@+id/createBackup"
+        android:title="@string/create_backup"
+        breathalyzer:showAsAction="never"/>
+    <item
+        android:id="@+id/loadBackup"
+        android:title="@string/load_backup"
+        breathalyzer:showAsAction="never" />
+    <item
         android:id="@+id/about"
         android:title="@string/about" />
 </menu>

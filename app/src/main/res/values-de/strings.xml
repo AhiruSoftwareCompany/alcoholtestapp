@@ -68,4 +68,6 @@
     <string name="and_your_IP_Adress">Und deine IP-Adresse.</string>
     <string name="drinking_beginning">"Trinkbeginn: "</string>
     <string name="depleted_since">"Abgebaut seit: "</string>
+    <string name="create_backup">Backup erstellen</string>
+    <string name="load_backup">Backup laden</string>
 </resources>
