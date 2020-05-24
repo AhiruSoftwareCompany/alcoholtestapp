@@ -1,4 +1,4 @@
-package de.klaushackner.breathalyzer;
+package de.ahirusoftware.breathalyzer;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
