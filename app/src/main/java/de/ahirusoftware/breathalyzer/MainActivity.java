@@ -284,10 +284,16 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Creates a user and opens select dialog afterwards
+     * @param initialUser Whether the user to be created is the first/only one
      */
-    private void createUser() {
+    private void createUser(boolean initialUser) {
         stopTimer();
-        startActivity(new Intent(this, CreateUser.class));
+        Intent createUserIntent = new Intent(this, CreateUser.class);
+        if(initialUser) {
+            // Clears task history and prevent user to switch back to MainActivity without any user existing
+            createUserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        }
+        startActivity(createUserIntent);
     }
 
     /**
@@ -312,7 +318,8 @@ public class MainActivity extends AppCompatActivity {
                     editor.commit();
 
                     if (User.getUserCount(c) == 0) {
-                        createUser();
+                        //Creates new user
+                        createUser(true);
                         return;
                     }
 
@@ -529,7 +536,8 @@ public class MainActivity extends AppCompatActivity {
 
             //Ist die Users-datenbank leer, wird ein neuer User erstellt
             if (sharedPref.getString("users", "[]").compareTo("[]") == 0) {
-                createUser();
+                // Creates new user
+                createUser(true);
             } else {
                 final JSONArray users = new JSONArray(sharedPref.getString("users", "[]"));
 
@@ -574,7 +582,8 @@ public class MainActivity extends AppCompatActivity {
                 builder.setNeutralButton(R.string.add_user, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        createUser();
+                        // Adds a new user
+                        createUser(false);
                     }
                 });
 
@@ -727,7 +736,7 @@ public class MainActivity extends AppCompatActivity {
                 removeUser(currentUser);
                 break;
             case R.id.newUser:
-                createUser();
+                createUser(false);
                 break;
             case R.id.recipes:
                 Intent i = new Intent(this, ShowRecipes.class);
