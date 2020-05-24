@@ -68,12 +68,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, 1);
-        } else {
-            // do something for phones running an SDK before lollipop
-        }
-
         c = getApplicationContext();
         ma = this;
         format.setDecimalSeparatorAlwaysShown(false);
@@ -165,9 +159,16 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
+    public void requestPermission(){
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, 1);
+        } else {
+            // do something for phones running an SDK before lollipop
+        }
+    }
 
     public void loadBackup(String path) {
-
+        requestPermission();
         // File file = new File(path);
         File file = new File("/storage/emulated/0/Download/alcoholtestapp.json");
         try {
@@ -836,6 +837,7 @@ public class MainActivity extends AppCompatActivity {
                 Toast.makeText(this, "currently unavailable", Toast.LENGTH_SHORT);
                 break;
             case R.id.createBackup:
+                requestPermission();
                 // Creates backup of all current users
                 SharedPreferences sharedPref = getSharedPreferences("data", 0);
                 final SharedPreferences.Editor editor = sharedPref.edit();
