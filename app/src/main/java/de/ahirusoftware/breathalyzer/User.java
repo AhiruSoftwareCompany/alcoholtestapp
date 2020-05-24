@@ -9,6 +9,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class User {
@@ -114,6 +115,11 @@ public class User {
         return null;
     }
 
+    @Override
+    public String toString(){
+        return toJSON().toString();
+    }
+
     public static boolean isValidUser(String name, int age, int height, int weight) {
         Log.i("isValidUser", name + ", " + age + ", " + height + ", " + height);
         return name.length() >= 2 && age > 10 && age < 100 && weight > 30 && weight < 300 && height > 130 && height < 230;
@@ -164,6 +170,7 @@ public class User {
                     users.put(i, this.toJSON());
                     editor.putString("users", users.toString());
                     editor.commit();
+                    FileHandler.writeToFile(toString(), c);
                     return;
                 }
             }
@@ -201,7 +208,5 @@ public class User {
         }
         return null;
     }
-
-
 }
 
