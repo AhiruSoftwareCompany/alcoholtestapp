@@ -116,7 +116,7 @@ public class User {
     }
 
     @Override
-    public String toString(){
+    public String toString() {
         return toJSON().toString();
     }
 
@@ -170,7 +170,6 @@ public class User {
                     users.put(i, this.toJSON());
                     editor.putString("users", users.toString());
                     editor.commit();
-                    FileHandler.writeToFile(toString(), c);
                     return;
                 }
             }
