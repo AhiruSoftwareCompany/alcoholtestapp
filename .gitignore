@@ -29,6 +29,9 @@ settings.gradle
 local.properties
 /gradle/wrapper/gradle-wrapper.jar
 /gradle/wrapper/gradle-wrapper.properties
+/app/googleplay/*
+/app/build/*
+/app/release/*
 
 # Local configuration file (sdk path, etc)
 local.properties
