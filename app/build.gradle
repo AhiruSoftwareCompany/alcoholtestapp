@@ -45,18 +45,10 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
         }
-        debug {
-            applicationIdSuffix ".debug"
-        }
     }
 
     flavorDimensions "version"
     productFlavors {
-
-//        fdroid {
-//            versionNameSuffix "-fdroid"
-//        }
-
         googleplay {
             versionNameSuffix "-googleplay"
         }
