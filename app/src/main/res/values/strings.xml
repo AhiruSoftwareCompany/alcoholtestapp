@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">Alkomat 3000</string>
-    <string name="about_text" translatable="false">© 2018 AhiruSoftware\n\nAlkomat 3000 for Android\n\n\nEmoji artwork provided by EmojiOne.\nhttp://emojione.com/</string>
+    <string name="about_text" translatable="false">© 2020 AhiruSoftware  Alkomat 3000 for Android   Emoji artwork provided by EmojiOne. http://emojione.com/</string>
     <string name="per_mille" translatable="false">‰</string>
     <string name="ingredients">Ingredients:</string>
     <string name="female">f</string>
