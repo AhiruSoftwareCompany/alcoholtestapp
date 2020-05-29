@@ -23,13 +23,13 @@ jobs:
       with:
         java-version: 1.8
 
-    # Run gradle test
-    - name: Run Tests
-      run: ./gradlew test
-
     # Missing sticky bit on ./gradlew
     - name: Make gradlew executable
       run: chmod +x ./gradlew
+
+      # Run gradle test
+    - name: Run Tests
+      run: ./gradlew test
 
     # Build project
     - name: Build Project
