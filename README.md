@@ -1,5 +1,8 @@
 # Alkomat 3000
 
+![Android Build](https://github.com/dieechtenilente/alcoholtestapp/workflows/Android%20Build/badge.svg?branch=master)
+
+
 ![](screenshots/mainscreen.png)
 ![](screenshots/adddrink.png)
 
