@@ -10,8 +10,9 @@ import java.io.FileOutputStream;
 import java.text.DateFormat;
 import java.util.Date;
 
-public class FileHandler {
-    public static void writeToFile(String data, Context c) {
+// package-private class
+class FileHandler {
+    static void writeToFile(String data, Context c) {
         // Build file name
         //String date = DateFormat.getDateInstance().format(new Date(System.currentTimeMillis()));
         String appName = c.getApplicationInfo().packageName;
@@ -42,9 +43,4 @@ public class FileHandler {
             e.printStackTrace();
         }
     }
-
-
-
-
-
 }
