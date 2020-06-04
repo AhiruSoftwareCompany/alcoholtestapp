@@ -1,8 +1,8 @@
 package de.ahirusoftware.breathalyzer;
 
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,6 +19,9 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import static android.Manifest.permission.READ_EXTERNAL_STORAGE;
+import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
 
 public class CreateUser extends AppCompatActivity {
     private TextView tvName;
@@ -86,10 +89,22 @@ public class CreateUser extends AppCompatActivity {
         }
     }
 
+    public void requestPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, 1);
+        } else {
+            // do something for phones running an SDK before lollipop
+        }
+    }
+
     public void loadBackup() {
-        Intent intent = new Intent(CreateUser.this, MainActivity.class);
-        intent.putExtra("loadBackupFromCreateUser", true);
-        startActivity(intent);
+        requestPermission();
+
+        if (FileHandler.loadFromFile(this)) {
+            //Backup successfully loaded, starting MainActivity -> user picker is shown
+            Intent intent = new Intent(CreateUser.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     /**

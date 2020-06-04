@@ -173,49 +173,11 @@ public class MainActivity extends AppCompatActivity {
 
     public void loadBackup(String path) {
         requestPermission();
-        // File file = new File(path);
-        File file = new File("/storage/emulated/0/Download/alcoholtestapp.json");
-        try {
-            FileInputStream fis = new FileInputStream(file);
-            InputStreamReader isr = new InputStreamReader(fis);
-            BufferedReader bufferedReader = new BufferedReader(isr);
-            StringBuilder sb = new StringBuilder();
-            String fileContent = null;
-            String backup = "";
 
-            try {
-                while ((fileContent = bufferedReader.readLine()) != null) {
-                    sb.append(fileContent);
-                    backup = fileContent;
-                }
-                //Save loaded file
-                SharedPreferences sharedPref = c.getSharedPreferences("data", 0);
-                SharedPreferences.Editor editor = sharedPref.edit();
-
-                try {
-                    JSONArray users = new JSONArray(backup);
-
-                    for (int i = 0; i < users.length(); i++) {
-                        User user = new User(new JSONObject(users.get(i).toString()));
-                        users.put(i, user.toJSON());
-                        System.out.println("loadBackup: " + users.toString());
-                        editor.putString("users", users.toString());
-                        editor.commit();
-                    }
-                    switchUser(false);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        if (FileHandler.loadFromFile(c)) {
+            switchUser(false);
         }
-
-
     }
-
 
     @Override
     public void onActivityResult(int requestCode, int resultCode,
@@ -230,7 +192,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-
 
     protected boolean isStartedByLauncher() {
         if (getIntent() == null) {
@@ -507,7 +468,7 @@ public class MainActivity extends AppCompatActivity {
     private void addCustomDrink(int stage, Mixture customMixture) {
         switch (stage) {
             case 0: //0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
-                //Open dialog and wait for result
+//Open dialog and wait for result
                 final Dialog d = new Dialog(this);
                 d.setContentView(R.layout.dialog_add_custom_drink);
 
@@ -660,7 +621,7 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                //Dialog with all users
+//Dialog with all users
                 final ArrayList<User> usersList = new ArrayList<>();
                 for (int i = 0; i < User.getUserCount(c); i++) {
                     usersList.add(new User(new JSONObject(users.get(i).toString())));
