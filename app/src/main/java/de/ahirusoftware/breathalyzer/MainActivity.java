@@ -867,13 +867,17 @@ public class MainActivity extends AppCompatActivity {
                 loadBackup("");
                 break;
             case R.id.about:
-                final Dialog dialog = new Dialog(this);
-                dialog.setContentView(R.layout.dialog_about);
-                dialog.show();
+                showAboutDialog(this);
                 break;
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    public void showAboutDialog(Context c){
+        final Dialog dialog = new Dialog(c);
+        dialog.setContentView(R.layout.dialog_about);
+        dialog.show();
     }
 
     @Override
