@@ -23,7 +23,8 @@
         breathalyzer:showAsAction="ifRoom" />
     <item
         android:id="@+id/sendFeedback"
-        android:title="@string/send_feedback" />
+        android:title="@string/send_feedback"
+        breathalyzer:showAsAction="never"/>
     <item
         android:id="@+id/createBackup"
         android:title="@string/create_backup"
@@ -34,5 +35,6 @@
         breathalyzer:showAsAction="never" />
     <item
         android:id="@+id/about"
-        android:title="@string/about" />
+        android:title="@string/about"
+        breathalyzer:showAsAction="never"/>
 </menu>
