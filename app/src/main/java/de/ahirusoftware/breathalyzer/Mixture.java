@@ -1,6 +1,7 @@
 package de.ahirusoftware.breathalyzer;
 
 import android.content.Context;
+import android.content.res.Resources;
 
 import java.util.ArrayList;
 
@@ -55,26 +56,27 @@ public class Mixture {
 
         //Add new mixtures here!
         ArrayList<Mixture> mixtures = new ArrayList<>();
+        Resources res = c.getResources();
 
-        mixtures.add(new Mixture(c.getResources().getString(R.string.beer), c.getResources().getString(R.string.beer_desc), 500, 0.05, MixtureImage.beer));
-        mixtures.add(new Mixture(c.getResources().getString(R.string.beer), c.getResources().getString(R.string.beer_desc), 1000, 0.05, MixtureImage.morebeer));
+        mixtures.add(new Mixture(res.getString(R.string.beer), c.getResources().getString(R.string.beer_desc), 500, 0.05, MixtureImage.beer));
+        mixtures.add(new Mixture(res.getString(R.string.beer), c.getResources().getString(R.string.beer_desc), 1000, 0.05, MixtureImage.morebeer));
 
-        mixtures.add(new Mixture("Goaß", "", new Content[]{new Content(c.getResources().getString(R.string.beer), 0.05, 250),
-                new Content("Cola", 0, 250), new Content("Kirschlikör", 0.20, 20)}, MixtureImage.goass));
-        mixtures.add(new Mixture("Goaßmaß", "", new Content[]{new Content(c.getResources().getString(R.string.beer), 0.05, 500),
-                new Content("Cola", 0, 500), new Content("Kirschlikör", 0.20, 40)}, MixtureImage.goass));
+        mixtures.add(new Mixture(res.getString(R.string.goass), "", new Content[]{new Content(c.getResources().getString(R.string.beer), 0.05, 250),
+                new Content(res.getString(R.string.cola), 0, 250), new Content(res.getString(R.string.cherryliqueur), 0.20, 20)}, MixtureImage.goass));
+        mixtures.add(new Mixture(res.getString(R.string.goassmass), "", new Content[]{new Content(c.getResources().getString(R.string.beer), 0.05, 500),
+                new Content(res.getString(R.string.cola), 0, 500), new Content(res.getString(R.string.cherryliqueur), 0.20, 40)}, MixtureImage.goass));
 
-        mixtures.add(new Mixture("Pils", "", 330, 0.048, MixtureImage.pils));
-        mixtures.add(new Mixture("Pils", "", 500, 0.048, MixtureImage.pils));
-        mixtures.add(new Mixture("Red Cider", "", 500, 0.04, MixtureImage.redcider));
-        mixtures.add(new Mixture("Wein", "", 200, 0.10, MixtureImage.wine));
-        mixtures.add(new Mixture("Wodka", "", 20, 0.30, MixtureImage.vodka));
-        mixtures.add(new Mixture("Wodka", "", 20, 0.40, MixtureImage.vodka));
-        mixtures.add(new Mixture("Irish Flag", "", new Content[]{new Content("Baileys Irish Creme", 0.17, 20),
-                new Content("Creme de Menthe", 0.24, 20), new Content("Irish whiskey", 0.40, 20)}, MixtureImage.irishflag));
-        mixtures.add(new Mixture("Whisky", "", 20, 0.40, MixtureImage.whisky));
-        mixtures.add(new Mixture("Sekt", "", 200, 0.12, MixtureImage.sparklingwine));
-        mixtures.add(new Mixture("Hugo", "", 300, 0.069, MixtureImage.sparklingwine));
+        mixtures.add(new Mixture(res.getString(R.string.pilsner), "", 330, 0.048, MixtureImage.pils));
+        mixtures.add(new Mixture(res.getString(R.string.pilsner), "", 500, 0.048, MixtureImage.pils));
+        mixtures.add(new Mixture(res.getString(R.string.redcider), "", 500, 0.04, MixtureImage.redcider));
+        mixtures.add(new Mixture(res.getString(R.string.wine), "", 200, 0.10, MixtureImage.wine));
+        mixtures.add(new Mixture(res.getString(R.string.vodka), "", 20, 0.30, MixtureImage.vodka));
+        mixtures.add(new Mixture(res.getString(R.string.vodka), "", 20, 0.40, MixtureImage.vodka));
+        mixtures.add(new Mixture(res.getString(R.string.irishflag), "", new Content[]{new Content(res.getString(R.string.baileysirishcreme), 0.17, 20),
+                new Content(res.getString(R.string.cremedeMenthe), 0.24, 20), new Content(res.getString(R.string.irishwhisky), 0.40, 20)}, MixtureImage.irishflag));
+        mixtures.add(new Mixture(res.getString(R.string.whisky), "", 20, 0.40, MixtureImage.whisky));
+        mixtures.add(new Mixture(res.getString(R.string.sparklingwine), "", 200, 0.12, MixtureImage.sparklingwine));
+        mixtures.add(new Mixture(res.getString(R.string.hugo), "", 300, 0.069, MixtureImage.sparklingwine));
 /*
             for (int i = 0; i < customMixtures.length(); i++) {
                 mixtures.put(customMixtures.get(i).toString());

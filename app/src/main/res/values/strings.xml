@@ -74,4 +74,19 @@
     <string name="depleted_since">Depleted since:</string>
     <string name="create_backup">Create Backup</string>
     <string name="load_backup">Load Backup</string>
+    <string name="goass" translatable="false">Goaß</string>
+    <string name="cola" translatable="false">Cola</string>
+    <string name="goassmass" translatable="false">Goaßmaß</string>
+    <string name="pilsner" translatable="false">Pilsner</string>
+    <string name="redcider" translatable="false">Red Cider</string>
+    <string name="wine">Wein</string>
+    <string name="whisky">Whisky</string>
+    <string name="vodka">Vodka</string>
+    <string name="sparklingwine">Sparkling Wine</string>
+    <string name="hugo" translatable="false">Hugo</string>
+    <string name="cherryliqueur">Cherry Liqueur</string>
+    <string name="irishflag" translatable="false">Irish Flag</string>
+    <string name="cremedeMenthe" translatable="false">Creme de Menthe</string>
+    <string name="irishwhisky">Irish whisky</string>
+    <string name="baileysirishcreme" translatable="false">Baileys Irish Creme</string>
 </resources>

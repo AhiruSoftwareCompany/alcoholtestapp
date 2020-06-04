@@ -70,4 +70,10 @@
     <string name="depleted_since">"Abgebaut seit: "</string>
     <string name="create_backup">Backup erstellen</string>
     <string name="load_backup">Backup laden</string>
+    <string name="cherryliqueur">Kirschlikör</string>
+    <string name="wine">Wein</string>
+    <string name="whisky">Whisky</string>
+    <string name="vodka">Wodka</string>
+    <string name="sparklingwine">Sekt</string>
+    <string name="irishwhisky">Irischer Whisky</string>
 </resources>
