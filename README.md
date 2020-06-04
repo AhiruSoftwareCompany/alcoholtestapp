@@ -2,6 +2,7 @@
 
 ![Android Build](https://github.com/AhiruSoftwareCompany/alcoholtestapp/workflows/Android%20Build/badge.svg?branch=master)
 
+[![https://play.google.com/store/apps/details?id=de.ahirusoftware.alkomat3000](https://play.google.com/intl/en_us/badges/images/badge_new.png)](https://play.google.com/store/apps/details?id=de.ahirusoftware.alkomat3000)
 
 ![](screenshots/mainscreen.png)
 ![](screenshots/adddrink.png)
