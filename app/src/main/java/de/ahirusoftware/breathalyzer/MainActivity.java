@@ -197,8 +197,8 @@ public class MainActivity extends AppCompatActivity {
                         System.out.println("loadBackup: " + users.toString());
                         editor.putString("users", users.toString());
                         editor.commit();
-                        switchUser(false);
                     }
+                    switchUser(false);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -376,6 +376,7 @@ public class MainActivity extends AppCompatActivity {
     private void createUser(boolean initialUser) {
         stopTimer();
         Intent createUserIntent = new Intent(this, CreateUser.class);
+        createUserIntent.putExtra("initialUser", initialUser);
         if (initialUser) {
             // Clears task history and prevent user to switch back to MainActivity without any user existing
             createUserIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -795,7 +796,7 @@ public class MainActivity extends AppCompatActivity {
         m.setIcon(R.mipmap.male_edit);
         m = menu.findItem(R.id.removeUser);
         m.setIcon(R.mipmap.male_delete);
-        if (currentUser != null) { //After creating a user while showing the menu, currentUser is null
+        if (currentUser != null) { //After creating a user while showing the menu_create_user, currentUser is null
             if (!currentUser.isMale) {
                 m = menu.findItem(R.id.newUser);
                 m.setIcon(R.mipmap.female_new);
