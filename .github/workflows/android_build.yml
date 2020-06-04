@@ -2,8 +2,10 @@ name: Android Build
 
 # When to run workflow
 on:
-  push:
+  commit:
     branches: [ master ]
+#  push:
+#    branches: [ master ]
   pull_request:
     branches: [ master ]
 
