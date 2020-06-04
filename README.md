@@ -1,17 +1,17 @@
 # Alkomat 3000
 
-![Android Build](https://github.com/dieechtenilente/alcoholtestapp/workflows/Android%20Build/badge.svg?branch=master)
+![Android Build](https://github.com/AhiruSoftwareCompany/alcoholtestapp/workflows/Android%20Build/badge.svg?branch=master)
 
 
 ![](screenshots/mainscreen.png)
 ![](screenshots/adddrink.png)
 
 ### Installing the app
-Download the [app as .apk](https://github.com/dieechtenilente/alcoholtestapp/releases) and copy it to your android phone.
+Download the [app as .apk](https://github.com/AhiruSoftwareCompany/alcoholtestapp/releases) and copy it to your android phone.
 Open the file browser and navigate to the apk file. To install it, click on it and accept the warning. Enjoy the app :)
 
 ### Fork & Clone the repo
-If you haven't already, fork [this repo](https://github.com/dieechtenilente/alcoholtestapp/fork).
+If you haven't already, fork [this repo](https://github.com/AhiruSoftwareCompany/alcoholtestapp/fork).
 
 #### Android Studio
 Clone the **alcoholtestapp app** in Android Studio:
@@ -46,7 +46,7 @@ origin	https://github.com/YOUR_USERNAME/alcoholtestapp.git (push)
 - Specify a new remote upstream repository
 
 ```
-$ git remote add upstream https://github.com/dieechtenilente/alcoholtestapp.git
+$ git remote add upstream https://github.com/AhiruSoftwareCompany/alcoholtestapp.git
 ```
 
 - Verify the new upstream repository
@@ -56,8 +56,8 @@ $ git remote -v
 
 origin	https://github.com/YOUR_USERNAME/alcoholtestapp.git (fetch)
 origin	https://github.com/YOUR_USERNAME/alcoholtestapp.git (push)
-upstream https://github.com/dieechtenilente/alcoholtestapp.git (fetch)
-upstream https://github.com/dieechtenilente/alcoholtestapp.git (push)
+upstream https://github.com/AhiruSoftwareCompany/alcoholtestapp.git (fetch)
+upstream https://github.com/AhiruSoftwareCompany/alcoholtestapp.git (push)
 ```
 
 #### Sync your fork
@@ -93,7 +93,7 @@ Once the project is cloned to disk you can import into Android Studio:
 
 The feedback server is used by the feedback feature in the app, which allows users to
 send a message and general device diagnostics to the developer. It is an HTTPS server
-written in [Go](https://golang.org/). It takes messages in JSON (see [below](https://github.com/dieechtenilente/alcoholtestapp#feedback) for the format) and forwards them to the specified e-mail address.
+written in [Go](https://golang.org/). It takes messages in JSON (see [below](https://github.com/AhiruSoftwareCompany/alcoholtestapp#feedback) for the format) and forwards them to the specified e-mail address.
 
 First, install the `gomail` package to compile the feedback server.
 
@@ -146,7 +146,7 @@ const (
 
 ### Data saved by the app on your phone
 
-Path: `/data/data/ahirusoftware.breathalyzer/shared_prefs/data.xml`
+Path: `/data/data/AhiruSoftwareCompany.breathalyzer/shared_prefs/data.xml`
 
 #### Users-Array
 
@@ -200,7 +200,7 @@ In addition to that: `lastUser` as `long` (simply the creation date (with millis
 
 #### Recipe-Array
 
-`MixtureImage` represents a image (as string). See [source](https://github.com/dieechtenilente/alcoholtestapp/blob/master/app/src/main/java/de/klaushackner/breathalyzer/model/MixtureImage.java) for more information.
+`MixtureImage` represents a image (as string). See [source](https://github.com/AhiruSoftwareCompany/alcoholtestapp/blob/master/app/src/main/java/de/ahirusoftware/breathalyzer/model/MixtureImage.java) for more information.
 
 For custom recipes saved by the user:
 
