@@ -16,6 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_weight="0.11"
+            android:paddingBottom="15dp"
             app:srcCompat="@mipmap/logo" />
 
         <TextView
@@ -25,7 +26,6 @@
             android:layout_weight="0.11"
             android:autoLink="web"
             android:text="@string/about_text"
-            android:textAlignment="center"
-            android:textSize="16sp" />
+            android:textAlignment="center" />
     </LinearLayout>
 </ScrollView>
