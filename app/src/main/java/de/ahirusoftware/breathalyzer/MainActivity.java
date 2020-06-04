@@ -146,6 +146,10 @@ public class MainActivity extends AppCompatActivity {
             switchUser(isStartedByLauncher());
         }
 
+        if (getIntent().getBooleanExtra("loadBackupFromCreateUser", false)) {
+            loadBackup("");
+        }
+
         //If coming from a notication, the mixture will be added to the current user
         /*String m = getIntent().getStringExtra("mixtureToAdd");
         if (m != null) {
@@ -159,7 +163,7 @@ public class MainActivity extends AppCompatActivity {
         }*/
     }
 
-    public void requestPermission(){
+    public void requestPermission() {
         if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requestPermissions(new String[]{WRITE_EXTERNAL_STORAGE, READ_EXTERNAL_STORAGE}, 1);
         } else {
@@ -874,7 +878,7 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void showAboutDialog(Context c){
+    public static void showAboutDialog(Context c) {
         final Dialog dialog = new Dialog(c);
         dialog.setContentView(R.layout.dialog_about);
         dialog.show();

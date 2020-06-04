@@ -4,7 +4,9 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,6 +27,7 @@ public class CreateUser extends AppCompatActivity {
     private TextView tvHeight;
     private RadioButton male;
     private CreateUser cp; //Used to display toast
+    private boolean initialUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,10 @@ public class CreateUser extends AppCompatActivity {
         male = findViewById(R.id.sex_male);
         cp = this;
 
+        initialUser = getIntent().getBooleanExtra("initialUser", false);
+
         Button createUser = findViewById(R.id.createUser);
+
         createUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -49,7 +55,6 @@ public class CreateUser extends AppCompatActivity {
                 }
             }
         });
-
     }
 
     private boolean addUser() {
@@ -81,6 +86,12 @@ public class CreateUser extends AppCompatActivity {
         }
     }
 
+    public void loadBackup() {
+        Intent intent = new Intent(CreateUser.this, MainActivity.class);
+        intent.putExtra("loadBackupFromCreateUser", true);
+        startActivity(intent);
+    }
+
     /**
      * Menu stuff
      */
@@ -88,15 +99,14 @@ public class CreateUser extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_create_user, menu);
-        this.menu = menu;
         return true;
     }
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
-
-        if (User.getUserCount(c) == 1) {
-            menu.removeItem(R.id.switchUser);
+        // Remove load backup option if a user exists
+        if (!initialUser) {
+            menu.removeItem(R.id.loadBackup);
         }
         return true;
     }
@@ -104,63 +114,13 @@ public class CreateUser extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.switchUser:
-                switchUser(false);
-                break;
-            case R.id.editUser:
-                editUser();
-                break;
-            case R.id.removeUser:
-                removeUser(currentUser);
-                break;
-            case R.id.newUser:
-                createUser(false);
-                break;
-            case R.id.recipes:
-                Intent i = new Intent(this, ShowRecipes.class);
-                i.putExtra("currentUser", currentUser.created);
-                startActivity(i);
-                break;
-            case R.id.sendFeedback:
-                //startActivity(new Intent(this, SendFeedback.class));
-                Toast.makeText(this, "currently unavailable", Toast.LENGTH_SHORT);
-                break;
-            case R.id.createBackup:
-                requestPermission();
-                // Creates backup of all current users
-                SharedPreferences sharedPref = getSharedPreferences("data", 0);
-                final SharedPreferences.Editor editor = sharedPref.edit();
-                System.out.println("SharedPrefs: " + sharedPref.getAll());
-
-                //Ist die Users-datenbank leer, wird ein neuer User erstellt
-                if (sharedPref.getString("users", "[]").compareTo("[]") != 0) {
-                    final JSONArray users;
-                    try {
-                        users = new JSONArray(sharedPref.getString("users", "[]"));
-                        FileHandler.writeToFile(users.toString(), c);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    Toast.makeText(this, "No users available!", Toast.LENGTH_SHORT);
-                }
-                break;
             case R.id.loadBackup:
-                // Opens File Picker Intent and calls onActivityResult afterwards
-                // Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-                //  intent.addCategory(Intent.CATEGORY_OPENABLE);
-                //  intent.setType("*/*");
-                //  startActivityForResult(intent, PICK_BACKUP_FILE);
-                // just load the backup from default path
-                loadBackup("");
+                loadBackup();
                 break;
             case R.id.about:
-                final Dialog dialog = new Dialog(this);
-                dialog.setContentView(R.layout.dialog_about);
-                dialog.show();
+                MainActivity.showAboutDialog(this);
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
