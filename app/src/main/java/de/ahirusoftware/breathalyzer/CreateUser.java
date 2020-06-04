@@ -1,10 +1,13 @@
 package de.ahirusoftware.breathalyzer;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
@@ -76,5 +79,88 @@ public class CreateUser extends AppCompatActivity {
         } else {
             return false;
         }
+    }
+
+    /**
+     * Menu stuff
+     */
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_create_user, menu);
+        this.menu = menu;
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+
+        if (User.getUserCount(c) == 1) {
+            menu.removeItem(R.id.switchUser);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.switchUser:
+                switchUser(false);
+                break;
+            case R.id.editUser:
+                editUser();
+                break;
+            case R.id.removeUser:
+                removeUser(currentUser);
+                break;
+            case R.id.newUser:
+                createUser(false);
+                break;
+            case R.id.recipes:
+                Intent i = new Intent(this, ShowRecipes.class);
+                i.putExtra("currentUser", currentUser.created);
+                startActivity(i);
+                break;
+            case R.id.sendFeedback:
+                //startActivity(new Intent(this, SendFeedback.class));
+                Toast.makeText(this, "currently unavailable", Toast.LENGTH_SHORT);
+                break;
+            case R.id.createBackup:
+                requestPermission();
+                // Creates backup of all current users
+                SharedPreferences sharedPref = getSharedPreferences("data", 0);
+                final SharedPreferences.Editor editor = sharedPref.edit();
+                System.out.println("SharedPrefs: " + sharedPref.getAll());
+
+                //Ist die Users-datenbank leer, wird ein neuer User erstellt
+                if (sharedPref.getString("users", "[]").compareTo("[]") != 0) {
+                    final JSONArray users;
+                    try {
+                        users = new JSONArray(sharedPref.getString("users", "[]"));
+                        FileHandler.writeToFile(users.toString(), c);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                } else {
+                    Toast.makeText(this, "No users available!", Toast.LENGTH_SHORT);
+                }
+                break;
+            case R.id.loadBackup:
+                // Opens File Picker Intent and calls onActivityResult afterwards
+                // Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+                //  intent.addCategory(Intent.CATEGORY_OPENABLE);
+                //  intent.setType("*/*");
+                //  startActivityForResult(intent, PICK_BACKUP_FILE);
+                // just load the backup from default path
+                loadBackup("");
+                break;
+            case R.id.about:
+                final Dialog dialog = new Dialog(this);
+                dialog.setContentView(R.layout.dialog_about);
+                dialog.show();
+                break;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
