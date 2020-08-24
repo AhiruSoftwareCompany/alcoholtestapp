@@ -14,7 +14,6 @@ import android.os.Handler;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.provider.DocumentsContract;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -26,20 +25,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -60,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
     private Handler mHandler = new Handler();
     private DrinkAdapter dA;
     private TimerTask timerTask; //updates the gui
+    private TimePicker timePicker;
 
     private static final int PICK_BACKUP_FILE = 1;
 
@@ -424,13 +420,32 @@ public class MainActivity extends AppCompatActivity {
                     return;
                 }
 
-                currentUser.consumeDrink(mixtures.get(position));
+                timePicker = dialog.findViewById(R.id.timePicker);
+                timePicker.setIs24HourView(true);
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTimeInMillis(System.currentTimeMillis());
+                int pickedHour = 0;
+                int pickedMinute = 0;
+
+                if (android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    pickedHour = timePicker.getHour();
+                    pickedMinute = timePicker.getMinute();
+                } else {
+                    pickedHour = timePicker.getCurrentHour();
+                    pickedMinute = timePicker.getCurrentMinute();
+                }
+
+                calendar.set(Calendar.HOUR_OF_DAY, pickedHour);
+                calendar.set(Calendar.MINUTE, pickedMinute);
+
+                currentUser.consumeDrink(mixtures.get(position), calendar.getTimeInMillis());
                 currentUser.saveUser(c);
 
                 dialog.dismiss();
                 updateGui();
             }
         });
+        /*
         mixtureList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
@@ -457,6 +472,7 @@ public class MainActivity extends AppCompatActivity {
                 return true;
             }
         });
+        */
 
         dialog.show();
     }

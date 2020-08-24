@@ -129,6 +129,10 @@ public class User {
         drinks.add(new Drink(m.name, m.description, System.currentTimeMillis(), m.content, m.image, this));
     }
 
+    public void consumeDrink(Mixture m, long consumePoint) {
+        drinks.add(new Drink(m.name, m.description, consumePoint, m.content, m.image, this));
+    }
+
     public boolean removeDrink(long consumePoint) {
         for (Drink d : drinks) {
             if (d.getConsumePoint() == consumePoint) {
