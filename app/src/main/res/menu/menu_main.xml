@@ -21,10 +21,10 @@
         android:id="@+id/removeUser"
         android:title="@string/remove_current_user"
         breathalyzer:showAsAction="ifRoom" />
-    <item
+    <!--<item
         android:id="@+id/sendFeedback"
         android:title="@string/send_feedback"
-        breathalyzer:showAsAction="never"/>
+        breathalyzer:showAsAction="never"/>-->
     <item
         android:id="@+id/createBackup"
         android:title="@string/create_backup"
