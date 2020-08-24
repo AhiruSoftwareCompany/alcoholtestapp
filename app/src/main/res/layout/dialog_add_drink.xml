@@ -1,9 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<GridView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/mixtureList"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:gravity="top|center"
-    android:numColumns="2">
-</GridView>
+    android:orientation="vertical">
+
+    <TimePicker
+        android:id="@+id/timePicker"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:timePickerMode="spinner" />
+
+    <GridView
+        android:id="@+id/mixtureList"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:gravity="top|center"
+        android:horizontalSpacing="4dp"
+        android:numColumns="3"
+        android:verticalSpacing="4dp" />
+
+</LinearLayout>

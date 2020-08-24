@@ -19,7 +19,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/no_information"
-        android:textSize="20sp" />
+        android:textSize="16sp" />
 
     <TableRow
         android:layout_width="match_parent"
@@ -32,7 +32,7 @@
             android:layout_weight="1"
             android:gravity="center|end"
             android:text="@string/no_information"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
         <Space
             android:layout_width="15dp"
@@ -45,7 +45,7 @@
             android:layout_weight="1"
             android:gravity="center|start"
             android:text="@string/no_information"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
     </TableRow>
 
 </LinearLayout>
