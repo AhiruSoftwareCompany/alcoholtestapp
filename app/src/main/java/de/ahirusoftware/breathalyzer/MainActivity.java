@@ -438,6 +438,13 @@ public class MainActivity extends AppCompatActivity {
                 calendar.set(Calendar.HOUR_OF_DAY, pickedHour);
                 calendar.set(Calendar.MINUTE, pickedMinute);
 
+                // Quick and dirty fix for picked hours after a new day has begun
+                // eg. yesterday 23:00 picked, but it is 0:22 the next day
+                Calendar rightNow = Calendar.getInstance();
+                if (pickedHour > rightNow.get(Calendar.HOUR_OF_DAY)) {
+                    calendar.add(Calendar.DATE, -1);
+                }
+
                 currentUser.consumeDrink(mixtures.get(position), calendar.getTimeInMillis());
                 currentUser.saveUser(c);
 
