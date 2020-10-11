@@ -77,6 +77,23 @@ public class Mixture {
         mixtures.add(new Mixture(res.getString(R.string.whisky), "", 20, 0.40, MixtureImage.whisky));
         mixtures.add(new Mixture(res.getString(R.string.sparklingwine), "", 200, 0.12, MixtureImage.sparklingwine));
         mixtures.add(new Mixture(res.getString(R.string.hugo), "", 300, 0.069, MixtureImage.sparklingwine));
+
+        mixtures.add(new Mixture("Sex On The Beach", "Zutaten mit Eiswürfeln shaken\n\nGlas: Longdrinkglas\nDekoration mit ½ Orangenscheibe, Ananas, Kirsche",
+                new Content[]{new Content("Wodka Gorbatschow (37,5%)", 0.375, 40), new Content("Pfirsichlikör (17%)", 0.17, 20),
+                        new Content("Orangensaft", 0, 40), new Content("Cranberrysaft", 0, 40)}, MixtureImage.cocktail2));
+        mixtures.add(new Mixture("Mojito", "Ein Rum-Cocktail mit kubanischer Note.\n1.\tMinze, Limettensaft und Zucker in ein Glas geben\n" + "2.\tMit Stößel leicht andrücken.\n" + "3.\tGlas mit Eiswürfeln auffüllen und Rum hinzugeben.\n" + "4.\tGut verrühren und mit Soda auffüllen.\n\nGlas: Longdrinkglas\nDekoration mit Minzzweig, Limetten",
+                new Content[]{new Content("Rum, weiß (37,5%)", 0.375, 40), new Content("Limettensaft", 0, 20), new Content("Rohrzucker (2 Löffel)", 0, 10),
+                        new Content("Minzblätter, frisch", 0, 2), new Content("Soda/Wasser congas", 0, 330)}, MixtureImage.cocktail));
+        mixtures.add(new Mixture("Island Mule", "Ein Rum-Cocktail mit original kubanischer Note.\nZutaten mit Eiswürfel in den Kupferbecher geben\n\nGlas: Kupfertasse\nDekoration mit Vanille, Orangenzeste",
+                new Content[]{new Content("Pott Rum (54%)", 0.54, 50), new Content("Limette", 0, 10), new Content("Vanillesirup", 0, 20), new Content("Bitterorangen-Likör (Spritzer)", 0, 1),
+                        new Content("Ginger Beer", 0, 100)}, MixtureImage.cocktail2));
+        mixtures.add(new Mixture("Touch Down", "1.\tZutaten außer Grenadine mit Eis shaken und in das Glas geben.\n" + "2.\tGrenadine ins Glas geben und vorsichtig umrühren.\n\nGlas: Lang, dünn (Fancy)\nDekoration mit ½ Maracujascheibe",
+                new Content[]{new Content("Wodka Gorbatschow (37,5%)", 0.375, 40), new Content("Apricot Brandy (24%)", 0.24, 20),
+                        new Content("Zitronensaft", 0, 20), new Content("Grenadine", 0, 1), new Content("Maracujasaft", 0, 80)}, MixtureImage.cocktail2));
+        mixtures.add(new Mixture("Pina Colada", "Zutaten erst ohne, nach 10 Sekunden mit Eiswürfeln shaken\n\nGlas: Lang, dünn (Fancy)\nDekoration mit Ananasstück, Trinkhalm",
+                new Content[]{new Content("Eiswürfel", 0, 4), new Content("Rum, weiß (37,5%)", 0.375, 60), new Content("Sahne", 0, 20), new Content("Kokoslikör/Malibu (21%)", 0.21, 40),
+                        new Content("Ananassaft", 0, 120), new Content("Crushed-Ice (2 EL)", 0, 2), new Content("frische Ananas", 0, 1)}, MixtureImage.cocktail));
+
 /*
             for (int i = 0; i < customMixtures.length(); i++) {
                 mixtures.put(customMixtures.get(i).toString());
