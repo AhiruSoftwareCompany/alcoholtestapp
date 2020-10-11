@@ -24,10 +24,15 @@
 
             <TextView
                 android:id="@+id/name"
-                android:layout_width="wrap_content"
+                android:layout_width="200sp"
                 android:layout_height="wrap_content"
                 android:text="@string/no_information"
-                android:textSize="18sp" />
+                android:gravity="center"
+
+                android:textSize="18sp"
+                app:autoSizeMinTextSize="10sp"
+
+                app:autoSizeTextType="uniform" />
         </TableRow>
 
         <TableRow
@@ -36,17 +41,16 @@
             android:gravity="center">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="160dp"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp">
+                android:paddingStart="0dp"
+                android:paddingEnd="10dp">
 
                 <TextView
                     android:id="@+id/alcoholLevel"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/bacNoChar"
                     android:textAlignment="center"
@@ -56,7 +60,6 @@
                     android:id="@+id/bac"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:gravity="center"
                     android:text="@string/no_information"
                     android:textAlignment="center"
@@ -67,8 +70,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp">
+                android:paddingStart="0dp"
+                android:paddingEnd="15dp">
 
                 <TextView
                     android:id="@+id/elap"
@@ -94,8 +97,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="20dp"
-                android:paddingEnd="20dp">
+                android:paddingStart="15dp"
+                android:paddingEnd="15sp">
 
                 <TextView
                     android:id="@+id/left"
