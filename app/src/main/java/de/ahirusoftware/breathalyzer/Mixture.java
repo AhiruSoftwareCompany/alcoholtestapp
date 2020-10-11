@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.Resources;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import de.ahirusoftware.breathalyzer.model.Content;
 
@@ -17,7 +18,6 @@ public class Mixture {
         this.name = name;
         this.description = description;
         this.content = content;
-        System.out.println(content.toString());
         this.image = image;
     }
 
