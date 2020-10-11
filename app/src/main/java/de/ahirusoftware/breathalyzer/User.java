@@ -9,7 +9,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 
 public class User {
@@ -21,6 +20,7 @@ public class User {
     protected long created;
     protected ArrayList<Drink> drinks;
     protected ArrayList<Drink> depletedDrinks;
+    private int userVersion;
 
     public User(String name, boolean isMale, int age, int weight, int height, long created, ArrayList<Drink> drinks, ArrayList<Drink> depletedDrinks) {
         this.name = name;
@@ -47,6 +47,7 @@ public class User {
 
     public User(JSONObject user) {
         try {
+            // Basic user facts
             this.name = user.getString("name");
             this.isMale = user.getBoolean("isMale");
             this.age = user.getInt("age");
@@ -54,6 +55,7 @@ public class User {
             this.height = user.getInt("height");
             this.created = user.getLong("created");
 
+            // Drink list
             JSONArray drinksJSON = user.getJSONArray("drinks");
             drinks = new ArrayList<>();
 
@@ -61,18 +63,25 @@ public class User {
                 drinks.add(new Drink(drinksJSON.getJSONObject(i), this));
             }
 
-            System.out.println(user.getJSONArray("depletedDrinks"));
-            JSONArray depletedDrinksJSON = user.getJSONArray("depletedDrinks");
-            // Converting from Alkomat 3000 v1.9 and older
-            if (depletedDrinksJSON == null) {
-                depletedDrinksJSON = new JSONArray();
+            // Backwards compatibility to version 2.2.1221 and older
+            if (user.isNull("userVersion")) {
+                userVersion = 2;
             } else {
-                depletedDrinks = new ArrayList<>();
+                int userVersion = user.getInt("userVersion");
             }
 
-            for (int i = 0; i < depletedDrinksJSON.length(); i++) {
-                depletedDrinks.add(new Drink(depletedDrinksJSON.getJSONObject(i), this));
+            // Backwards compatibility to version 1.9 and older
+            JSONArray depletedDrinksJSON;
+            if (user.isNull("depletedDrinks")) {
+                depletedDrinks = new ArrayList<>();
+            } else {
+                depletedDrinksJSON = user.getJSONArray("depletedDrinks");
+                depletedDrinks = new ArrayList<>();
+                for (int i = 0; i < depletedDrinksJSON.length(); i++) {
+                    depletedDrinks.add(new Drink(depletedDrinksJSON.getJSONObject(i), this));
+                }
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -87,6 +96,7 @@ public class User {
             user.put("weight", weight);
             user.put("height", height);
             user.put("created", created);
+            user.put("userVersion", userVersion);
 
             JSONArray drinks = new JSONArray();
 
@@ -96,13 +106,9 @@ public class User {
 
             user.put("drinks", drinks);
 
-
             JSONArray depletedDrinks = new JSONArray();
-            // Converting from Alkomat 3000 v1.9 and older
-            if (this.depletedDrinks != null) {
-                for (Drink d : this.depletedDrinks) {
-                    depletedDrinks.put(d.toJSON());
-                }
+            for (Drink d : this.depletedDrinks) {
+                depletedDrinks.put(d.toJSON());
             }
 
             user.put("depletedDrinks", depletedDrinks);
@@ -111,8 +117,8 @@ public class User {
 
         } catch (JSONException e) {
             e.printStackTrace();
+            return null;
         }
-        return null;
     }
 
     @Override
@@ -122,7 +128,13 @@ public class User {
 
     public static boolean isValidUser(String name, int age, int height, int weight) {
         Log.i("isValidUser", name + ", " + age + ", " + height + ", " + height);
-        return name.length() >= 2 && age > 10 && age < 100 && weight > 30 && weight < 300 && height > 130 && height < 230;
+        return name.length() >= 2 &&
+                age > 10 &&
+                age < 100 &&
+                weight > 30 &&
+                weight < 300 &&
+                height > 130 &&
+                height < 230;
     }
 
     public void consumeDrink(Mixture m) {

@@ -162,6 +162,7 @@ An array with every user currently existing including its drinks (updated on sta
     weight:int,
     height:int,
     created:long,
+    userVersion:int,
     drinks: [
       {
         name:String,
