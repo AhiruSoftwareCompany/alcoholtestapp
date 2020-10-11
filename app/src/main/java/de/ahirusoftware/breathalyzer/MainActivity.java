@@ -414,12 +414,7 @@ public class MainActivity extends AppCompatActivity {
         mixtureList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View v, int position, long id) {
-                if (mixtures.get(position).getAlcContent() == 0) {
-                    addCustomDrink(0, null);
-                    dialog.dismiss();
-                    return;
-                }
-
+                //Get time from time picker
                 timePicker = dialog.findViewById(R.id.timePicker);
                 timePicker.setIs24HourView(true);
                 Calendar calendar = Calendar.getInstance();
@@ -445,11 +440,20 @@ public class MainActivity extends AppCompatActivity {
                     calendar.add(Calendar.DATE, -1);
                 }
 
-                currentUser.consumeDrink(mixtures.get(position), calendar.getTimeInMillis());
-                currentUser.saveUser(c);
+                long consumePoint = calendar.getTimeInMillis();
 
-                dialog.dismiss();
-                updateGui();
+                // If custom drink is selected, open custom drink dialog
+                if (mixtures.get(position).getAlcContent() == 0) {
+                    addCustomDrink(0, null, consumePoint);
+                    dialog.dismiss();
+                    return;
+                } else {
+                    currentUser.consumeDrink(mixtures.get(position), consumePoint);
+                    currentUser.saveUser(c);
+
+                    dialog.dismiss();
+                    updateGui();
+                }
             }
         });
         /*
@@ -488,7 +492,7 @@ public class MainActivity extends AppCompatActivity {
      * @param stage         0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
      * @param customMixture from "addCustomRecipe custom drink" dialog
      */
-    private void addCustomDrink(int stage, Mixture customMixture) {
+    private void addCustomDrink(int stage, Mixture customMixture, long consumePoint) {
         switch (stage) {
             case 0: //0 = from "addCustomRecipe drinks" dialog; 1 = from "addCustomRecipe custom drink" dialog
 //Open dialog and wait for result
@@ -563,9 +567,9 @@ public class MainActivity extends AppCompatActivity {
                         if (Mixture.isValidMixture(name, amount, percentage)) {
                             MixtureImage m = MixtureImage.fromString(image.getTag().toString());
                             if (currentUser.name.compareTo("Franzi") == 0) {
-                                addCustomDrink(1, new Mixture(name, "Custom drink", amount, percentage, m));
+                                addCustomDrink(1, new Mixture(name, "Custom drink", amount, percentage, MixtureImage.custom_panda), consumePoint);
                             } else {
-                                addCustomDrink(1, new Mixture(name, "Custom drink", amount, percentage, m));
+                                addCustomDrink(1, new Mixture(name, "Custom drink", amount, percentage, m), consumePoint);
                             }
                             d.dismiss();
                         } else {
@@ -577,7 +581,7 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case 1: //from "addCustomRecipe custom drink" dialog
                 if (customMixture != null || currentUser != null) {
-                    currentUser.consumeDrink(customMixture);
+                    currentUser.consumeDrink(customMixture, consumePoint);
                     currentUser.saveUser(c);
                     updateGui();
                 }
