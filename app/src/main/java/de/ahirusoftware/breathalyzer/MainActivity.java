@@ -50,9 +50,8 @@ public class MainActivity extends AppCompatActivity {
     private User currentUser;
     private TextView tvNameString;
     private TextView tvBac;
-    private LinearLayout nameLayout;
     private Menu menu;
-    private Handler mHandler = new Handler();
+    private final Handler mHandler = new Handler();
     private DrinkAdapter dA;
     private TimerTask timerTask; //updates the gui
     private TimePicker timePicker;
@@ -72,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         ListView drinks = findViewById(R.id.drinks);
         tvNameString = findViewById(R.id.nameString);
         tvBac = findViewById(R.id.bac);
-        nameLayout = findViewById(R.id.nameLayout);
+        LinearLayout nameLayout = findViewById(R.id.nameLayout);
 
         btnAddDrink.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,23 +99,22 @@ public class MainActivity extends AppCompatActivity {
                 builder.setPositiveButton(R.string.remove_drink, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // if the drink is depleted, currentUser.depletedDrinks.get(pos) would be out of bounce
-                        // because depleted drinks are stored in a seperate array.
+                        // because depleted drinks are stored in a separate array.
                         if (pos >= currentUser.drinks.size()) {
                             currentUser.removeDrink(currentUser.depletedDrinks.get(pos - currentUser.drinks.size()));
-                            currentUser.saveUser(c);
                         } else {
                             currentUser.removeDrink(currentUser.drinks.get(pos));
-                            currentUser.saveUser(c);
                         }
+                        currentUser.saveUser(c);
                         updateGui();
                     }
                 });
-                builder.setNeutralButton(R.string.add_as_mixture, new DialogInterface.OnClickListener() {
+               /* builder.setNeutralButton(R.string.add_as_mixture, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         //TODO Handle mixture saving
 
                     }
-                });
+                });*/
                 builder.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                     }
@@ -146,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             loadBackup("");
         }
 
-        //If coming from a notication, the mixture will be added to the current user
+        //If coming from a notification, the mixture will be added to the current user
         /*String m = getIntent().getStringExtra("mixtureToAdd");
         if (m != null) {
             try {
@@ -314,7 +312,6 @@ public class MainActivity extends AppCompatActivity {
 
         //removing old drinks
         if (!drinks.isEmpty()) {
-
             ArrayList<Drink> toRemove = new ArrayList<>();
             for (Drink d : drinks) {
                 if (d.getConsumePoint() + d.getDepletingDuration() <= System.currentTimeMillis()) {
