@@ -6,13 +6,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.Comparator;
 import de.ahirusoftware.breathalyzer.model.Content;
 
 /**
  * A consumed mixture bound to user
  */
 
-public class Drink implements Comparable<Drink> {
+public class Drink implements Comparable<Drink>, Comparator<Drink> {
     private String name;
     private String description;
     private long consumePoint;
@@ -22,6 +23,10 @@ public class Drink implements Comparable<Drink> {
     private long depletingDuration;
     private User consumer;
     public static long DEPLETINGFACTOR = 1; //0.1 per unit
+
+    public Drink(){
+
+    }
 
     public Drink(String name, String description, long consumePoint, Content[] content, MixtureImage mixtureImage, User consumer) {
         this.name = name;
@@ -170,5 +175,13 @@ public class Drink implements Comparable<Drink> {
             return 1;
         }
         return -1;
+    }
+
+    @Override
+    /*
+    Compares the consumePoint of two given drinks
+     */
+    public int compare(Drink o1, Drink o2) {
+        return Long.compare(o1.getConsumePoint(), o2.getConsumePoint());
     }
 }
