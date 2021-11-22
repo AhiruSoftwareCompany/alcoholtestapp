@@ -6,8 +6,8 @@ apply plugin: 'com.android.application'
  */
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '29.0.2'
+    compileSdkVersion 31
+    buildToolsVersion '30.0.2'
 
     def versionPropsFile = file('version.properties')
     def versionBuild
@@ -35,7 +35,7 @@ android {
     defaultConfig {
         applicationId "de.ahirusoftware.alkomat3000"
         minSdkVersion 21
-        targetSdkVersion 29
+        targetSdkVersion 31
         versionCode versionBuild
         versionName "2.2." + versionBuild
     }
@@ -63,9 +63,9 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    androidTestImplementation('androidx.test.espresso:espresso-core:3.3.0', {
+    androidTestImplementation('androidx.test.espresso:espresso-core:3.4.0', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-    implementation 'androidx.appcompat:appcompat:1.2.0'
-    implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
+    implementation 'androidx.appcompat:appcompat:1.4.0'
+    implementation 'androidx.constraintlayout:constraintlayout:2.1.2'
 }
