@@ -72,8 +72,11 @@ public class Mixture {
         mixtures.add(new Mixture(res.getString(R.string.wine), "", 200, 0.10, MixtureImage.wine));
         mixtures.add(new Mixture(res.getString(R.string.vodka), "", 20, 0.30, MixtureImage.vodka));
         mixtures.add(new Mixture(res.getString(R.string.vodka), "", 20, 0.40, MixtureImage.vodka));
-        mixtures.add(new Mixture(res.getString(R.string.irishflag), "", new Content[]{new Content(res.getString(R.string.baileysirishcreme), 0.17, 20),
-                new Content(res.getString(R.string.cremedeMenthe), 0.24, 20), new Content(res.getString(R.string.irishwhisky), 0.40, 20)}, MixtureImage.irishflag));
+        mixtures.add(new Mixture(res.getString(R.string.irishflag), "",
+                new Content[]{new Content(res.getString(R.string.baileysirishcreme), 0.17, 13.333),
+                new Content(res.getString(R.string.cremedeMenthe), 0.24, 13.333),
+                new Content(res.getString(R.string.irishwhisky), 0.40, 13.333)},
+                MixtureImage.irishflag));
         mixtures.add(new Mixture(res.getString(R.string.whisky), "", 20, 0.40, MixtureImage.whisky));
         mixtures.add(new Mixture(res.getString(R.string.sparklingwine), "", 200, 0.12, MixtureImage.sparklingwine));
         mixtures.add(new Mixture(res.getString(R.string.hugo), "", 300, 0.069, MixtureImage.sparklingwine));
