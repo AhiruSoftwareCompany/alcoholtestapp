@@ -35,6 +35,7 @@ import org.json.JSONObject;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Set;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -243,22 +244,26 @@ public class MainActivity extends AppCompatActivity {
         }
 
         if (!drinks.isEmpty()) {
+            Collections.sort(drinks, new Drink());
+            Collections.sort(depletedDrinks, new Drink());
+
             /*
             If you have 2 items in your list and remove the first one, index 1 is gone and the for each loop throws an
             error. Therefore I will remove all "old drinks" after looping through the list
             In addition to that depleted Drinks
             */
             ArrayList<Drink> toRemove = new ArrayList<>();
+            long currentDepletionDuration = 0;
             for (Drink d : drinks) {
-                if (d.getConsumePoint() + d.getDepletingDuration() <= System.currentTimeMillis()) {
+                if (d.getConsumePoint() + d.getDepletingDuration() + currentDepletionDuration <= System.currentTimeMillis()) {
+                    d.setDepletionPoint(d.getConsumePoint() + d.getDepletingDuration() + currentDepletionDuration);
+                    currentDepletionDuration += d.getDepletingDuration();
                     depletedDrinks.add(d);
-                    toRemove.add(d);
                 }
             }
             drinks.removeAll(toRemove);
-        }
 
-        if (!drinks.isEmpty()) {
+
             // starting with the consume point of the first drink
             long totalDepletionDuration = drinks.get(0).getConsumePoint();
             boolean firstDrink = false;
